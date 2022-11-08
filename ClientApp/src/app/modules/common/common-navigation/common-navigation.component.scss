@@ -1,0 +1,23 @@
+@import '/src/styles/constants';
+
+.common-navigation {
+    display: flex;
+    align-items: center;
+
+    &-line {
+        height: 2px;
+        background: $project-light-blue;
+        &-front {
+            width: 50px;
+        }
+    }
+    &-logo {
+        margin: 0 25px 0 10px;
+    }
+
+    &-title {
+        font-size: 33px;
+        font-weight: 900;
+        color: $project-dark-grey;
+    }
+}

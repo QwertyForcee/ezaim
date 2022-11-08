@@ -1,0 +1,15 @@
+@import 'styles/constants';
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+    display: flex;
+    background: $project-white;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}

@@ -1,0 +1,28 @@
+@import '/src/styles/constants';
+
+:host {
+    width: 100%;
+}
+.profile-data {
+    width: 100%;
+    margin-left: 15%;
+
+    &-title {
+        &-first {
+            color: $project-medium-grey;
+            margin: 0 0 5px 0
+        }
+        
+        &-second {
+            color: $project-medium-purple;
+            margin: 5px 0 50px 0;
+            font-size: 30px;
+        }
+    }
+
+    &-separator {
+        height: 32px;
+        background-image: url('/assets/user-profile-separator.svg');
+        width: 100%;
+    }
+}

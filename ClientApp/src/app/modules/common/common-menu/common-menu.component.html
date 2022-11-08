@@ -1,0 +1,15 @@
+<ng-container *ngIf="!expanded; else expandedMenu">
+    <div class="closed-menu" (click)="expandMenu()">
+        <img src="assets/menu-icon.svg" alt="menu">
+    </div>
+</ng-container>
+<ng-template #expandedMenu>
+    <div class="expanded-menu">
+        <div class="expanded-menu-container">
+            <div class="close-container">
+                <img class="close-icon" src="assets/curly-bracket2-icon.svg" alt="close">
+                <p>CLOSE</p>
+            </div>
+        </div>
+    </div>
+</ng-template>
