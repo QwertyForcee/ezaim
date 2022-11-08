@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CommonMenuComponent } from './common-menu/common-menu.component';
 import { CommonNavigationComponent } from './common-navigation/common-navigation.component';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -11,11 +12,12 @@ import { CommonNavigationComponent } from './common-navigation/common-navigation
     CommonNavigationComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    RouterModule
   ],
   exports: [
     CommonMenuComponent,
-    CommonNavigationComponent
+    CommonNavigationComponent,
   ]
 })
 export class ApplicationCommonModule { }

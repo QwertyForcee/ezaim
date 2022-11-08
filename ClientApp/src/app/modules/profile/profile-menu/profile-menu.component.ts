@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-profile-menu',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfileMenuComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: ActivatedRoute) { }
 
   menuItems = [
     {title: 'данные об аккауте', url: 'data'},
@@ -15,6 +16,7 @@ export class ProfileMenuComponent implements OnInit {
     {title: 'настройки', url: ''},
   ]
   ngOnInit(): void {
+    console.log(this.router)
   }
 
 }

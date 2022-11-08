@@ -1,11 +1,18 @@
+@import '/src/styles/constants';
+
 .profile-menu {
     margin: 0;
     list-style-type: none;
     li {
         font-weight: bold;
-        font-size: 25px;
+        font-size: 29px;
         white-space: nowrap;
         text-overflow: ellipsis;
-        margin-bottom: 15px;
+        margin-bottom: 18px;
+    }
+
+    .selected {
+        background: $project-light-grey;
+        border-radius: 10px;
     }
 }

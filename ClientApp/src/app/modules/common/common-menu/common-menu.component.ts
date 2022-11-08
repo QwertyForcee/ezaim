@@ -6,6 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./common-menu.component.scss']
 })
 export class CommonMenuComponent implements OnInit {
+  menuItems = [
+    { title: 'личный кабинет', url: '/profile' },
+    { title: 'мои займы', url: '' },
+    { title: 'настройки', url: '' },
+    { title: 'выйти', url: '' },
+  ]
   expanded = false;
   constructor() { }
 
@@ -14,5 +20,9 @@ export class CommonMenuComponent implements OnInit {
 
   expandMenu(): void {
     this.expanded = true;
+  }
+
+  closeMenu(): void {
+    this.expanded = false;
   }
 }
