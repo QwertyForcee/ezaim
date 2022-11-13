@@ -45,6 +45,7 @@
     }
 
     &-list {
+        cursor: pointer;
         list-style-type: none;
         text-align: left;
         li {
@@ -54,6 +55,10 @@
             &:hover {
                 font-weight: 500;
             }
+        }
+
+        img {
+            height: 20px;
         }
     }
 }

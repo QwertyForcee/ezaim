@@ -1,0 +1,16 @@
+:host {
+    display: contents;
+}
+
+.user-loans {
+    width: 100%;
+    display: flex;
+
+    .loan-card {
+        border-radius: 15px;
+        &-content {
+            margin: 30px;
+        }
+    }
+
+}

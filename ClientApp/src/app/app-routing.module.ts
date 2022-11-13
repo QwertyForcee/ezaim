@@ -6,7 +6,7 @@ import { HomeComponent } from './shared/home/home.component';
 
 
 const profile_routes: Routes = [
-  { path: 'data', component: ProfileDataComponent }
+  { path: '', component: ProfileDataComponent },
 ];
 
 const routes: Routes = [

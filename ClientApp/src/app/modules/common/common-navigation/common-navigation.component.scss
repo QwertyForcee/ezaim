@@ -3,12 +3,18 @@
 .common-navigation {
     display: flex;
     align-items: center;
+    margin-right: 100px;
 
     &-line {
         height: 2px;
         background: $project-light-blue;
+        width: 100px;
+        flex-grow: 1;
+        margin-left: 10px;
+
         &-front {
             width: 50px;
+            flex-grow: 0;
         }
     }
     &-logo {
@@ -19,5 +25,6 @@
         font-size: 33px;
         font-weight: 900;
         color: $project-dark-grey;
+        font-family: 'IBM Plex Sans', sans-serif;
     }
 }

@@ -7,10 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CommonMenuComponent implements OnInit {
   menuItems = [
+    { title: 'главная', url: '' },
     { title: 'личный кабинет', url: '/profile' },
     { title: 'мои займы', url: '' },
-    { title: 'настройки', url: '' },
-    { title: 'выйти', url: '' },
+    { title: 'новый займ', url: '', star: true },
+
   ]
   expanded = false;
   constructor() { }

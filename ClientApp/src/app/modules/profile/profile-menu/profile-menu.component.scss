@@ -1,18 +1,53 @@
 @import '/src/styles/constants';
 
+:host {
+    display: contents;
+}
+
 .profile-menu {
+    position: relative;
+    width: 100%;
+    height: 80%;
     margin: 0;
-    list-style-type: none;
-    li {
-        font-weight: bold;
-        font-size: 29px;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        margin-bottom: 18px;
+
+    // background-image: url('/assets/blur-purple-3.svg');
+    // background-position: center;
+    // background-origin: margin-box;
+    // background-size: cover; //100% 100%;
+    // background-repeat: no-repeat;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &-image {
+        width: 100%;
+        position: absolute;
+        z-index: 5;
+        content: url('/assets/blur-purple-3.svg');
     }
 
-    .selected {
-        background: $project-light-grey;
-        border-radius: 10px;
+    &-list {
+        list-style-type: none;
+        padding-left: 0;
+        z-index: 6;
+        li {
+            color: $project-white;
+            border-radius: 10px;
+            background: $project-dark-grey;
+
+            font-weight: bold;
+            font-size: 29px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            margin-bottom: 18px;
+            padding: 0 10px;
+            margin-left: 15px;
+        }
+
+        .selected {
+            background: $project-light-grey;
+            color: $project-dark-grey;
+        }
     }
 }

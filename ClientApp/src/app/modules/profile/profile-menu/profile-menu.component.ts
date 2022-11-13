@@ -10,13 +10,24 @@ export class ProfileMenuComponent implements OnInit {
 
   constructor(private router: ActivatedRoute) { }
 
+  currentUrl = '';
   menuItems = [
-    {title: 'данные об аккауте', url: 'data'},
-    {title: 'мои займы', url: ''},
-    {title: 'настройки', url: ''},
+    { title: 'данные об аккауте', url: 'profile' },
+    { title: 'мои займы', url: '' },
+    { title: 'настройки', url: '' },
+    { title: 'выйти', url: '' },
   ]
   ngOnInit(): void {
-    console.log(this.router)
+    this.router.url.subscribe({
+      next: (value) => {
+        this.currentUrl = value[0].path;
+        console.log(value);
+      }
+    })
+  }
+
+  isSelectedUrl(url: string): boolean {
+    return url === this.currentUrl;
   }
 
 }
