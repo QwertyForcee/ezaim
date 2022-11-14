@@ -1,0 +1,7 @@
+<div class="profile-menu">
+    <img class="profile-menu-image">
+    <ul class="profile-menu-list">
+        <li *ngFor="let item of menuItems" [routerLink]="item.url" [class.selected]="isSelectedUrl(item.url)">
+            {{item.title}}</li>
+    </ul>
+</div>
