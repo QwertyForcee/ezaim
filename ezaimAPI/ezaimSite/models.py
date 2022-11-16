@@ -40,7 +40,11 @@ class User(BaseDbModel):
         return self.email
 
 class UserSettings(BaseDbModel):
-    user_id = models.ForeignKey('User', on_delete=models.CASCADE)
+    user_id = models.OneToOneField(
+        User, 
+        on_delete=models.CASCADE
+        primary_key=True
+    )
     date_format = models.ForeignKey(DateFormat, on_delete=models.RESTRICT)
     preferred_currency = models.ForeignKey(Currency, on_delete=models.RESTRICT)
     week_start = models.ForeignKey(Day, on_delete=models.RESTRICT)
