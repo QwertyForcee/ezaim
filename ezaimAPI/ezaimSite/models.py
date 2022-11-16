@@ -42,7 +42,7 @@ class User(BaseDbModel):
 class UserSettings(BaseDbModel):
     user_id = models.OneToOneField(
         User, 
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
         primary_key=True
     )
     date_format = models.ForeignKey(DateFormat, on_delete=models.RESTRICT)
