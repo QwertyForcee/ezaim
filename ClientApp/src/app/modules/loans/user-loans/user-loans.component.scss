@@ -1,16 +1,110 @@
+@import '/src/styles/constants';
+
 :host {
     display: contents;
 }
 
 .user-loans {
     width: 100%;
-    display: flex;
+    display: flex; 
+    flex-direction: column;
+
+    .loans-header {
+        font-family: 'IBM Plex Sans', sans-serif;
+        color: $project-dark-grey;
+        font-size: 75px;
+        margin-left: 80px;
+    }
+
+    &-cards {
+        display: flex;
+        width: 100%;
+        flex-wrap: wrap;
+    }
 
     .loan-card {
+        cursor: pointer;
+        margin-left: 80px;
+        margin-bottom: 70px;
+        height: fit-content;
         border-radius: 15px;
+        background: $loan-card-blue;
+        border: 1px solid $loan-card-border-blue;
+        box-shadow: 3px 3px 5px $loan-card-shadow;
+        -webkit-transition: background-color .1s ease-in;
+
+        &:hover {
+            background: $loan-card-blue-hover;
+        }
+
         &-content {
-            margin: 30px;
+            margin: 30px 160px 30px 30px;
+
+            h3 {
+                font-size: 35px;
+                margin-bottom: 35px;
+                margin-top: 20px;
+            }
+
+            h4,
+            h5 {
+                margin-top: 0;
+                margin-bottom: 20px;
+                font-weight: bold;
+                font-size: 25px;
+            }
+
+            h3,
+            h4,
+            h5 {
+                font-family: 'IBM Plex Sans', sans-serif;
+                color: $project-dark-grey;
+            }
         }
     }
 
+    &-grey-mode {
+        &-cards {
+
+        }
+        .loan-card {
+            border: none;
+            box-shadow: 3px 3px 5px $loan-card-shadow-light-purple;
+            padding-bottom: 53px;
+            background: $loan-card-light-purple;
+
+            &:hover {
+                background: $loan-card-light-purple-hover;
+            }
+
+            &-content h4 {
+                color: $project-white;
+            }
+
+            h3{
+                color: $project-black;
+            }
+
+            h5 {
+                color: $loan-card-light-blue;
+            }
+        }
+    }
+
+    .complete-loans-separator {
+        background: transparent;
+        height: 1px;
+        width: 100%;
+    }
+    .complete-loans-header {
+        position: fixed;
+        left: 3%;
+        top: 20%;
+        color: $project-white;
+        margin-left: 0;
+
+        &-hidden {
+            display: none;
+        }
+    }
 }

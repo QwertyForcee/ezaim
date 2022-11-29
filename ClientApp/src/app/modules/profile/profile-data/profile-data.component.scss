@@ -13,6 +13,8 @@
         }
         
         &-second {
+            border: none;
+            font-weight: bold;
             color: $project-medium-purple;
             margin: 5px 0 50px 0;
             font-size: 30px;
@@ -23,5 +25,29 @@
         height: 32px;
         background-image: url('/assets/user-profile-separator.svg');
         width: 100%;
+    }
+
+    &_form {
+        &-block {
+
+            margin: 45px 0 0 25px;
+
+            display: flex;
+            flex-direction: column;
+            label, input {
+                font-size: 30px;
+            }
+            label {
+                margin-bottom: 5px;
+            }
+
+            input {
+                width: fit-content;
+                outline: none;
+                border: none;
+                border-bottom: 1px solid $project-dark-grey;
+            }
+
+        }
     }
 }

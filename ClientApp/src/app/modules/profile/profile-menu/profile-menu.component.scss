@@ -5,7 +5,7 @@
 }
 
 .profile-menu {
-    position: relative;
+    top: 0;
     width: 100%;
     height: 80%;
     margin: 0;
@@ -31,7 +31,9 @@
         list-style-type: none;
         padding-left: 0;
         z-index: 6;
+
         li {
+            cursor: pointer;
             color: $project-white;
             border-radius: 10px;
             background: $project-dark-grey;
@@ -43,11 +45,19 @@
             margin-bottom: 18px;
             padding: 0 10px;
             margin-left: 15px;
+
+            &:hover {
+                background: rgba($project-dark-grey, 0.6);
+            }
         }
 
         .selected {
             background: $project-light-grey;
             color: $project-dark-grey;
+
+            &:hover {
+                background: rgba($project-light-grey, 0.9);
+            }
         }
     }
 }
