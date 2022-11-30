@@ -1,0 +1,53 @@
+@import '/src/styles/constants';
+
+.loan {
+    width: 100%;
+    height: fit-content;
+
+    &-data {
+        display: grid;
+        grid-gap: 0;
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 40px;
+
+        &-amount {
+            color: $loan-amount-text;
+            background: $loan-amount-background;
+            width: fit-content;
+            padding-left: 50px;
+
+            p {
+                white-space: initial;
+            }
+
+            grid-column: 1;
+            grid-row-start: 1;
+            grid-row-end: span 2;
+        }
+
+        &-status {
+            color: $loan-status-text;
+            background: $loan-status-background;
+            grid-row: 1;
+            grid-column-start: 2;
+            grid-column-end: 4;
+            padding-right: auto;
+        }
+
+        &-empty {
+            background: $project-black;
+            width: 360px;
+            height: 220px;
+            grid-row: 2;
+            grid-column: 2;
+        }
+
+        &-info {
+            color: $loan-info-text;
+            background: $loan-info-background;
+            grid-row: 2;
+            grid-column: 3;
+        }
+
+    }
+}

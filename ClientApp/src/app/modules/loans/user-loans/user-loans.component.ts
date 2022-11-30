@@ -1,4 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-loans',
@@ -9,7 +10,7 @@ export class UserLoansComponent implements OnInit, OnDestroy {
 
   switchHeader: HTMLElement | null = null;
   greyMode = false;
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
     this.switchHeader = document.getElementById('complete-loans-separator');
@@ -21,7 +22,7 @@ export class UserLoansComponent implements OnInit, OnDestroy {
   }
 
   onLoanClicked(): void {
-
+    this.router.navigate(['/loan'], { queryParams: { id: 1} });
   }
 
   @HostListener('window:scroll', ['$event'])
