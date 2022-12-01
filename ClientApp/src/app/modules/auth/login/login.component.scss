@@ -1,0 +1,65 @@
+@import '/src/styles/constants';
+
+:host {
+    display: contents;
+}
+
+.auth {
+    width: 100%;
+    height: 100%;
+
+    &-form-container,
+    &-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+    }
+
+    &-image {
+        content: url('/assets/auth-image.svg');
+    }
+
+    &-form-container {
+        width: fit-content;
+        height: fit-content;
+    }
+
+    &-form {
+        display: flex;
+        flex-direction: column;
+
+        &-input,
+        &-input:-webkit-autofill,
+        &-input:-webkit-autofill::first-line,
+        &-input:-webkit-autofill:hover,
+        &-input:-webkit-autofill:focus {
+            font-size: 30px;
+        }
+
+        &-label {
+            font-family: 'IBM Plex Sans', sans-serif;
+            letter-spacing: 2px;
+            font-size: 28px;
+            color: $project-white;
+            background: #B778A1;
+            margin-bottom: 5px;
+            padding-left: 15px;
+            margin-left: 15px;
+            margin-right: 5px;
+        }
+
+        &-input {
+            border: none;
+            background: $project-white;
+            padding: 10px;
+            &:focus {
+                outline: none;
+            }
+            margin-bottom: 50px;
+            box-shadow: -6px 5px 0px $project-dark-grey;
+        }
+    }
+}

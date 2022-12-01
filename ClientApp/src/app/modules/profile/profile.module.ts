@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ApplicationCommonModule } from '../common/common.module';
 import { ProfileMenuComponent } from './profile-menu/profile-menu.component';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { CommonModule } from '@angular/common';
   imports: [
     ApplicationCommonModule,
     RouterModule,
-    CommonModule
+    CommonModule,
+    ReactiveFormsModule
   ]
 })
 export class ProfileModule { }

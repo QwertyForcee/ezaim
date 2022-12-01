@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthModule } from './modules/auth/auth.module';
 import { ApplicationCommonModule } from './modules/common/common.module';
+import { LoansModule } from './modules/loans/loans.module';
 import { ProfileModule } from './modules/profile/profile.module';
 import { HomeComponent } from './shared/home/home.component';
 
@@ -20,7 +21,8 @@ import { HomeComponent } from './shared/home/home.component';
     ApplicationCommonModule,
     CommonModule,
     AuthModule,
-    ProfileModule
+    ProfileModule,
+    LoansModule
   ],
   providers: [],
   bootstrap: [AppComponent]

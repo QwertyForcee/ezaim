@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-common-menu',
@@ -16,6 +16,11 @@ export class CommonMenuComponent implements OnInit {
   expanded = false;
   constructor() { }
 
+  @HostListener('window:scroll')
+  onScroll(){
+    this.expanded = false;    
+  }
+  
   ngOnInit(): void {
   }
 

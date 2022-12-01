@@ -12,4 +12,14 @@ body {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    -webkit-transition: background-color .3s ease-in;
+
+}
+
+.body-grey {
+    background: $project-dark-grey !important;
+
+    .profile-menu-image {
+        content: url('/assets/blur-green-3.svg') !important;
+    }
 }

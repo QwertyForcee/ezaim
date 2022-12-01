@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -12,22 +12,23 @@ export class ProfileMenuComponent implements OnInit {
 
   currentUrl = '';
   menuItems = [
-    { title: 'данные об аккауте', url: 'profile' },
-    { title: 'мои займы', url: '' },
+    { title: 'данные об аккауте', url: '/profile' },
+    { title: 'мои займы', url: 'loans' },
     { title: 'настройки', url: '' },
     { title: 'выйти', url: '' },
   ]
   ngOnInit(): void {
-    this.router.url.subscribe({
-      next: (value) => {
-        this.currentUrl = value[0].path;
-        console.log(value);
-      }
-    })
+    this.currentUrl = window.location.href.split('/').pop() ?? '';
   }
 
   isSelectedUrl(url: string): boolean {
-    return url === this.currentUrl;
+    return url.replace('/', '') === this.currentUrl;
+  }
+
+  onMenuItemClicked() {
+    setTimeout(() => {
+      this.currentUrl = window.location.href.split('/').pop() ?? '';
+    }, 0)
   }
 
 }

@@ -1,7 +1,7 @@
 <div class="profile-menu">
     <img class="profile-menu-image">
     <ul class="profile-menu-list">
-        <li *ngFor="let item of menuItems" [routerLink]="item.url" [class.selected]="isSelectedUrl(item.url)">
+        <li *ngFor="let item of menuItems" [routerLink]="item.url" [class.selected]="isSelectedUrl(item.url)" (click)="onMenuItemClicked()">
             {{item.title}}</li>
     </ul>
 </div>

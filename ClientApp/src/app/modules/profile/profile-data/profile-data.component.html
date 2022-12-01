@@ -1,7 +1,12 @@
 <div class="profile-data">
-    <h1 class="profile-data-title-first">{{userFullName}}</h1>
-    <h2 class="profile-data-title-second">{{email}}</h2>
-    <div class="profile-data-separator"></div>
+    <form [formGroup]="userDataForm">
+        <h1 class="profile-data-title-first">{{userFullName}}</h1>
+        <input id="Email" formControlName="Email" type="email" class="profile-data-title-second">
+        <div class="profile-data-separator"></div>
 
-    
+        <div class="profile-data_form-block">
+            <label for="Phone">КОНТАКТНЫЙ ТЕЛЕФОН</label>
+            <input id="Phone" formControlName="Phone" type="text">
+        </div>
+    </form>
 </div>
