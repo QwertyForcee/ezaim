@@ -49,8 +49,8 @@ class PasportData(BaseDbModel):
     surname = models.CharField(max_length=255)
     sex = models.CharField(max_length=16)
     birth_date = models.DateField()
-    birth_place = models.CharField(max_length=255)
-    registration_address = models.CharField(max_length=255)
+    birth_place = models.ForeignKey('Address', on_delete=models.RESTRICT)
+    registration_address = models.ForeignKey('Address', on_delete=models.RESTRICT)
     nationality = models.CharField(max_length=255)
     identification_number = models.CharField(max_length=128)
     issue_date = models.DateField()
@@ -59,6 +59,16 @@ class PasportData(BaseDbModel):
 
     def __str__(self) -> str:
         return f'{self.surname} {self.name}'
+
+class Address(BaseDbModel):
+    country = models.CharField(max_length=255)
+    state = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    code_soato = models.CharField(max_length=255)
+    street = models.CharField(max_length=255)
+    house = models.CharField(max_length=255)
+    flat = models.CharField(max_length=255)
+    mail_index = models.CharField(max_length=255)
     
 class UserSettings(BaseDbModel):
     user_id = models.OneToOneField(
