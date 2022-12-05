@@ -11,11 +11,12 @@
     &-sign-up {
         height: fit-content;
         display: flex;
+
         .auth {
             &-title-vertical {
                 align-self: flex-start;
             }
-            
+
             &-form-container {
                 position: initial;
                 align-self: center;
@@ -49,18 +50,21 @@
     &-image {
         &-login {
             right: 0;
-            content: url('/assets/auth-image.svg');
+            content: url('/assets/auth-login-image.svg');
         }
-    
+
         &-sign-up-1 {
-            content: url('/assets/auth-sign-up-image.svg');
+            content: url('/assets/auth-sign-up-image-1.svg');
         }
-    
+
         &-sign-up-2 {
             content: url('/assets/auth-sign-up-image-2.svg');
             transform: rotate(-8.03deg);
         }
-    
+
+        &-sign-up-3 {
+            content: url('/assets/auth-sign-up-image-3.svg');
+        }
     }
 
     &-form-container {
@@ -73,7 +77,59 @@
         flex-direction: column;
         row-gap: 250px;
 
-        &-block {
+        &-checkbox-section {
+            margin-left: 200px;
+            display: flex;
+            align-items: center;
+
+            input[type="checkbox"] {
+                -webkit-appearance: none;
+                appearance: none;
+                background-color: #fff;
+                margin: 0;
+            }
+
+            input[type="checkbox"] {
+                appearance: none;
+                background-color: #D0B5E0;
+                margin: 0;
+                color: $project-white;
+                border: 1px solid $project-black;
+ 
+                display: grid;
+                place-content: center;
+                
+            }
+
+            input[type="checkbox"]::before {
+                width: 30px;
+                height: 30px;
+                content: "";
+                transform: scale(0);
+                transition: 120ms transform ease-in-out;
+                box-shadow: inset 20px 30px #5B2F77;
+                transform-origin: bottom left;
+                // clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+                clip-path: polygon(45% 60%, 67% 30%, 84% 4%, 100% 31%, 68% 70%, 45% 95%, 5% 56%, 24% 34%);
+            }
+
+            input[type="checkbox"]:checked::before {
+                transform: scale(1);
+            }
+
+            p {
+                margin: 0 20px 1px 20px;
+                font-size: 20px;
+                font-weight: 300;
+                span {
+                    color: #8A6EC7;
+                    text-decoration: underline;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        &-block {   
             &-sections {
                 margin-left: 200px;
                 display: flex;
@@ -83,9 +139,45 @@
                 flex-direction: row;
                 flex-wrap: wrap;
             }
+
             position: relative;
 
+            &-without-image {
+                margin-top: -180px;
+            }
+
+
+            &-headers, &-button {
+                margin-left: 200px;
+                max-width: calc(150px + 770px);
+            }
+            &-headers {
+                display: flex;
+                justify-content: space-between;
+                h3 {
+                    z-index: 5;
+                    font-size: 40px;
+                    font-weight: 300;
+                }
+            }
+
+            &-button {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 60px;
+                button {
+
+                    z-index: 5;
+                    color: #A189B0;
+                    background: $project-white;
+                    border-radius: 15px;
+                    font-size: 25px;
+                    border: none;
+                }
+            }
         }
+
         &-label,
         &-input {
             max-width: 365px;
