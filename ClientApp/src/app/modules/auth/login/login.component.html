@@ -1,12 +1,101 @@
-<div class="auth">
+<div class="auth" [class.auth-sign-up]="!isLoginMode">
+    <h1 class="auth-title-vertical">EZAIM</h1>
+    <ng-container *ngIf="isLoginMode; else signUpTemplate">
+        <img class="auth-image auth-image-login">
+        <div class="auth-form-container">
+            <form class="auth-form" action="">
+                <label class="auth-form-label" for="">EMAIL</label>
+                <input class="auth-form-input" type="text">
 
-    <img class="auth-image">
-    <div class="auth-form-container">
-        <form class="auth-form" action="">
-            <label class="auth-form-label" for="">EMAIL</label>
-            <input class="auth-form-input" type="text">
-            <label class="auth-form-label" for="">PASSWORD</label>
-            <input class="auth-form-input" type="password">
-        </form>
-    </div>
+                <label class="auth-form-label" for="">PASSWORD</label>
+                <input class="auth-form-input" type="password">
+
+                <button class="auth-form-submit">SIGN IN</button>
+                <button class="auth-form-switch" (click)="onSwitch()">switch to sign up</button>
+            </form>
+        </div>
+    </ng-container>
+    <ng-template #signUpTemplate>
+        <div class="auth-form-container">
+            <div class="auth-sign-up-sub-menu">
+                <h3 class="auth-sign-up-sub-menu-item">
+                    Регистрация
+                </h3>
+                <h4 class="auth-sign-up-sub-menu-item">home page</h4>
+                <h4 class="auth-sign-up-sub-menu-item" (click)="onSwitch()">switch to sign in</h4>
+            </div>
+            <form class="auth-form" action="">
+                <div class="auth-form-block">
+                    <img class="auth-image auth-image-sign-up-1">
+                    <div class="auth-form-block-sections">
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">EMAIL</label>
+                            <input class="auth-form-input" type="text">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">PASSWORD</label>
+                            <input class="auth-form-input" type="password">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">PHONE NUMBER</label>
+                            <input class="auth-form-input">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">CONFIRM PASSWORD</label>
+                            <input class="auth-form-input" type="password">
+                        </section>
+                    </div>
+                </div>
+                <div class="auth-form-block">
+                    <img class="auth-image auth-image-sign-up-2">
+                    <div class="auth-form-block-sections">
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">ИМЯ</label>
+                            <input class="auth-form-input" type="text">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">ЕЩЕ ЦИФЕРКИ</label>
+                            <input class="auth-form-input" type="password">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">ФАМИЛИЯ</label>
+                            <input class="auth-form-input">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">ВЫДАН ЧИСЛА</label>
+                            <input class="auth-form-input" type="password">
+                        </section>
+
+                        
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">Идентификационный номер</label>
+                            <input class="auth-form-input" type="text">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">ДО ЧИСЛА</label>
+                            <input class="auth-form-input" type="password">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">PHONE NUMBER</label>
+                            <input class="auth-form-input">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">КЕМ ВЫДАН</label>
+                            <input class="auth-form-input" type="password">
+                        </section>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </ng-template>
 </div>

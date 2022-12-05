@@ -9,15 +9,27 @@
         grid-gap: 0;
         font-family: 'IBM Plex Sans', sans-serif;
         font-size: 40px;
+        grid-template-columns: 25% 20% auto;
 
         &-amount {
             color: $loan-amount-text;
             background: $loan-amount-background;
-            width: fit-content;
-            padding-left: 50px;
+            width: 100%;
+            padding-left: 60px;
 
             p {
                 white-space: initial;
+                margin: 0;
+            }
+
+            p:first-child {
+                margin-top: 40px;
+            }
+
+            p:last-child {
+                margin-top: 10px;
+                text-decoration: underline;
+                font-size: 50px;
             }
 
             grid-column: 1;
@@ -32,12 +44,22 @@
             grid-column-start: 2;
             grid-column-end: 4;
             padding-right: auto;
+
+            &-white {
+                color: $project-white;
+                text-decoration: underline;
+            }
+
+            &-black {
+                color: $project-dark-grey;
+                font-size: 50px;
+                text-decoration: underline;
+            }
         }
 
         &-empty {
             background: $project-black;
-            width: 360px;
-            height: 220px;
+            width: 100%;
             grid-row: 2;
             grid-column: 2;
         }
@@ -47,6 +69,15 @@
             background: $loan-info-background;
             grid-row: 2;
             grid-column: 3;
+
+            &-gold {
+                color: $project-gold;
+            }
+        }
+
+        &-info,
+        &-status p {
+            padding-left: 30px;
         }
 
     }

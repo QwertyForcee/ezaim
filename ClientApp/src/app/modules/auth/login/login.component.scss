@@ -8,18 +8,59 @@
     width: 100%;
     height: 100%;
 
+    &-sign-up {
+        height: fit-content;
+        display: flex;
+        .auth {
+            &-title-vertical {
+                align-self: flex-start;
+            }
+            
+            &-form-container {
+                position: initial;
+                align-self: center;
+                width: 100%;
+            }
+
+        }
+    }
+
+    &-title-vertical {
+        font-size: 125px;
+        font-weight: 500;
+        letter-spacing: 30px;
+        writing-mode: vertical-lr;
+        text-orientation: revert;
+        position: sticky;
+        transform: rotate(180deg);
+        top: 25%
+    }
+
     &-form-container,
     &-image {
         position: absolute;
         top: 0;
         left: 0;
-        right: 0;
         bottom: 0;
         margin: auto;
+        overflow: hidden;
     }
 
     &-image {
-        content: url('/assets/auth-image.svg');
+        &-login {
+            right: 0;
+            content: url('/assets/auth-image.svg');
+        }
+    
+        &-sign-up-1 {
+            content: url('/assets/auth-sign-up-image.svg');
+        }
+    
+        &-sign-up-2 {
+            content: url('/assets/auth-sign-up-image-2.svg');
+            transform: rotate(-8.03deg);
+        }
+    
     }
 
     &-form-container {
@@ -30,6 +71,31 @@
     &-form {
         display: flex;
         flex-direction: column;
+        row-gap: 250px;
+
+        &-block {
+            &-sections {
+                margin-left: 200px;
+                display: flex;
+                flex-direction: column;
+                max-width: calc(150px + 770px);
+                column-gap: 150px;
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            position: relative;
+
+        }
+        &-label,
+        &-input {
+            max-width: 365px;
+        }
+
+        &-section {
+            display: flex;
+            flex-direction: column;
+            z-index: 5;
+        }
 
         &-input,
         &-input:-webkit-autofill,
@@ -42,24 +108,66 @@
         &-label {
             font-family: 'IBM Plex Sans', sans-serif;
             letter-spacing: 2px;
-            font-size: 28px;
+            font-size: 27px;
             color: $project-white;
             background: #B778A1;
             margin-bottom: 5px;
             padding-left: 15px;
             margin-left: 15px;
             margin-right: 5px;
+            min-height: 35px;
+            max-height: fit-content;
+            overflow-wrap: break-word;
         }
 
         &-input {
             border: none;
             background: $project-white;
             padding: 10px;
+
             &:focus {
                 outline: none;
             }
+
             margin-bottom: 50px;
             box-shadow: -6px 5px 0px $project-dark-grey;
+        }
+
+        &-submit {
+            color: #A0006A;
+            font-size: 40px;
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        &-switch {
+            color: #FFD4F1;
+            font-size: 25px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-top: 30px;
+        }
+    }
+
+    &-sign-up-sub-menu {
+        margin-left: 200px;
+        display: flex;
+        margin-bottom: 170px;
+        align-items: center;
+
+        &-item {
+            font-weight: 400;
+            font-size: 25px;
+            color: #AE3184;
+            margin-right: 60px;
+        }
+
+        &-item:first-child {
+            font-size: 40px;
+            color: $project-dark-grey;
         }
     }
 }

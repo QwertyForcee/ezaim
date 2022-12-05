@@ -22,7 +22,7 @@ import { HomeComponent } from './shared/home/home.component';
     CommonModule,
     AuthModule,
     ProfileModule,
-    LoansModule
+    LoansModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
