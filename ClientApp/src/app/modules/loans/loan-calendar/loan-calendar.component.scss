@@ -1,0 +1,49 @@
+@import '/src/styles/constants';
+
+.loan-calendar {
+    font-family: 'Source Sans Pro', sans-serif;
+    margin: 45px 150px 300px 100px;
+    display: flex;
+    flex-direction: column;
+
+    p {
+        font-size: 20px;
+        margin: 0;
+        cursor: pointer;
+    }
+
+    h3 {
+        font-size: 30px;
+        margin: 35px 0 30px 0;
+    }
+
+    p, h3 {
+        font-weight: 300;
+        color: $project-dark-grey;
+    }
+
+    .days-list {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 22px;
+        row-gap: 25px;
+        margin-bottom: 85px;
+
+        &-item {
+            font-size: 30px;
+            margin: 0;
+            padding: 10px 20px;
+            border-radius: 50%;
+            background: $project-light-blue;
+            color: $project-white;
+        
+            &-past {
+                background: #7C7979;
+            }
+
+            &-today {
+                background: $project-gold;
+            }
+        }
+    }
+}

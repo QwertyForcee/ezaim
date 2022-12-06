@@ -3,7 +3,8 @@
 .loan {
     width: 100%;
     height: fit-content;
-
+    display: flex;
+    flex-direction: column;
     &-data {
         display: grid;
         grid-gap: 0;

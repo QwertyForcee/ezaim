@@ -13,6 +13,11 @@
         display: flex;
 
         .auth {
+
+            &-form {
+                row-gap: 250px;
+            }
+
             &-title-vertical {
                 align-self: flex-start;
             }
@@ -47,6 +52,10 @@
         overflow: hidden;
     }
 
+    &-form-container {
+        right: 0;
+    }
+
     &-image {
         &-login {
             right: 0;
@@ -75,7 +84,6 @@
     &-form {
         display: flex;
         flex-direction: column;
-        row-gap: 250px;
 
         &-checkbox-section {
             margin-left: 200px;
@@ -95,10 +103,10 @@
                 margin: 0;
                 color: $project-white;
                 border: 1px solid $project-black;
- 
+
                 display: grid;
                 place-content: center;
-                
+
             }
 
             input[type="checkbox"]::before {
@@ -121,6 +129,7 @@
                 margin: 0 20px 1px 20px;
                 font-size: 20px;
                 font-weight: 300;
+
                 span {
                     color: #8A6EC7;
                     text-decoration: underline;
@@ -129,7 +138,7 @@
             }
         }
 
-        &-block {   
+        &-block {
             &-sections {
                 margin-left: 200px;
                 display: flex;
@@ -147,17 +156,21 @@
             }
 
 
-            &-headers, &-button {
+            &-headers,
+            &-button {
                 margin-left: 200px;
                 max-width: calc(150px + 770px);
             }
+
             &-headers {
                 display: flex;
                 justify-content: space-between;
+
                 h3 {
                     z-index: 5;
                     font-size: 40px;
                     font-weight: 300;
+                    letter-spacing: 3px;
                 }
             }
 
@@ -166,14 +179,25 @@
                 align-items: center;
                 justify-content: center;
                 margin-bottom: 60px;
-                button {
 
+                button {
                     z-index: 5;
                     color: #A189B0;
                     background: $project-white;
                     border-radius: 15px;
                     font-size: 25px;
                     border: none;
+                    padding: 10px 10px;
+                    letter-spacing: 3px;
+                    cursor: pointer;
+                    border: 1px solid $project-white;
+                    transition: 0.5s;
+                    -webkit-transition:0.5s;
+
+                    &:hover {
+                        color: #8A6EC7;
+                        border: 1px solid #8A6EC7;
+                    }
                 }
             }
         }
@@ -210,6 +234,10 @@
             min-height: 35px;
             max-height: fit-content;
             overflow-wrap: break-word;
+
+            &-alt {
+                background: #62ABCB;
+            }
         }
 
         &-input {
@@ -245,12 +273,14 @@
     }
 
     &-sign-up-sub-menu {
+        margin-top: 100px;
         margin-left: 200px;
         display: flex;
-        margin-bottom: 170px;
+        margin-bottom: 100px;
         align-items: center;
 
         &-item {
+            cursor: pointer;
             font-weight: 400;
             font-size: 25px;
             color: #AE3184;
@@ -258,6 +288,7 @@
         }
 
         &-item:first-child {
+            cursor: default;
             font-size: 40px;
             color: $project-dark-grey;
         }
