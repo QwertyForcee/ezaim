@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -9,6 +10,7 @@ import { ApplicationCommonModule } from './modules/common/common.module';
 import { LoansModule } from './modules/loans/loans.module';
 import { ProfileModule } from './modules/profile/profile.module';
 import { HomeComponent } from './shared/home/home.component';
+
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import { HomeComponent } from './shared/home/home.component';
     AuthModule,
     ProfileModule,
     LoansModule,
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

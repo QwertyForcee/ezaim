@@ -1,5 +1,6 @@
 @import '/src/styles/constants';
 
+
 :host {
     display: contents;
 }
@@ -16,6 +17,19 @@
 
             &-form {
                 row-gap: 250px;
+
+                &-submit-section {
+                    margin-bottom: 150px;
+                    margin-top: -150px;
+                    margin-left: 200px;
+                    max-width: 920px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 30px;
+                    letter-spacing: 3px;
+                }
             }
 
             &-title-vertical {
@@ -147,6 +161,11 @@
                 column-gap: 150px;
                 flex-direction: row;
                 flex-wrap: wrap;
+
+                &-horizontal {
+                    flex-direction: row;
+                    margin-bottom: -150px;
+                }
             }
 
             position: relative;
@@ -192,7 +211,7 @@
                     cursor: pointer;
                     border: 1px solid $project-white;
                     transition: 0.5s;
-                    -webkit-transition:0.5s;
+                    -webkit-transition: 0.5s;
 
                     &:hover {
                         color: #8A6EC7;
@@ -205,6 +224,10 @@
         &-label,
         &-input {
             max-width: 365px;
+        }
+
+        &-label {
+            max-width: 350px;
         }
 
         &-section {
@@ -253,6 +276,10 @@
             box-shadow: -6px 5px 0px $project-dark-grey;
         }
 
+        &-input.ng-touched.ng-invalid {
+            box-shadow: -6px 5px 0px $control-error;
+        }
+
         &-submit {
             color: #A0006A;
             font-size: 40px;
@@ -260,6 +287,10 @@
             background: none;
             border: none;
             cursor: pointer;
+
+            &.disabled {
+                color: $project-light-grey;
+            }
         }
 
         &-switch {
@@ -269,6 +300,21 @@
             border: none;
             cursor: pointer;
             margin-top: 30px;
+        }
+
+        &-date {
+            position: relative;
+            display: flex;
+
+            &-img {
+                position: absolute;
+                right: 15px;
+                top: 10px;
+                content: url('/assets/calendar.svg');
+                width: 35px;
+                height: 35px;
+                z-index: 7;
+            }
         }
     }
 

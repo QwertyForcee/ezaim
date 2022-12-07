@@ -27,3 +27,32 @@ $loan-status-text: #FFFFD2;
 $loan-status-background: $project-light-purple;
 $loan-info-text: $project-dark-grey;
 $loan-info-background: $project-light-green;
+
+$control-error:#AC0000;
+$control-error-header: #8D0707;
+
+@mixin styles-for-calendar() {
+    .cdk-overlay-container {
+        position: fixed;
+        z-index: 60;
+        width: fit-content;
+        top: 35%;
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .cdk-live-announcer-element {
+        display: none;
+    }
+
+    .mat-datepicker-content {
+        background: $project-white;
+        box-shadow: -3px 3px 5px $project-dark-grey;
+    }
+
+    .mat-calendar-body-cell-content:hover {
+        background-color: #9D7EB0;
+    }
+}
