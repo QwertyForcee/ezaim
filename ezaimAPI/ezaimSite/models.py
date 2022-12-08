@@ -33,7 +33,7 @@ class DateFormat(BaseDbModel):
 class User(BaseDbModel):
     email = models.EmailField()
     password = models.CharField(max_length=255)
-    phone_number = models.BigIntegerField()
+    phone_number = models.CharField(max_length=255)
     salary = models.DecimalField(max_digits=15, decimal_places=2)
 
     def __str__(self) -> str:
@@ -48,6 +48,7 @@ class PasportData(BaseDbModel):
     name = models.CharField(max_length=255)
     surname = models.CharField(max_length=255)
     sex = models.CharField(max_length=16)
+    resident = models.CharField(max_length=255)
     birth_date = models.DateField()
     birth_place = models.ForeignKey('Address', on_delete=models.RESTRICT)
     registration_address = models.ForeignKey('Address', on_delete=models.RESTRICT)
