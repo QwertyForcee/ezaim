@@ -1,12 +1,245 @@
-<div class="auth">
+<div class="auth" [class.auth-sign-up]="!isLoginMode">
+    <h1 class="auth-title-vertical">EZAIM</h1>
+    <ng-container *ngIf="isLoginMode; else signUpTemplate">
+        <img class="auth-image auth-image-login">
+        <div class="auth-form-container">
+            <form class="auth-form" action="" [formGroup]="loginFormGroup">
+                <label class="auth-form-label" for="">ЭЛЕКТРОННАЯ ПОЧТА</label>
+                <input class="auth-form-input" formControlName="loginEmail" type="text">
 
-    <img class="auth-image">
-    <div class="auth-form-container">
-        <form class="auth-form" action="">
-            <label class="auth-form-label" for="">EMAIL</label>
-            <input class="auth-form-input" type="text">
-            <label class="auth-form-label" for="">PASSWORD</label>
-            <input class="auth-form-input" type="password">
-        </form>
-    </div>
+                <label class="auth-form-label" for="">ПАРОЛЬ</label>
+                <input class="auth-form-input" formControlName="loginPassword" type="password">
+
+                <button class="auth-form-submit" (click)="onSubmit()" [disabled]="invalidLogInForm"
+                    [class.disabled]="invalidLogInForm">ВОЙТИ</button>
+                <button class="auth-form-switch" (click)="onSwitch()">у меня еще нету аккаунта</button>
+            </form>
+        </div>
+    </ng-container>
+    <ng-template #signUpTemplate>
+        <div class="auth-form-container">
+            <div class="auth-sign-up-sub-menu">
+                <h3 class="auth-sign-up-sub-menu-item">
+                    Регистрация
+                </h3>
+                <h4 class="auth-sign-up-sub-menu-item">на главную</h4>
+                <h4 class="auth-sign-up-sub-menu-item" (click)="onSwitch()">переключиться на вход</h4>
+            </div>
+            <form class="auth-form" action="" [formGroup]="signUpFormGroup">
+                <section class="auth-form-checkbox-section">
+                    <input type="checkbox" formControlName="personalDataTermsAgreement">
+                    <p>Я соглашаюсь с <span>политикой обработки персональных данных</span></p>
+                </section>
+                <div class="auth-form-block">
+                    <img class="auth-image auth-image-sign-up-1">
+                    <div class="auth-form-block-sections">
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">EMAIL</label>
+                            <input class="auth-form-input" type="text" formControlName="email">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">PASSWORD</label>
+                            <input class="auth-form-input" type="password" formControlName="password">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">PHONE NUMBER</label>
+                            <input class="auth-form-input" formControlName="phoneNumber">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">CONFIRM PASSWORD</label>
+                            <input class="auth-form-input" type="password" formControlName="confirmPassword">
+                        </section>
+                    </div>
+                </div>
+                <div class="auth-form-block">
+                    <img class="auth-image auth-image-sign-up-2">
+                    <div class="auth-form-block-sections">
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">ИМЯ</label>
+                            <input class="auth-form-input" type="text" formControlName="name">
+                        </section>
+
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">ФАМИЛИЯ</label>
+                            <input class="auth-form-input" formControlName="surname">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">СЕРИЯ И НОМЕР ПАСПОРТА</label>
+                            <input class="auth-form-input" formControlName="passportNumber">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">Идентификационный номер</label>
+                            <input class="auth-form-input" type="text" formControlName="identificationNumber">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">ВЫДАН ЧИСЛА</label>
+                            <input class="auth-form-input" formControlName="issueDate">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">ДО ЧИСЛА</label>
+                            <input class="auth-form-input" formControlName="expiryDate">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">КЕМ ВЫДАН</label>
+                            <input class="auth-form-input" formControlName="authority">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">ГРАЖДАНСТВО</label>
+                            <input class="auth-form-input" formControlName="nationality">
+                        </section>
+                    </div>
+                </div>
+                <div class="auth-form-block auth-form-block-without-image">
+                    <div class="auth-form-block-sections">
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">ПОЛ</label>
+                            <input class="auth-form-input" formControlName="sex">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">РЕЗИДЕНТ</label>
+                            <input class="auth-form-input" formControlName="resident">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">ДАТА РОЖДЕНИЯ</label>
+                            <div class="auth-form-date">
+                                <input class="auth-form-input auth-form-input-date" matInput
+                                    [matDatepicker]="birthDatePicker" formControlName="birthDate">
+                                <img class="auth-form-date-img" (click)="birthDatePicker.open()">
+                                <mat-datepicker #birthDatePicker></mat-datepicker>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="auth-form-block auth-form-block-without-image">
+                    <div class="auth-form-block-headers">
+                        <h3>Место рождения</h3>
+                    </div>
+                    <div class="auth-form-block-sections auth-form-block-sections-horizontal">
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">СТРАНА</label>
+                            <input class="auth-form-input" type="text" formControlName="birth_country">
+                        </section>
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">ОБЛАСТЬ</label>
+                            <input class="auth-form-input" type="text" formControlName="birth_state">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">ГОРОД</label>
+                            <input class="auth-form-input" type="text" formControlName="birth_city">
+                        </section>
+                    </div>
+                </div>
+                <div class="auth-form-block">
+                    <img class="auth-image auth-image-sign-up-3">
+                    <div class="auth-form-block-headers">
+                        <h3>Адрес регистрации</h3>
+                        <h3>Адрес проживания</h3>
+                    </div>
+                    <div class="auth-form-block-button">
+                        <button (click)="duplicate()">дублировать</button>
+                    </div>
+                    <div class="auth-form-block-sections">
+                        <section class="auth-form-section">
+                            <label class="auth-form-label auth-form-label-alt" for="">СТРАНА</label>
+                            <input class="auth-form-input" type="text" formControlName="registration_country">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">СТРАНА</label>
+                            <input class="auth-form-input" type="text" formControlName="residential_country">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label auth-form-label-alt" for="">ОБЛАСТЬ</label>
+                            <input class="auth-form-input" type="text" formControlName="registration_state">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">ОБЛАСТЬ</label>
+                            <input class="auth-form-input" type="text" formControlName="residential_state">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label auth-form-label-alt" for="">ГОРОД</label>
+                            <input class="auth-form-input" type="text" formControlName="registration_city">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">ГОРОД</label>
+                            <input class="auth-form-input" type="text" formControlName="residential_city">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label auth-form-label-alt" for="">УЛИЦА</label>
+                            <input class="auth-form-input" type="text" formControlName="registration_street">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">УЛИЦА</label>
+                            <input class="auth-form-input" type="text" formControlName="residential_street">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label auth-form-label-alt" for="">НОМЕР ДОМА</label>
+                            <input class="auth-form-input" type="text" formControlName="registration_house">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">НОМЕР ДОМА</label>
+                            <input class="auth-form-input" type="text" formControlName="residential_house">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label auth-form-label-alt" for="">КВАРТИРА</label>
+                            <input class="auth-form-input" type="text" formControlName="registration_flat">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">КВАРТИРА</label>
+                            <input class="auth-form-input" type="text" formControlName="residential_flat">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label auth-form-label-alt" for="">ПОЧТОВЫЙ ИНДЕКС</label>
+                            <input class="auth-form-input" type="text" formControlName="registration_mailIndex">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">ПОЧТОВЫЙ ИНДЕКС</label>
+                            <input class="auth-form-input" type="text" formControlName="residential_mailIndex">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label auth-form-label-alt" for="">Код СОАТО</label>
+                            <input class="auth-form-input" type="text" formControlName="registration_codeSoato">
+                        </section>
+
+                        <section class="auth-form-section">
+                            <label class="auth-form-label" for="">Код СОАТО</label>
+                            <input class="auth-form-input" type="text" formControlName="residential_codeSoato">
+                        </section>
+                    </div>
+                </div>
+                <div class="auth-form-submit-section">
+                    <button class="auth-form-submit" (click)="onSubmit()" [disabled]="invalidSignUpForm"
+                        [class.disabled]="invalidSignUpForm">ВОЙТИ</button>
+                    <p *ngIf="invalidSignUpForm">Некоторые данные заполнены некорректно</p>
+                </div>
+            </form>
+        </div>
+    </ng-template>
 </div>

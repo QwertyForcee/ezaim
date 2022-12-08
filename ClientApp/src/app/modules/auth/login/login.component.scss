@@ -1,5 +1,6 @@
 @import '/src/styles/constants';
 
+
 :host {
     display: contents;
 }
@@ -8,18 +9,85 @@
     width: 100%;
     height: 100%;
 
+    &-sign-up {
+        height: fit-content;
+        display: flex;
+
+        .auth {
+
+            &-form {
+                row-gap: 250px;
+
+                &-submit-section {
+                    margin-bottom: 150px;
+                    margin-top: -150px;
+                    margin-left: 200px;
+                    max-width: 920px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 30px;
+                    letter-spacing: 3px;
+                }
+            }
+
+            &-title-vertical {
+                align-self: flex-start;
+            }
+
+            &-form-container {
+                position: initial;
+                align-self: center;
+                width: 100%;
+            }
+
+        }
+    }
+
+    &-title-vertical {
+        font-size: 125px;
+        font-weight: 500;
+        letter-spacing: 30px;
+        writing-mode: vertical-lr;
+        text-orientation: revert;
+        position: sticky;
+        transform: rotate(180deg);
+        top: 25%
+    }
+
     &-form-container,
     &-image {
         position: absolute;
         top: 0;
         left: 0;
-        right: 0;
         bottom: 0;
         margin: auto;
+        overflow: hidden;
+    }
+
+    &-form-container {
+        right: 0;
     }
 
     &-image {
-        content: url('/assets/auth-image.svg');
+        &-login {
+            right: 0;
+            content: url('/assets/auth-login-image.svg');
+        }
+
+        &-sign-up-1 {
+            content: url('/assets/auth-sign-up-image-1.svg');
+        }
+
+        &-sign-up-2 {
+            content: url('/assets/auth-sign-up-image-2.svg');
+            transform: rotate(-8.03deg);
+        }
+
+        &-sign-up-3 {
+            content: url('/assets/auth-sign-up-image-3.svg');
+        }
     }
 
     &-form-container {
@@ -30,6 +98,143 @@
     &-form {
         display: flex;
         flex-direction: column;
+
+        &-checkbox-section {
+            margin-left: 200px;
+            display: flex;
+            align-items: center;
+
+            input[type="checkbox"] {
+                -webkit-appearance: none;
+                appearance: none;
+                background-color: #fff;
+                margin: 0;
+            }
+
+            input[type="checkbox"] {
+                appearance: none;
+                background-color: #D0B5E0;
+                margin: 0;
+                color: $project-white;
+                border: 1px solid $project-black;
+
+                display: grid;
+                place-content: center;
+
+            }
+
+            input[type="checkbox"]::before {
+                width: 30px;
+                height: 30px;
+                content: "";
+                transform: scale(0);
+                transition: 120ms transform ease-in-out;
+                box-shadow: inset 20px 30px #5B2F77;
+                transform-origin: bottom left;
+                // clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+                clip-path: polygon(45% 60%, 67% 30%, 84% 4%, 100% 31%, 68% 70%, 45% 95%, 5% 56%, 24% 34%);
+            }
+
+            input[type="checkbox"]:checked::before {
+                transform: scale(1);
+            }
+
+            p {
+                margin: 0 20px 1px 20px;
+                font-size: 20px;
+                font-weight: 300;
+
+                span {
+                    color: #8A6EC7;
+                    text-decoration: underline;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        &-block {
+            &-sections {
+                margin-left: 200px;
+                display: flex;
+                flex-direction: column;
+                max-width: calc(150px + 770px);
+                column-gap: 150px;
+                flex-direction: row;
+                flex-wrap: wrap;
+
+                &-horizontal {
+                    flex-direction: row;
+                    margin-bottom: -150px;
+                }
+            }
+
+            position: relative;
+
+            &-without-image {
+                margin-top: -180px;
+            }
+
+
+            &-headers,
+            &-button {
+                margin-left: 200px;
+                max-width: calc(150px + 770px);
+            }
+
+            &-headers {
+                display: flex;
+                justify-content: space-between;
+
+                h3 {
+                    z-index: 5;
+                    font-size: 40px;
+                    font-weight: 300;
+                    letter-spacing: 3px;
+                }
+            }
+
+            &-button {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 60px;
+
+                button {
+                    z-index: 5;
+                    color: #A189B0;
+                    background: $project-white;
+                    border-radius: 15px;
+                    font-size: 25px;
+                    border: none;
+                    padding: 10px 10px;
+                    letter-spacing: 3px;
+                    cursor: pointer;
+                    border: 1px solid $project-white;
+                    transition: 0.5s;
+                    -webkit-transition: 0.5s;
+
+                    &:hover {
+                        color: #8A6EC7;
+                        border: 1px solid #8A6EC7;
+                    }
+                }
+            }
+        }
+
+        &-label,
+        &-input {
+            max-width: 365px;
+        }
+
+        &-label {
+            max-width: 350px;
+        }
+
+        &-section {
+            display: flex;
+            flex-direction: column;
+            z-index: 5;
+        }
 
         &-input,
         &-input:-webkit-autofill,
@@ -42,24 +247,96 @@
         &-label {
             font-family: 'IBM Plex Sans', sans-serif;
             letter-spacing: 2px;
-            font-size: 28px;
+            font-size: 27px;
             color: $project-white;
             background: #B778A1;
             margin-bottom: 5px;
             padding-left: 15px;
             margin-left: 15px;
             margin-right: 5px;
+            min-height: 35px;
+            max-height: fit-content;
+            overflow-wrap: break-word;
+
+            &-alt {
+                background: #62ABCB;
+            }
         }
 
         &-input {
             border: none;
             background: $project-white;
             padding: 10px;
+
             &:focus {
                 outline: none;
             }
+
             margin-bottom: 50px;
             box-shadow: -6px 5px 0px $project-dark-grey;
+        }
+
+        &-input.ng-touched.ng-invalid {
+            box-shadow: -6px 5px 0px $control-error;
+        }
+
+        &-submit {
+            color: #A0006A;
+            font-size: 40px;
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: none;
+            border: none;
+            cursor: pointer;
+
+            &.disabled {
+                color: $project-light-grey;
+            }
+        }
+
+        &-switch {
+            color: #FFD4F1;
+            font-size: 25px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-top: 30px;
+        }
+
+        &-date {
+            position: relative;
+            display: flex;
+
+            &-img {
+                position: absolute;
+                right: 15px;
+                top: 10px;
+                content: url('/assets/calendar.svg');
+                width: 35px;
+                height: 35px;
+                z-index: 7;
+            }
+        }
+    }
+
+    &-sign-up-sub-menu {
+        margin-top: 100px;
+        margin-left: 200px;
+        display: flex;
+        margin-bottom: 100px;
+        align-items: center;
+
+        &-item {
+            cursor: pointer;
+            font-weight: 400;
+            font-size: 25px;
+            color: #AE3184;
+            margin-right: 60px;
+        }
+
+        &-item:first-child {
+            cursor: default;
+            font-size: 40px;
+            color: $project-dark-grey;
         }
     }
 }
