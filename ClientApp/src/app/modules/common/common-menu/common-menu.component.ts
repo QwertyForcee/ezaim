@@ -9,7 +9,7 @@ export class CommonMenuComponent implements OnInit {
   menuItems = [
     { title: 'главная', url: '' },
     { title: 'личный кабинет', url: '/profile' },
-    { title: 'мои займы', url: '' },
+    { title: 'мои займы', url: '/loans' },
     { title: 'новый займ', url: '', star: true },
 
   ]

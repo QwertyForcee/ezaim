@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { DateHelper } from 'src/app/utilities/date-helper';
 
 @Component({
   selector: 'app-loan-calendar',
   templateUrl: './loan-calendar.component.html',
-  styleUrls: ['./loan-calendar.component.scss']
+  styleUrls: ['./loan-calendar.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class LoanCalendarComponent implements OnInit {
 
   constructor() { }
   realCurrentDate: Date = new Date();
-  currentDate: Date = new Date();
+  currentDate!: Date;
 
   get realCurrentYear(): number {
     return this.realCurrentDate.getFullYear();
@@ -25,6 +26,8 @@ export class LoanCalendarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.currentDate = new Date();
+    // this.currentDate.setDate(0);
   }
 
   getMonthName(toAdd: number, useToName = false): string {
@@ -38,6 +41,34 @@ export class LoanCalendarComponent implements OnInit {
     return this.getDaysObjects(year, monthIndex, this.getDays(DateHelper.getDays(year, monthIndex)));
   }
 
+  get currentMonthDays() {
+    return this.getMonthDaysCount(0);
+  }
+
+  get nextMonthDays() {
+    return this.getMonthDaysCount(1);
+  }
+
+  get nextNextMonthDays() {
+    return this.getMonthDaysCount(2);
+  }
+
+  dayToolTip(day: number) {
+    return `оставшаяся сумма выплаты на ${day} число составит 100 BYN`
+  }
+
+  trackByDay(index: any, item: any) {
+    return item.id;
+  }
+
+  shiftMonthLeft(): void {
+    this.currentDate.setMonth(this.currentDate.getMonth() - 1, this.currentDate.getDate());
+  }
+
+  shiftMonthRight(): void {
+    this.currentDate.setMonth(this.currentDate.getMonth() + 1, 1);
+  }
+
   private getDays(count: number): number[] {
     return Array.from(Array(count)).map((e, i) => i + 1);
   }
@@ -45,6 +76,7 @@ export class LoanCalendarComponent implements OnInit {
   private getDaysObjects(year: number, month: number, days: number[]) {
     return days.map(day => {
       return {
+        id: `${year}_${month}_${day}`,
         value: day,
         isPrev: this.isPreviousDate(year, month, day),
         isToday: this.isCurrentDate(year, month, day)
@@ -54,8 +86,8 @@ export class LoanCalendarComponent implements OnInit {
 
   private isPreviousDate(year: number, month: number, day: number) {
     return this.realCurrentYear > year
-      || (this.realCurrentYear === year && this.realCurrentMonth > month
-        || (this.realCurrentMonth === month && this.realCurrentDay > day)
+      || (this.realCurrentYear === year && (this.realCurrentMonth > month
+        || (this.realCurrentMonth === month && this.realCurrentDay > day))
       )
   }
   private isCurrentDate(year: number, month: number, day: number) {

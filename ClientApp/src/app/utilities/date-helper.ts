@@ -46,6 +46,11 @@ export class DateHelper {
         if (currentMonth + addValue > 11) {
             return currentMonth + addValue - 12;
         }
+        if (currentMonth + addValue < 0) {
+            console.log(`${currentMonth} , ${addValue}, ${11 + currentMonth + addValue}`);
+
+            return 11 + currentMonth + addValue + 1;
+        }
         else {
             return currentMonth + addValue;
         }
@@ -63,6 +68,6 @@ export class DateHelper {
     }
 
     static getDays(year: number, month: number): number {
-        return new Date(year, month, 0).getDate();
+        return new Date(year, month + 1, 0).getDate();
     }
 }
