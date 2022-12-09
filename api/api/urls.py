@@ -22,6 +22,7 @@ from drf_yasg import openapi
 from api import settings
 from ezaim.views import (
     not_found, app_error,
+    login,
     UserViewSet,
     UserSettingsViewSet,
     CurrencyViewSet,
@@ -55,7 +56,8 @@ router.register(r'currencies', CurrencyViewSet, basename='currencies')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/', include(router.urls))
+    path('api/v1/', include(router.urls)),
+    path('login', login),
 ]
 
 if settings.DEBUG:
