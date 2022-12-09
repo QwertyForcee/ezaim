@@ -2,10 +2,8 @@ from django.contrib import admin
 from .models import (
     User, TelegramUser, UserSettings,
     PaymentCard, Payment, Loan, 
-    Currency, Day, DateFormat, Log
+    Currency, Log
 )
-
-# Register your models here.
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -39,12 +37,4 @@ class CurrencyAdmin(admin.ModelAdmin):
 
 @admin.register(Log)
 class LogAdmin(admin.ModelAdmin):
-    pass
-
-@admin.register(Day)
-class DayAdmin(admin.ModelAdmin):
-    pass
-
-@admin.register(DateFormat)
-class DateFormatAdmin(admin.ModelAdmin):
     pass

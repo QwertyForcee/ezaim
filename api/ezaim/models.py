@@ -18,18 +18,6 @@ class Currency(BaseDbModel):
     class Meta:
         verbose_name_plural = "Currencies"
 
-class Day(BaseDbModel):
-    day = models.CharField(max_length=32)
-    
-    def __str__(self) -> str:
-        return self.day
-
-class DateFormat(BaseDbModel):
-    date_format = models.CharField(max_length=255)
-
-    def __str__(self) -> str:
-        return self.date_format
-
 class User(BaseDbModel):
     email = models.EmailField()
     password = models.CharField(max_length=255)
@@ -38,6 +26,16 @@ class User(BaseDbModel):
 
     def __str__(self) -> str:
         return self.email
+
+class Address(BaseDbModel):
+    country = models.CharField(max_length=255)
+    state = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    code_soato = models.CharField(max_length=255)
+    street = models.CharField(max_length=255)
+    house = models.CharField(max_length=255)
+    flat = models.CharField(max_length=255)
+    mail_index = models.CharField(max_length=255)
 
 class PasportData(BaseDbModel):
     user_id = models.OneToOneField(
@@ -50,8 +48,21 @@ class PasportData(BaseDbModel):
     sex = models.CharField(max_length=16)
     resident = models.CharField(max_length=255)
     birth_date = models.DateField()
-    birth_place = models.ForeignKey('Address', on_delete=models.RESTRICT)
-    registration_address = models.ForeignKey('Address', on_delete=models.RESTRICT)
+    birth_place = models.ForeignKey(
+        Address, 
+        on_delete=models.RESTRICT,
+        related_name='birth_place'
+    )
+    registration_address = models.ForeignKey(
+        Address, 
+        on_delete=models.RESTRICT,
+        related_name='registration_address'
+    )
+    residence_place = models.ForeignKey(
+        Address,
+        on_delete=models.RESTRICT,
+        related_name='residence_place'
+    )
     nationality = models.CharField(max_length=255)
     identification_number = models.CharField(max_length=128)
     issue_date = models.DateField()
@@ -61,25 +72,18 @@ class PasportData(BaseDbModel):
     def __str__(self) -> str:
         return f'{self.surname} {self.name}'
 
-class Address(BaseDbModel):
-    country = models.CharField(max_length=255)
-    state = models.CharField(max_length=255)
-    city = models.CharField(max_length=255)
-    code_soato = models.CharField(max_length=255)
-    street = models.CharField(max_length=255)
-    house = models.CharField(max_length=255)
-    flat = models.CharField(max_length=255)
-    mail_index = models.CharField(max_length=255)
-    
 class UserSettings(BaseDbModel):
     user_id = models.OneToOneField(
         User, 
         on_delete=models.CASCADE,
         primary_key=True
     )
-    date_format = models.ForeignKey(DateFormat, on_delete=models.RESTRICT)
-    preferred_currency = models.ForeignKey(Currency, on_delete=models.RESTRICT)
-    week_start = models.ForeignKey(Day, on_delete=models.RESTRICT)
+    date_format = models.CharField(max_length=32, default="DD/MM/YYYY")
+    preferred_currency = models.ForeignKey(
+        Currency, 
+        on_delete=models.RESTRICT
+    )
+    week_start = models.IntegerField(default=0)
 
     def __str__(self) -> str:
         return f"{self.user_id} settings"
