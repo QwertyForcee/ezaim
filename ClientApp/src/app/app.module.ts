@@ -10,7 +10,7 @@ import { ApplicationCommonModule } from './modules/common/common.module';
 import { LoansModule } from './modules/loans/loans.module';
 import { ProfileModule } from './modules/profile/profile.module';
 import { HomeComponent } from './shared/home/home.component';
-
+import 'hammerjs'; 
 
 @NgModule({
   declarations: [

@@ -6,6 +6,9 @@ import { UserLoansComponent } from './user-loans/user-loans.component';
 import { LoanComponent } from './loan/loan.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoanCalendarComponent } from './loan-calendar/loan-calendar.component';
+import { LoansPageComponent } from './loans-page/loans-page.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 
@@ -13,13 +16,16 @@ import { LoanCalendarComponent } from './loan-calendar/loan-calendar.component';
   declarations: [
     UserLoansComponent,
     LoanComponent,
-    LoanCalendarComponent
+    LoanCalendarComponent,
+    LoansPageComponent
   ],
   imports: [
     ApplicationCommonModule,
     CommonModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatTooltipModule,
+    BrowserAnimationsModule
   ]
 })
 export class LoansModule { }

@@ -1,25 +1,33 @@
 <div class="loan-calendar">
-    <p>... к {{getMonthName(-1, true)}}</p>
-    
+    <p (click)="shiftMonthLeft()">... к {{getMonthName(-1, true)}}</p>
+
     <h3>{{getMonthName(0)}}</h3>
 
     <div class="days-list">
-        <div class="days-list-item" *ngFor="let day of getMonthDaysCount(0)" [class.days-list-item-past]="day.isPrev" [class.days-list-item-today]="day.isToday">{{day.value}}</div>
+        <div class="days-list-item" *ngFor="let day of currentMonthDays; trackBy trackByDay"
+            [class.days-list-item-past]="day.isPrev" [class.days-list-item-today]="day.isToday" mat-raised-button
+            [matTooltip]="dayToolTip(day.value)" showDelay="300">
+            {{day.value}}
+        </div>
     </div>
 
-        
+
     <h3>{{getMonthName(1)}}</h3>
 
     <div class="days-list">
-        <div class="days-list-item" *ngFor="let day of getMonthDaysCount(1)" [class.days-list-item-past]="day.isPrev" [class.days-list-item-today]="day.isToday">{{day.value}}</div>
+        <div class="days-list-item" *ngFor="let day of nextMonthDays; trackBy trackByDay" [class.days-list-item-past]="day.isPrev"
+            [class.days-list-item-today]="day.isToday" mat-raised-button [matTooltip]="dayToolTip(day.value)">
+            {{day.value}}</div>
     </div>
 
-        
+
     <h3>{{getMonthName(2)}}</h3>
 
     <div class="days-list">
-        <div class="days-list-item" *ngFor="let day of getMonthDaysCount(2)" [class.days-list-item-past]="day.isPrev" [class.days-list-item-today]="day.isToday">{{day.value}}</div>
+        <div class="days-list-item" *ngFor="let day of nextNextMonthDays; trackBy trackByDay" [class.days-list-item-past]="day.isPrev"
+            [class.days-list-item-today]="day.isToday" mat-raised-button [matTooltip]="dayToolTip(day.value)">
+            {{day.value}}</div>
     </div>
 
-    <p>... к {{getMonthName(3, true)}}</p>
+    <p (click)="shiftMonthRight()">... к {{getMonthName(3, true)}}</p>
 </div>
