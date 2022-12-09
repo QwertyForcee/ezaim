@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'http://localhost:8000/',
+  baseUrl: 'http://localhost:8000/api/v1/',
   access_token_key: 'access_token',
   tokenWhiteListedDomains: ['localhost:8000'],
 };

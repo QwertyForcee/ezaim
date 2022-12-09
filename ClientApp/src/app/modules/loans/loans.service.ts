@@ -9,8 +9,8 @@ import { environment } from 'src/environments/environment';
 })
 export class LoansService {
 
-  private readonly LOAD_LOANS = 'api/Loans/GetUserLoans';
-  private readonly LOAD_CALCULATED_SUM_FOR_LOAN = 'api/Loans/GetCalculatedSumForLoan';
+  private readonly LOAD_LOANS = 'Loans/GetUserLoans';
+  private readonly LOAD_CALCULATED_SUM_FOR_LOAN = 'Loans/GetCalculatedSumForLoan';
 
   constructor(private http: HttpClient) { }
 
