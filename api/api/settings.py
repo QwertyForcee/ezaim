@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-anblfx!5!7$8!gs3anrvsf@xi7wj72uvt!)fra1t(0de*507!=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -40,9 +40,11 @@ INSTALLED_APPS = [
     'ezaim.apps.EzaimConfig',
     'rest_framework',
     'drf_yasg',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -126,3 +128,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CORS_ALLOWED_ORIGINS = []
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_REPLACE_HTTPS_REFERER = True
