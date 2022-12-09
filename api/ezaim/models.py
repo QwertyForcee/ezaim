@@ -37,7 +37,10 @@ class Address(BaseDbModel):
     flat = models.CharField(max_length=255)
     mail_index = models.CharField(max_length=255)
 
-class PasportData(BaseDbModel):
+    class Meta:
+        verbose_name_plural = "Addresses"
+
+class PassportData(BaseDbModel):
     user_id = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
@@ -71,6 +74,9 @@ class PasportData(BaseDbModel):
 
     def __str__(self) -> str:
         return f'{self.surname} {self.name}'
+
+    class Meta:
+        verbose_name_plural = "Passports' data"
 
 class UserSettings(BaseDbModel):
     user_id = models.OneToOneField(

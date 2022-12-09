@@ -1,6 +1,7 @@
 from django.contrib import admin
 from ezaim.models import (
     User, TelegramUser, UserSettings,
+    Address, PassportData,
     PaymentCard, Payment, Loan, 
     Currency, Log
 )
@@ -17,6 +18,13 @@ class TelegramUserAdmin(admin.ModelAdmin):
 class UserSettingsAdmin(admin.ModelAdmin):
     pass
 
+@admin.register(Address)
+class AddressAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(PassportData)
+class PassportDataAdmin(admin.ModelAdmin):
+    pass
 
 @admin.register(PaymentCard)
 class PaymentCardAdmin(admin.ModelAdmin):
