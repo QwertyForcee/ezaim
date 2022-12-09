@@ -14,8 +14,34 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
+from ezaim.views import (
+    not_found, app_error,
+    UserViewSet,
+    UserSettingsViewSet,
+    CurrencyViewSet,
+    LoanViewSet,
+    PaymentViewSet,
+    PaymentCardViewSet
+)
+
+
+handler404 = not_found
+handler500 = app_error
+
+router = routers.SimpleRouter()
+# router.include_root_view = False
+
+router.register(r'users', UserViewSet, basename='users') 
+router.register(r'loans', LoanViewSet, basename='loans')
+router.register(r'payments', PaymentViewSet, basename='payments')
+router.register(r'cards', PaymentCardViewSet, basename='cards')
+router.register(r'user-settings', UserSettingsViewSet, basename='user-settings')
+router.register(r'currencies', CurrencyViewSet, basename='currencies')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v2/', include(router.urls))
 ]
