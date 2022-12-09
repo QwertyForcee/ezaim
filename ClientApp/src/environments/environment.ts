@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'http://localhost:???/',
+  baseUrl: 'http://localhost:8000/',
   access_token_key: 'access_token',
-  tokenWhiteListedDomains: ['localhost:???'],
+  tokenWhiteListedDomains: ['localhost:8000'],
 };
 
 /*
