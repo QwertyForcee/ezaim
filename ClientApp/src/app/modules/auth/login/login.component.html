@@ -5,10 +5,10 @@
         <div class="auth-form-container">
             <form class="auth-form" action="" [formGroup]="loginFormGroup">
                 <label class="auth-form-label" for="">ЭЛЕКТРОННАЯ ПОЧТА</label>
-                <input class="auth-form-input" formControlName="loginEmail" type="text">
+                <input class="auth-form-input" formControlName="email" type="text">
 
                 <label class="auth-form-label" for="">ПАРОЛЬ</label>
-                <input class="auth-form-input" formControlName="loginPassword" type="password">
+                <input class="auth-form-input" formControlName="password" type="password">
 
                 <button class="auth-form-submit" (click)="onSubmit()" [disabled]="invalidLogInForm"
                     [class.disabled]="invalidLogInForm">ВОЙТИ</button>
