@@ -11,8 +11,8 @@ import { SignUpModel } from './models/sign-up-model';
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly AUTH_LOGIN = 'Auth/LogIn';
-  private readonly AUTH_SIGNUP = 'Auth/SignUp';
+  private readonly AUTH_LOGIN = 'api/v1/auth/login';
+  private readonly AUTH_SIGNUP = 'api/v1/auth/signup';
   constructor(private http: HttpClient, private jwtHelper: JwtHelperService, private router: Router) { }
 
   login(model: LoginModel): void {

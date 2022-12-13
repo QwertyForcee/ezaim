@@ -7,7 +7,7 @@ from drf_yasg import openapi
 from api import settings
 from ezaim.views import (
     not_found, app_error,
-    login, register,
+    login, signup,
     UserViewSet,
     UserSettingsViewSet,
     CurrencyViewSet,
@@ -43,7 +43,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
     path('api/v1/auth/login', login),
-    path('api/v1/auth/register', register),
+    path('api/v1/auth/signup', signup),
 ]
 
 if settings.DEBUG:

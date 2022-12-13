@@ -78,7 +78,7 @@ def parse_address(address) -> Address:
     )
 
 @csrf_exempt
-def register(request: HttpRequest, *args, **kwargs):
+def signup(request: HttpRequest, *args, **kwargs):
     data = request.POST
     email = data.get('email', None)
     password = data.get('password', None)
@@ -130,6 +130,9 @@ def register(request: HttpRequest, *args, **kwargs):
         residential_address=residential_address
     )
 
+    # user.save()
+    # passport.save()
+
     token = jwt.encode(
         {
             "id": user.pk
@@ -140,7 +143,6 @@ def register(request: HttpRequest, *args, **kwargs):
     return JsonResponse({
         "access_token": token
     })
-    
 
 
 
