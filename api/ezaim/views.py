@@ -5,6 +5,7 @@ from rest_framework import viewsets, mixins
 from api.settings import JWT_KEY
 import jwt
 import json
+from ezaim.utils import JWTAuthentication
 
 from django.views.decorators.csrf import csrf_exempt
 import pprint
@@ -171,7 +172,6 @@ def signup(request: HttpRequest, *args, **kwargs):
     })
 
 
-
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -181,8 +181,10 @@ class CurrencyViewSet(viewsets.ModelViewSet):
     serializer_class = CurrencySerializer
 
 class UserSettingsViewSet(viewsets.ModelViewSet):
-    queryset = UserSettings.objects.all()
     serializer_class = UserSettingsSerializer
+
+    def get_queryset(self):
+        return UserSettings.objects.filter(user_id=self.request.user)
 
     # def update(self, request, pk=None, *args, **kwargs):
     #     instance = self.get_object()
@@ -190,13 +192,20 @@ class UserSettingsViewSet(viewsets.ModelViewSet):
 
 
 class LoanViewSet(viewsets.ModelViewSet):
-    queryset = Loan.objects.all()
     serializer_class = LoanSerializer
+    authentication_classes = (JWTAuthentication,)
+
+    def get_queryset(self):
+        return Loan.objects.filter(user=self.request.user)
 
 class PaymentViewSet(viewsets.ModelViewSet):
-    queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
 
+    def get_queryset(self):
+        return Payment.objects.filter(loan_id__user=self.request.user)
+
 class PaymentCardViewSet(viewsets.ModelViewSet):
-    queryset = PaymentCard.objects.all()
     serializer_class = PaymentCardSerializer
+
+    def get_queryset(self):
+        return PaymentCard.objects.filter(owner_id=self.request.user)
