@@ -4,9 +4,11 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from rest_framework import viewsets, mixins
 from api.settings import JWT_KEY
 import jwt
+import json
 
-# todo: delete csrf exempt, and its usages
 from django.views.decorators.csrf import csrf_exempt
+import pprint
+from decimal import Decimal
 
 
 from ezaim.models import (
@@ -35,8 +37,17 @@ def not_authorized(request, *args, **kwargs):
     return JsonResponse(data={"message": "Unauthorized"}, status=401)
 
 @csrf_exempt
-def login(request, *args, **kwargs):
-    email, password = request.POST['email'], request.POST['password']
+def login(request: HttpRequest, *args, **kwargs):
+    data = json.loads(request.body.decode())
+
+    print('data')
+    print(data)
+    # print('headers:')
+    # print(request.headers)
+    # print("user")
+    # print(request.user)
+
+    email, password = data['email'], data['password']
     try:
         user = User.objects.get(email=email)
         if user.password != password:
@@ -52,6 +63,7 @@ def login(request, *args, **kwargs):
         JWT_KEY, 
         algorithm='HS256'
     )
+    print(f'token: {token}')
     return JsonResponse({
         "access_token": token
     })
@@ -79,7 +91,11 @@ def parse_address(address) -> Address:
 
 @csrf_exempt
 def signup(request: HttpRequest, *args, **kwargs):
-    data = request.POST
+    data = json.loads(request.body.decode())
+
+    print('data')
+    pprint.pprint(data, width=1)
+
     email = data.get('email', None)
     password = data.get('password', None)
     phone_number = data.get('phoneNumber', None)
@@ -99,10 +115,17 @@ def signup(request: HttpRequest, *args, **kwargs):
     resident = data.get('resident', None)
     birth_date = data.get('birthDate', None)
 
+    if salary is None:
+        salary = Decimal()
+
     try:
-        birth_address = parse_address(data['birthAddress'])
+        # birth_address = parse_address(data['birthAddress'])
         registration_address = parse_address(data['registrationAddress'])
+        registration_address.save()
+        print('reg add saved')
         residential_address = parse_address(data['residentialAddress'])
+        residential_address.save()
+        print('res add saved')
     except Exception:
         print('something went wrong')
 
@@ -112,8 +135,10 @@ def signup(request: HttpRequest, *args, **kwargs):
         phone_number=phone_number,
         salary=salary
     )
+    user.save()
+    print('user saved')
     passport = PassportData(
-        user_id=user.pk,
+        user_id=user,
         name=name,
         surname=surname,
         passport_number=passport_number,
@@ -125,13 +150,14 @@ def signup(request: HttpRequest, *args, **kwargs):
         sex=sex,
         resident=resident,
         birth_date=birth_date,
-        birth_place=birth_address,
+        birth_country=data['birthAddress']['country'],
+        birth_state=data['birthAddress']['state'],
+        birth_city=data['birthAddress']['city'],
         registration_address=registration_address,
         residential_address=residential_address
     )
-
-    # user.save()
-    # passport.save()
+    passport.save()
+    print('passport saved')
 
     token = jwt.encode(
         {

@@ -40,6 +40,9 @@ class Address(BaseDbModel):
     class Meta:
         verbose_name_plural = "Addresses"
 
+    def __str__(self) -> str:
+        return f'{self.country}, {self.state}, {self.city}'
+
 class PassportData(BaseDbModel):
     user_id = models.OneToOneField(
         User,
@@ -48,32 +51,31 @@ class PassportData(BaseDbModel):
     )
     name = models.CharField(max_length=255)
     surname = models.CharField(max_length=255)
-    sex = models.CharField(max_length=16)
+    sex = models.CharField(max_length=255)
     resident = models.CharField(max_length=255)
-    birth_date = models.DateField()
-    birth_place = models.ForeignKey(
-        Address, 
-        on_delete=models.RESTRICT,
-        related_name='birth_place'
-    )
+    birth_date = models.CharField(max_length=255)
+    birth_country = models.CharField(max_length=255)
+    birth_state = models.CharField(max_length=255)
+    birth_city = models.CharField(max_length=255)
     registration_address = models.ForeignKey(
         Address, 
         on_delete=models.RESTRICT,
         related_name='registration_address'
     )
-    residence_place = models.ForeignKey(
+    residential_address = models.ForeignKey(
         Address,
         on_delete=models.RESTRICT,
-        related_name='residence_place'
+        related_name='residential_address'
     )
     nationality = models.CharField(max_length=255)
-    identification_number = models.CharField(max_length=128)
-    issue_date = models.DateField()
-    expiry_date = models.DateField()
+    passport_number = models.CharField(max_length=255)
+    identification_number = models.CharField(max_length=255)
+    issue_date = models.CharField(max_length=255)
+    expiry_date = models.CharField(max_length=255)
     authority = models.CharField(max_length=255)
 
     def __str__(self) -> str:
-        return f'{self.surname} {self.name}'
+        return f'Passport data, user: {self.user_id}'
 
     class Meta:
         verbose_name_plural = "Passports' data"
@@ -113,7 +115,7 @@ class PaymentCard(BaseDbModel):
     owner_id = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return f"card#{self.number}"
+        return f"card owned by {self.owner_id}"
 
 class Loan(BaseDbModel):
     percent = models.DecimalField(max_digits=7, decimal_places=3)
