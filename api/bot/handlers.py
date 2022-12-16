@@ -53,7 +53,6 @@ def connect(update: Update, context: CallbackContext):
     
 
 def disconnect(update: Update, context: CallbackContext):
-    print('disconnect')
     chat_id = update.message.chat_id
     res = list(TelegramUser.objects.filter(chat_id=chat_id))
 

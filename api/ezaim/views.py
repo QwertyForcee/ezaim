@@ -41,12 +41,8 @@ def not_authorized(request, *args, **kwargs):
 def login(request: HttpRequest, *args, **kwargs):
     data = json.loads(request.body.decode())
 
-    print('data')
-    print(data)
-    # print('headers:')
-    # print(request.headers)
-    # print("user")
-    # print(request.user)
+    # print('data')
+    # print(data)
 
     email, password = data['email'], data['password']
     try:
@@ -64,7 +60,6 @@ def login(request: HttpRequest, *args, **kwargs):
         JWT_KEY, 
         algorithm='HS256'
     )
-    print(f'token: {token}')
     return JsonResponse({
         "access_token": token
     })
@@ -94,8 +89,8 @@ def parse_address(address) -> Address:
 def signup(request: HttpRequest, *args, **kwargs):
     data = json.loads(request.body.decode())
 
-    print('data')
-    pprint.pprint(data, width=1)
+    # print('data')
+    # pprint.pprint(data, width=1)
 
     email = data.get('email', None)
     password = data.get('password', None)
@@ -182,6 +177,7 @@ class CurrencyViewSet(viewsets.ModelViewSet):
 
 class UserSettingsViewSet(viewsets.ModelViewSet):
     serializer_class = UserSettingsSerializer
+    authentication_classes = (JWTAuthentication,)
 
     def get_queryset(self):
         return UserSettings.objects.filter(user_id=self.request.user)
@@ -200,12 +196,14 @@ class LoanViewSet(viewsets.ModelViewSet):
 
 class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
+    authentication_classes = (JWTAuthentication,)
 
     def get_queryset(self):
         return Payment.objects.filter(loan_id__user=self.request.user)
 
 class PaymentCardViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentCardSerializer
+    authentication_classes = (JWTAuthentication,)
 
     def get_queryset(self):
         return PaymentCard.objects.filter(owner_id=self.request.user)

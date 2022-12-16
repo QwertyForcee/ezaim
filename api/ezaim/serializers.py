@@ -45,5 +45,3 @@ class PaymentCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = PaymentCard
         fields = '__all__'
-
-
