@@ -90,7 +90,3 @@ def loans(update: Update, context: CallbackContext):
         update.message.reply_text(reply)
         return
     update.message.reply_text('Error: multiple connected accounts')
-
-
-def echo(update: Update, context: CallbackContext):
-    update.message.reply_text(update.message.text)

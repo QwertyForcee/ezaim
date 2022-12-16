@@ -1,14 +1,12 @@
 from telegram.ext import (
-    Dispatcher, MessageHandler,
-    CommandHandler, Filters
+    Dispatcher, CommandHandler
 )
 
 from bot.main import bot
 from api.settings import DEBUG
 from bot.handlers import (
     start, help,
-    connect, disconnect,
-    loans, echo
+    connect, disconnect, loans
 )
 
 def setup_dispatcher(dp: Dispatcher):
