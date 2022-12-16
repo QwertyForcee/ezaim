@@ -101,7 +101,7 @@ class UserSettings(BaseDbModel):
 
 class TelegramUser(BaseDbModel):
     chat_id = models.IntegerField()
-    confirmed = models.BooleanField()
+    confirmed = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
@@ -118,6 +118,7 @@ class PaymentCard(BaseDbModel):
         return f"card owned by {self.owner_id}"
 
 class Loan(BaseDbModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     percent = models.DecimalField(max_digits=7, decimal_places=3)
     amount = models.DecimalField(max_digits=15, decimal_places=2)
     currency_id = models.ForeignKey(Currency, on_delete=models.RESTRICT)
