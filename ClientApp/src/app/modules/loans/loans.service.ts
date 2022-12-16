@@ -9,8 +9,9 @@ import { environment } from 'src/environments/environment';
 })
 export class LoansService {
 
-  private readonly LOAD_LOANS = 'Loans/GetUserLoans';
+  private readonly LOAD_LOANS = 'loans/GetUserLoans';
   private readonly LOAD_CALCULATED_SUM_FOR_LOAN = 'Loans/GetCalculatedSumForLoan';
+  private readonly LOAD_LOAN = 'loans'
 
   constructor(private http: HttpClient) { }
 
@@ -19,7 +20,11 @@ export class LoansService {
   }
 
   getUserLoanById(id: number): Observable<LoanModel> {
-    return this.http.post<LoanModel>(`${environment.baseUrl}${this.LOAD_LOANS}`, { id: id });
+    return this.http.get<LoanModel>(`${environment.baseUrl}${this.LOAD_LOAN}`, {
+      params: {
+        id: id,
+      }
+    });
   }
 
   getCalculatedSumForLoanDay(loanId: number, date: Date | string) {
