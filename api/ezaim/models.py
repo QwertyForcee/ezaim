@@ -124,7 +124,7 @@ class Loan(BaseDbModel):
     currency_id = models.ForeignKey(Currency, on_delete=models.RESTRICT)
 
     def __str__(self) -> str:
-        return f"Loan of {self.payment_amount}, {self.percent}%"
+        return f"Loan of {self.amount}, {self.percent}%"
 
 class Payment(BaseDbModel):
     amount = models.DecimalField(max_digits=15, decimal_places=2)
