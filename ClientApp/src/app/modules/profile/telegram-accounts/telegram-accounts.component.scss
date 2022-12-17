@@ -1,0 +1,30 @@
+@import '/src/styles/constants';
+
+.telegram-accounts {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+
+    &,
+    &-confirmed,
+    &-not-confirmed {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .confirm-action {
+        color: $project-light-green;
+    }
+
+    .delete-action {
+        color: red;
+    }
+
+    &-confirmed {
+
+    }
+
+    p {
+        margin: 5px 10px;
+    }
+}

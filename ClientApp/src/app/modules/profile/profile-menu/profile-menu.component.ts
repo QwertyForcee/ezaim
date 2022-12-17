@@ -13,6 +13,7 @@ export class ProfileMenuComponent implements OnInit {
   currentUrl = '';
   menuItems = [
     { title: 'данные об аккауте', url: '/profile' },
+    { title: 'telegram аккаунты', url: '/tg-accounts'},
     { title: 'мои займы', url: 'loans' },
     { title: 'настройки', url: '' },
     { title: 'выйти', url: '' },

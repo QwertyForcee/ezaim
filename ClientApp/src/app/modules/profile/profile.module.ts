@@ -6,12 +6,14 @@ import { ApplicationCommonModule } from '../common/common.module';
 import { ProfileMenuComponent } from './profile-menu/profile-menu.component';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { TelegramAccountsComponent } from './telegram-accounts/telegram-accounts.component';
 
 @NgModule({
   declarations: [
     ProfileDataComponent,
     ProfileComponent,
-    ProfileMenuComponent
+    ProfileMenuComponent,
+    TelegramAccountsComponent
   ],
   imports: [
     ApplicationCommonModule,
