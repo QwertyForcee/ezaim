@@ -5,11 +5,11 @@ from rest_framework import viewsets, mixins
 from api.settings import JWT_KEY
 import jwt
 import json
-from ezaim.utils import JWTAuthentication
+from ezaim.utils import JWTAuthentication, pay_loan, get_loan, WebpayCurrency
 
 from django.views.decorators.csrf import csrf_exempt
 import pprint
-from decimal import Decimal
+from decimal import *
 
 
 from ezaim.models import (
@@ -36,6 +36,12 @@ def app_error(request, *args, **kwargs):
 
 def not_authorized(request, *args, **kwargs):
     return JsonResponse(data={"message": "Unauthorized"}, status=401)
+
+@csrf_exempt
+def test_pay(request):
+    # getcontext().prec = 2
+    resp = ('order-1', '10.12', WebpayCurrency.BYN, 1)
+    return JsonResponse(resp)
 
 @csrf_exempt
 def login(request: HttpRequest, *args, **kwargs):
