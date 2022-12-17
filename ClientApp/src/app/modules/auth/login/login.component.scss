@@ -1,5 +1,5 @@
 @import '/src/styles/constants';
-@include styles-for-calendar();
+// @include styles-for-calendar();
 
 :host {
     display: contents;
@@ -21,7 +21,7 @@
                 &-submit-section {
                     margin-bottom: 150px;
                     margin-top: -150px;
-                    margin-left: 200px;
+                    margin-left: 5%;
                     max-width: 920px;
                     display: flex;
                     flex-direction: column;
@@ -100,11 +100,12 @@
         flex-direction: column;
 
         &-checkbox-section {
-            margin-left: 200px;
+            margin-left: 5%;
             display: flex;
             align-items: center;
 
             input[type="checkbox"] {
+                cursor: pointer;
                 -webkit-appearance: none;
                 appearance: none;
                 background-color: #fff;
@@ -154,7 +155,7 @@
 
         &-block {
             &-sections {
-                margin-left: 200px;
+                margin-left: 5%;
                 display: flex;
                 flex-direction: column;
                 max-width: calc(150px + 770px);
@@ -177,7 +178,7 @@
 
             &-headers,
             &-button {
-                margin-left: 200px;
+                margin-left: 5%;
                 max-width: calc(150px + 770px);
             }
 
@@ -277,6 +278,7 @@
         }
 
         &-input.ng-touched.ng-invalid {
+            background: $control-error-background;
             box-shadow: -6px 5px 0px $control-error;
         }
 
@@ -320,7 +322,7 @@
 
     &-sign-up-sub-menu {
         margin-top: 100px;
-        margin-left: 200px;
+        margin-left: 5%;
         display: flex;
         margin-bottom: 100px;
         align-items: center;
