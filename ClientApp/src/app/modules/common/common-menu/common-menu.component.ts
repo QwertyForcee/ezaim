@@ -10,7 +10,7 @@ export class CommonMenuComponent implements OnInit {
     { title: 'главная', url: '' },
     { title: 'личный кабинет', url: '/profile' },
     { title: 'мои займы', url: '/loans' },
-    { title: 'новый займ', url: '', star: true },
+    { title: 'новый займ', url: '/new-loan', star: true },
 
   ]
   expanded = false;

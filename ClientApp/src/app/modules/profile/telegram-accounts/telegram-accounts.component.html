@@ -1,0 +1,29 @@
+<div class="telegram-accounts">
+    <ul class="telegram-accounts-confirmed">
+        <li *ngFor="let acc of confirmedAccounts">
+            <p>
+                {{acc.name}}
+            </p>
+            <p class="confirmed">
+                confirmed
+            </p>
+            <p class="delete-action" (click)="onDelete(acc.chat_id)">
+                delete
+            </p>
+        </li>
+    </ul>
+    <ul class="telegram-accounts-not-confirmed">
+        <li *ngFor="let acc of notConfirmedAccounts">
+            <p>
+                {{acc.name}}
+            </p>
+            <p class="confirm-action" (click)="onConfirm(acc)">
+                confirm
+            </p>
+            <p class="delete-action" (click)="onDelete(acc.chat_id)">
+                delete
+            </p>
+        </li>
+
+    </ul>
+</div>

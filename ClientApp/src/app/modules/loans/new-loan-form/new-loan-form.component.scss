@@ -1,0 +1,90 @@
+@import '/src/styles/constants';
+
+.new-loan-form-container {
+    &-header {
+        width: 100%;
+        content: url('/assets/new-loan-header.svg');
+    }
+
+    .new-loan-form {
+        padding-top: 50px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+
+        &-blocks {
+            display: flex;
+            width: 100%;
+
+            justify-content: space-around;
+
+            &-block {
+                display: flex;
+                flex-direction: column;
+                padding: 25px 260px 50px 25px;
+                font-size: 30px;
+                background: #F2F9FB;
+                box-shadow:  -6px 5px 0px #dbdfe0;
+
+                &-label {}
+
+                &-input {}
+
+                &-main {
+                    box-shadow:  -6px 5px 0px #E5B815;
+                }
+            }
+        }
+
+        &-block-card {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            margin: 165px 0 15% 300px;
+
+            h4 {
+                font-size: 30px;
+                color: #005E87;
+                margin-right: 15px;
+                max-width: 360px;
+                white-space: break-spaces;
+                
+                font-family: 'IBM Plex Sans', sans-serif;
+            }
+
+            &-img {
+                content: url('/assets/new-loan-card.svg');
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        &-block-sum {
+            width: 100%;
+            padding-bottom: 150px;
+            display: flex;
+            justify-content: center;
+            h3 {
+                font-size: 35px;
+                font-weight: 400;
+                letter-spacing: 5%;
+                color: $project-dark-grey;
+            }
+        }
+        background-image: url('/assets/new-loan-section-1.svg');
+        background-repeat:repeat-x;
+    }
+
+    .payment-card-form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        &-block {
+            
+        }
+    }
+
+}

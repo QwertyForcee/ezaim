@@ -8,5 +8,14 @@
             <label for="Phone">КОНТАКТНЫЙ ТЕЛЕФОН</label>
             <input id="Phone" formControlName="Phone" type="text">
         </div>
+
+        <div *ngFor="let card of cards; let i=index">
+            <div class="profile-data_form-block">
+                <label>КАРТА #{{i}} <span class="card-delete-button">удалить</span></label>
+                <div class="profile-data_form-block-card">
+                    
+                </div>
+            </div>
+        </div>
     </form>
 </div>

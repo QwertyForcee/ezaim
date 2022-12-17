@@ -18,7 +18,7 @@ export class ProfileDataComponent implements OnInit {
   userFullName = 'Максим Максимов Максимович';
   email = 'user.example@gmail.com';
   userDataForm: FormGroup;
-  
+  cards = [];
 
 
   ngOnInit(): void {

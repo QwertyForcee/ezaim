@@ -9,6 +9,7 @@ import { LoanCalendarComponent } from './loan-calendar/loan-calendar.component';
 import { LoansPageComponent } from './loans-page/loans-page.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NewLoanFormComponent } from './new-loan-form/new-loan-form.component';
 
 
 
@@ -17,7 +18,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     UserLoansComponent,
     LoanComponent,
     LoanCalendarComponent,
-    LoansPageComponent
+    LoansPageComponent,
+    NewLoanFormComponent
   ],
   imports: [
     ApplicationCommonModule,
