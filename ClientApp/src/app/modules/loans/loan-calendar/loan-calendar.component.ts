@@ -17,6 +17,16 @@ export class LoanCalendarComponent implements OnInit {
   realCurrentDate: Date = new Date();
   currentDate!: Date;
 
+
+  private _toolTip: string = '';
+  public get toolTip(): string {
+    return this._toolTip;
+  }
+  private set toolTip(v: string) {
+    this._toolTip = v;
+  }
+
+
   get realCurrentYear(): number {
     return this.realCurrentDate.getFullYear();
   }
@@ -57,12 +67,10 @@ export class LoanCalendarComponent implements OnInit {
     return this.getMonthDaysCount(2);
   }
 
-  dayToolTip(day: number, month: number, year: number) {
-    // if (this.loanId) {
-      return this.loansService.getCalculatedSumForLoanDayAsync(this.loanId ?? 0, new Date(year, month, day))
-      // return ``
-    // }
-    // return '';
+  setData(day: number, month: number, year: number) {
+    this.loansService.getCalculatedSumForLoanDay(this.loanId ?? 0, new Date(year, month, day)).subscribe(res => {
+      this.toolTip = `оставшаяся сумма выплаты на ${day} число составит ${res}`;
+    })
   }
 
   trackByDay(index: any, item: any) {
