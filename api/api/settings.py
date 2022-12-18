@@ -33,8 +33,6 @@ WEBPAY_SECRET_KEY = os.getenv("WEBPAY_SECRET_KEY")
 if WEBPAY_SECRET_KEY is None:
     print('WEBPAY_SECRET_KEY not found in env')
     sys.exit(1)
-print('secret key')
-print(WEBPAY_SECRET_KEY)
 
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")

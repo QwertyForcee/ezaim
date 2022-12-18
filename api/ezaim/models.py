@@ -23,6 +23,8 @@ class User(BaseDbModel):
     password = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255)
     salary = models.DecimalField(max_digits=15, decimal_places=2)
+    name = models.CharField(max_length=255)
+    surname = models.CharField(max_length=255)
 
     def __str__(self) -> str:
         return self.email
@@ -44,7 +46,7 @@ class Address(BaseDbModel):
         return f'{self.country}, {self.state}, {self.city}'
 
 class PassportData(BaseDbModel):
-    user_id = models.OneToOneField(
+    user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         primary_key=True
@@ -75,13 +77,13 @@ class PassportData(BaseDbModel):
     authority = models.CharField(max_length=255)
 
     def __str__(self) -> str:
-        return f'Passport data, user: {self.user_id}'
+        return f'Passport data, user: {self.user}'
 
     class Meta:
         verbose_name_plural = "Passports' data"
 
 class UserSettings(BaseDbModel):
-    user_id = models.OneToOneField(
+    user = models.OneToOneField(
         User, 
         on_delete=models.CASCADE,
         primary_key=True
@@ -89,12 +91,13 @@ class UserSettings(BaseDbModel):
     date_format = models.CharField(max_length=32, default="DD/MM/YYYY")
     preferred_currency = models.ForeignKey(
         Currency, 
-        on_delete=models.RESTRICT
+        on_delete=models.RESTRICT,
+        null=True
     )
     week_start = models.IntegerField(default=0)
 
     def __str__(self) -> str:
-        return f"{self.user_id} settings"
+        return f"{self.user} settings"
 
     class Meta:
         verbose_name_plural = "User settings"
@@ -103,35 +106,38 @@ class TelegramUser(BaseDbModel):
     chat_id = models.IntegerField()
     confirmed = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
 
     def __str__(self) -> str:
-        return f"chat#{self.chat_id}"
+        return f"{self.name}#{self.chat_id}"
 
 class PaymentCard(BaseDbModel):
     number = models.CharField(max_length=255)
     csv = models.CharField(max_length=255)
     initials = models.CharField(max_length=255)
     valid_through = models.DateField()    
-    owner_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return f"card owned by {self.owner_id}"
+        return f"card owned by {self.user}"
 
 class Loan(BaseDbModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     percent = models.DecimalField(max_digits=7, decimal_places=3)
     amount = models.DecimalField(max_digits=15, decimal_places=2)
-    currency_id = models.ForeignKey(Currency, on_delete=models.RESTRICT)
+    remaining_amount = models.DecimalField(max_digits=15, decimal_places=2)
+    
+    currency = models.ForeignKey(Currency, on_delete=models.RESTRICT)
 
     def __str__(self) -> str:
         return f"Loan of {self.amount}, {self.percent}%"
 
 class Payment(BaseDbModel):
     amount = models.DecimalField(max_digits=15, decimal_places=2)
-    loan_id = models.ForeignKey(Loan, on_delete=models.CASCADE)
+    loan = models.ForeignKey(Loan, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return f"{self.amount} credited for {self.loan_id}"
+        return f"{self.amount} credited for {self.loan}"
 
 class Log(BaseDbModel):
     log = models.TextField()

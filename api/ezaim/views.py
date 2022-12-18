@@ -2,11 +2,12 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpRequest
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from rest_framework import viewsets, mixins
+from rest_framework.permissions import IsAuthenticated
 from api.settings import JWT_KEY
 import jwt
 import json
-from ezaim.utils import JWTAuthentication, pay_loan, get_loan, WebpayCurrency
-
+from ezaim.utils import JWTAuthentication
+from ezaim.utils import WebpayCurrency, pay_loan, get_loan
 from django.views.decorators.csrf import csrf_exempt
 import pprint
 from decimal import *
@@ -14,17 +15,21 @@ from decimal import *
 
 from ezaim.models import (
     User, TelegramUser, UserSettings,
-    PaymentCard, Payment, Loan, 
     PassportData, Address,
+    PaymentCard, Payment, Loan, 
     Currency, Log
 )
 from ezaim.serializers import (
-    UserSerializer,
-    UserSettingsSerializer,
     CurrencySerializer,
+    UserSerializer,
+    AddressSerializer, 
+    PassportDataSerializer,
+    UserSettingsSerializer,
+    TelegramUserSerializer,
+    PaymentCardSerializer,
     LoanSerializer,
     PaymentSerializer,
-    PaymentCardSerializer
+    LogSerializer
 )
 
 
@@ -39,9 +44,20 @@ def not_authorized(request, *args, **kwargs):
 
 @csrf_exempt
 def test_pay(request):
-    # getcontext().prec = 2
-    resp = ('order-1', '10.12', WebpayCurrency.BYN, 1)
+    resp = pay_loan(
+        "order-test", 
+        1, 
+        WebpayCurrency.BYN,
+        "100",
+        "customer-test",
+        "http://127.0.0.1:8000/admin"
+    )
     return JsonResponse(resp)
+
+@csrf_exempt
+def test_loan(request):
+    resp = None
+    JsonResponse(resp)
 
 @csrf_exempt
 def login(request: HttpRequest, *args, **kwargs):
@@ -69,7 +85,6 @@ def login(request: HttpRequest, *args, **kwargs):
     return JsonResponse({
         "access_token": token
     })
-
 
 def parse_address(address) -> Address:
     country = address.get('country', None)
@@ -135,12 +150,20 @@ def signup(request: HttpRequest, *args, **kwargs):
         email=email,
         password=password,
         phone_number=phone_number,
-        salary=salary
+        salary=salary,
+        name=name,
+        surname=surname
     )
     user.save()
     print('user saved')
+    user_settings = UserSettings(
+        user=user
+    )
+    user_settings.save()
+    print('user settings saved')
+
     passport = PassportData(
-        user_id=user,
+        user=user,
         name=name,
         surname=surname,
         passport_number=passport_number,
@@ -184,18 +207,16 @@ class CurrencyViewSet(viewsets.ModelViewSet):
 class UserSettingsViewSet(viewsets.ModelViewSet):
     serializer_class = UserSettingsSerializer
     authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         return UserSettings.objects.filter(user_id=self.request.user)
-
-    # def update(self, request, pk=None, *args, **kwargs):
-    #     instance = self.get_object()
-    #     print(request)
 
 
 class LoanViewSet(viewsets.ModelViewSet):
     serializer_class = LoanSerializer
     authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         return Loan.objects.filter(user=self.request.user)
@@ -203,6 +224,7 @@ class LoanViewSet(viewsets.ModelViewSet):
 class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
     authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         return Payment.objects.filter(loan_id__user=self.request.user)
@@ -210,6 +232,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
 class PaymentCardViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentCardSerializer
     authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         return PaymentCard.objects.filter(owner_id=self.request.user)
