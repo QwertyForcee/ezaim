@@ -11,22 +11,22 @@ dotenv_file = BASE_DIR / ".env"
 if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
 else:
-    print('.env file not found in env')
+    print('.env file not found')
     sys.exit(1)
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 if TELEGRAM_TOKEN is None:
-    print('telegram token not found in env')
+    print('TELEGRAM_TOKEN not found in env')
     sys.exit(1)
 
 JWT_KEY = os.getenv("JWT_KEY")
 if JWT_KEY is None:
-    print('jwt key not found in env')
+    print('JWT_KEY not found in env')
     sys.exit(1)
 
 WSB_STOREID = os.getenv("WSB_STOREID")
 if WSB_STOREID is None:
-    print('wsb storeid not found in env')
+    print('WSB_STOREID not found in env')
     sys.exit(1)
 
 WEBPAY_SECRET_KEY = os.getenv("WEBPAY_SECRET_KEY")
@@ -34,26 +34,29 @@ if WEBPAY_SECRET_KEY is None:
     print('WEBPAY_SECRET_KEY not found in env')
     sys.exit(1)
 
-
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 if SECRET_KEY is None:
-    print('django secret key not found in env')
+    print('DJANGO_SECRET_KEY not found in env')
     sys.exit(1)
 
+FIELD_ENCRYPTION_KEY = os.getenv("FIELD_ENCRYPTION_KEY").encode()
+if FIELD_ENCRYPTION_KEY is None:
+    print('FIELD_ENCRYPTION_KEY not found in env')
+    sys.exit(1)
 
 MYSQL_NAME = os.getenv("MYSQL_NAME")
 if MYSQL_NAME is None:
-    print('mysql name not found in env')
+    print('MYSQL_NAME not found in env')
     sys.exit(1)
 
 MYSQL_USER = os.getenv("MYSQL_USER")
 if MYSQL_USER is None:
-    print('mysql user not found in env')
+    print('MYSQL_USER not found in env')
     sys.exit(1)
 
 MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
 if MYSQL_PASSWORD is None:
-    print('mysql password not found in env')
+    print('MYSQL_PASSWORD not found in env')
     sys.exit(1)
 
 if os.environ.get('DJANGO_DEBUG') in ('True', 'true', '1', True):
@@ -78,7 +81,8 @@ INSTALLED_APPS = [
     'ezaim.apps.EzaimConfig',
     'rest_framework',
     'drf_yasg',
-    'corsheaders'
+    'corsheaders',
+    'encrypted_model_fields',
 ]
 
 MIDDLEWARE = [

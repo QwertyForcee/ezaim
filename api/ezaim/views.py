@@ -3,14 +3,17 @@ from django.http import JsonResponse, HttpRequest
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
-from api.settings import JWT_KEY
 import jwt
 import json
+#
+import pprint
+from decimal import *
+
+from api.settings import JWT_KEY
 from ezaim.utils import JWTAuthentication
 from ezaim.utils import WebpayCurrency, pay_loan, get_loan
 from django.views.decorators.csrf import csrf_exempt
-import pprint
-from decimal import *
+
 
 
 from ezaim.models import (
@@ -212,8 +215,19 @@ class UserSettingsViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return UserSettings.objects.filter(user_id=self.request.user)
 
+class TelegramUsersViewSet(viewsets.ModelViewSet):
+    serializer_class = TelegramUserSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
-class LoanViewSet(viewsets.ModelViewSet):
+    def get_queryset(self):
+        return UserSettings.objects.filter(user_id=self.request.user)
+
+class LoanViewSet(
+        viewsets.GenericViewSet, 
+        mixins.ListModelMixin, 
+        mixins.CreateModelMixin, 
+        mixins.RetrieveModelMixin):
     serializer_class = LoanSerializer
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
@@ -221,13 +235,30 @@ class LoanViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Loan.objects.filter(user=self.request.user)
 
-class PaymentViewSet(viewsets.ModelViewSet):
+    def perform_create(self, serializer):
+        print('loan viewset: perform create')
+        data = json.loads(self.request.body.decode())
+        serializer.save(
+            user = self.request.user
+            # remaining_amount = data['remaining_amount']
+        )
+        return super().perform_create(serializer)
+
+class PaymentViewSet(
+        viewsets.GenericViewSet,
+        mixins.ListModelMixin,
+        mixins.CreateModelMixin,
+        mixins.RetrieveModelMixin):
     serializer_class = PaymentSerializer
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         return Payment.objects.filter(loan_id__user=self.request.user)
+
+    def perform_create(self, serializer):
+        print('payment viewset: perform create')
+        return super().perform_create(serializer)
 
 class PaymentCardViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentCardSerializer
