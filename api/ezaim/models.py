@@ -28,6 +28,9 @@ class User(BaseDbModel):
     name = models.CharField(max_length=255)
     surname = models.CharField(max_length=255)
 
+    def is_authenticated():
+        return True
+
     def __str__(self) -> str:
         return self.email
 
