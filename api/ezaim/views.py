@@ -5,6 +5,7 @@ from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
 import jwt
 import json
+import bcrypt
 #
 import pprint
 from decimal import *
@@ -65,14 +66,12 @@ def test_loan(request):
 @csrf_exempt
 def login(request: HttpRequest, *args, **kwargs):
     data = json.loads(request.body.decode())
-
-    # print('data')
-    # print(data)
-
     email, password = data['email'], data['password']
+
     try:
         user = User.objects.get(email=email)
-        if user.password != password:
+        hashed = bcrypt.hashpw(password, user.salt)
+        if not bcrypt.checkpw(user.password, hashed):
             return not_authorized(request)
     except ObjectDoesNotExist:
         return not_found(request)
@@ -113,9 +112,6 @@ def parse_address(address) -> Address:
 def signup(request: HttpRequest, *args, **kwargs):
     data = json.loads(request.body.decode())
 
-    # print('data')
-    # pprint.pprint(data, width=1)
-
     email = data.get('email', None)
     password = data.get('password', None)
     phone_number = data.get('phoneNumber', None)
@@ -149,9 +145,13 @@ def signup(request: HttpRequest, *args, **kwargs):
     except Exception:
         print('something went wrong')
 
+
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(password.encode(), salt)
     user = User(
         email=email,
-        password=password,
+        password=hashed,
+        salt=salt,
         phone_number=phone_number,
         salary=salary,
         name=name,
