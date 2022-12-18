@@ -19,8 +19,6 @@ export class LoginComponent implements OnInit {
   }
 
   get invalidSignUpForm(): boolean {
-    console.log(this.signUpFormGroup);
-    
     return this.signUpFormGroup.invalid;
   }
 

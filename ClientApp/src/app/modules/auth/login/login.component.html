@@ -81,12 +81,24 @@
 
                         <section class="auth-form-section">
                             <label class="auth-form-label" for="">ВЫДАН ЧИСЛА</label>
-                            <input class="auth-form-input" formControlName="issueDate">
+                            <!-- <input class="auth-form-input" formControlName="issueDate"> -->
+                            <div class="auth-form-date">
+                                <input class="auth-form-input auth-form-input-date" matInput
+                                    [matDatepicker]="issueDatePicker" formControlName="issueDate">
+                                <img class="auth-form-date-img" (click)="issueDatePicker.open()">
+                                <mat-datepicker #issueDatePicker></mat-datepicker>
+                            </div>
                         </section>
 
                         <section class="auth-form-section">
                             <label class="auth-form-label" for="">ДО ЧИСЛА</label>
-                            <input class="auth-form-input" formControlName="expiryDate">
+                            <!-- <input class="auth-form-input" formControlName="expiryDate"> -->
+                            <div class="auth-form-date">
+                                <input class="auth-form-input auth-form-input-date" matInput
+                                    [matDatepicker]="expiryDatePicker" formControlName="expiryDate">
+                                <img class="auth-form-date-img" (click)="expiryDatePicker.open()">
+                                <mat-datepicker #expiryDatePicker></mat-datepicker>
+                            </div>
                         </section>
 
                         <section class="auth-form-section">

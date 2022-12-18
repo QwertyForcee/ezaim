@@ -7,13 +7,15 @@ import { ProfileMenuComponent } from './profile-menu/profile-menu.component';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TelegramAccountsComponent } from './telegram-accounts/telegram-accounts.component';
+import { UserSettingsComponent } from './user-settings/user-settings.component';
 
 @NgModule({
   declarations: [
     ProfileDataComponent,
     ProfileComponent,
     ProfileMenuComponent,
-    TelegramAccountsComponent
+    TelegramAccountsComponent,
+    UserSettingsComponent
   ],
   imports: [
     ApplicationCommonModule,
