@@ -19,9 +19,9 @@ export class LoanComponent implements OnInit {
   constructor(private profileDataService: ProfileDataService, private loansService: LoansService, private route: ActivatedRoute) { }
 
   get getFormattedDate() {
-    return moment(this.loan?.created_at).format(this.dateFormat); 
+    return moment(this.loan?.created_at).format(this.dateFormat);
   }
-  
+
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.loanId = params['id'];
@@ -41,5 +41,9 @@ export class LoanComponent implements OnInit {
         this.dateFormat = settings.date_format;
       }
     })
+  }
+
+  onStartMakingPayment() {
+
   }
 }

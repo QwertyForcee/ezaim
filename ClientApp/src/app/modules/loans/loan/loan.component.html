@@ -21,7 +21,7 @@
             <p>ОСТАВШАЯСЯ СУММА ВОЗВРАТА: <span class="loan-data-status-black">{{loan?.remaining_amount}}</span></p>
         </div>
         <div class="loan-data-empty">
-
+            <p (click)="onStartMakingPayment()">СОВЕРШИТЬ ПЛАТЕЖ ?</p>
         </div>
         <div class="loan-data-info">
             <p>ДАТА ОФОРМЛЕНИЯ ЗАЙМА: <span class="loan-data-info-gold">{{getFormattedDate}}</span></p>

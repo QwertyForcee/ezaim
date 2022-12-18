@@ -95,6 +95,8 @@
             background-image: url('/assets/user-settings-save.svg');
             width: fit-content;
             transition: .5s;
+            -webkit-transition: 0.5s;
+
 
             &:hover {
                 background: #0e8ec4;
