@@ -45,7 +45,7 @@ def connect(update: Update, context: CallbackContext):
         return
 
     if len(res) == 0:
-        tg_user = TelegramUser(chat_id=chat_id, user=user)
+        tg_user = TelegramUser(chat_id=chat_id, user=user, name=update.effective_user.name)
         tg_user.save()
         update.message.reply_text(f"Sent confirmation request to {email}. Confirm connection through site")
         return
