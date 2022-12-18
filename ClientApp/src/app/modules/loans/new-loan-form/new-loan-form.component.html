@@ -8,16 +8,24 @@
                 <div class="new-loan-form-blocks-block-label">
                     ЗАЙМ НА СУММУ
                 </div>
-                <input class="new-loan-form-blocks-block-input" formControlName="sum">
+                <input class="new-loan-form-blocks-block-input" formControlName="sum" (input)="onInputChange()">
             </div>
             <div class="new-loan-form-blocks-block">
+                <div class="new-loan-form-blocks-block-label">
+                    ВАЛЮТА
+                </div>
+                <select class="new-loan-form-blocks-block-input new-loan-form-blocks-block-input-select" formControlName="currency" (input)="onInputChange()">
+                    <option *ngFor="let cur of currencies" value="{{cur.id}}">{{cur.name}}</option>
+                </select>
+            </div>
+            <!-- <div class="new-loan-form-blocks-block">
                 <div class="new-loan-form-blocks-block-label">
                     НОМЕР ТЕЛЕФОНА
                 </div>
                 <div class="new-loan-form-blocks-block-input">
                     +375 29 333 44 55
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <div class="new-loan-form-block-sum">

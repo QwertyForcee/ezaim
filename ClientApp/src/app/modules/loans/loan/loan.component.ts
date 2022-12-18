@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { LoanModel } from 'src/app/models/loan-model';
@@ -15,6 +16,11 @@ export class LoanComponent implements OnInit {
   loanId?: number;
   loan?: LoanModel;
   dateFormat: string = 'mm/dd/yyyy';
+  isPaymentFormOpened = false;
+
+  paymentFormGroup: FormGroup = new FormGroup({
+    'amount': new FormControl(0, [Validators.required, Validators.min(100), Validators.max(3_165_000)])
+  });
 
   constructor(private profileDataService: ProfileDataService, private loansService: LoansService, private route: ActivatedRoute) { }
 
@@ -44,6 +50,22 @@ export class LoanComponent implements OnInit {
   }
 
   onStartMakingPayment() {
+    this.isPaymentFormOpened = true;
+  }
 
+  closePaymentForm() {
+    this.isPaymentFormOpened = false;
+  }
+
+  confirmPayment() {
+    if (this.paymentFormGroup.valid && this.loanId) {
+      const payment = {
+        'loan': this.loanId,
+        'amount': this.paymentFormGroup.get('amount')?.value
+      };
+      this.loansService.createNewPayment(payment).subscribe(result => {
+
+      });
+    }
   }
 }

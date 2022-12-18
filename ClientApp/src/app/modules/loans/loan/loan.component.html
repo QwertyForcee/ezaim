@@ -28,5 +28,21 @@
             <p>ЗАЙМ ПОД <span class="loan-data-info-gold">{{loan?.percent}}</span> ЕЖЕМЕСЯЧНЫХ</p>
         </div>
     </div>
+    <ng-container *ngIf="isPaymentFormOpened">
+        <div class="loan-payment-form" [formGroup]="paymentFormGroup">
+            <div class="loan-payment-form-block">
+                <label class="loan-payment-form-block-label">Сумма</label>
+                <input type="number" class="loan-payment-form-block-input">
+            </div>
+            <div class="loan-payment-form-buttons">
+                <button class="loan-payment-form-buttons-action" (click)="closePaymentForm()">
+                    Свернуть
+                </button>
+                <button class="loan-payment-form-buttons-action" (click)="confirmPayment()" formControlName="amount">
+                    Перейти к данным по карте
+                </button>
+            </div>
+        </div>
+    </ng-container>
     <app-loan-calendar></app-loan-calendar>
 </div>
