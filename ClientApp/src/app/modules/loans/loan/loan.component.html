@@ -13,19 +13,19 @@
                 ЗАЙМА
             </p>
             <p>
-                10 000 BYN
+                {{loan?.amount}}
             </p>
         </div>
         <div class="loan-data-status">
             <p>СТАТУС ЗАЙМА: <span class="loan-data-status-white">НЕ ПОГАШЕН</span></p>
-            <p>ОСТАВШАЯСЯ СУММА ВОЗВРАТА: <span class="loan-data-status-black"> 12 553 BYN</span></p>
+            <p>ОСТАВШАЯСЯ СУММА ВОЗВРАТА: <span class="loan-data-status-black">{{loan?.remaining_amount}}</span></p>
         </div>
         <div class="loan-data-empty">
 
         </div>
         <div class="loan-data-info">
-            <p>ДАТА ОФОРМЛЕНИЯ ЗАЙМА: <span class="loan-data-info-gold">01.09.2022</span></p>
-            <p>ЗАЙМ ПОД <span class="loan-data-info-gold">5%</span> ЕЖЕМЕСЯЧНЫХ</p>
+            <p>ДАТА ОФОРМЛЕНИЯ ЗАЙМА: <span class="loan-data-info-gold">{{getFormattedDate}}</span></p>
+            <p>ЗАЙМ ПОД <span class="loan-data-info-gold">{{loan?.percent}}</span> ЕЖЕМЕСЯЧНЫХ</p>
         </div>
     </div>
     <app-loan-calendar></app-loan-calendar>

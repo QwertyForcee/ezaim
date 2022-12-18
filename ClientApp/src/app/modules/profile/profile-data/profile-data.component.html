@@ -1,23 +1,29 @@
 <div class="profile-data">
-    <form [formGroup]="userDataForm">
+    <form [formGroup]="userDataFormGroup">
         <h1 class="profile-data-title-first">{{userFullName}}</h1>
-        <input id="Email" formControlName="Email" type="email" class="profile-data-title-second" [readonly]="!editMode">
+        <input id="Email" formControlName="email" type="email" class="profile-data-title-second" [readonly]="!editMode">
         <div class="profile-data-separator"></div>
-        <button class="profile-data-switch-mode" (click)="switchMode()">
-            <div class="profile-data-switch-mode-img"></div>
-            {{ editMode ? 'disable edit mode' : 'enable edit mode'}}
-        </button>
+
+        <div class="profile-data-block">
+            <button class="profile-data-block-switch-mode" (click)="switchMode()">
+                <div class="profile-data-block-switch-mode-img"></div>
+                {{ editMode ? 'выключить редактирование' : 'включить редактирование'}}
+            </button>
+            <button class="profile-data-block-save" (click)="onSave()">
+                Сохранить
+            </button>
+        </div>
 
         <div class="profile-data_form-block">
             <label for="Phone">КОНТАКТНЫЙ ТЕЛЕФОН</label>
-            <input id="Phone" formControlName="Phone" type="text">
+            <input id="Phone" formControlName="phone_number" type="text" [readonly]="!editMode">
         </div>
 
         <div *ngFor="let card of cards; let i=index">
             <div class="profile-data_form-block">
                 <label>КАРТА #{{i}} <span class="card-delete-button">удалить</span></label>
                 <div class="profile-data_form-block-card">
-                    
+
                 </div>
             </div>
         </div>

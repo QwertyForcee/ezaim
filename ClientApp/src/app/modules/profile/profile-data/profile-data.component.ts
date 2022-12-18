@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ProfileDataService } from '../services/profile-data.service';
 
 @Component({
   selector: 'app-profile-data',
@@ -8,25 +9,51 @@ import { FormControl, FormGroup } from '@angular/forms';
 })
 export class ProfileDataComponent implements OnInit {
 
-  constructor() {
-    this.userDataForm = new FormGroup({
-      "Email": new FormControl("user.example@gmail.com"),
-      "Phone": new FormControl("+375 (29) 111 22 33"),
-    });
-  }
+  constructor(private profileDataService: ProfileDataService) { }
 
-  userFullName = 'Максим Максимов Максимович';
+  get userFullName() {
+    return `${this.userDataFormGroup.get('surname')?.value} ${this.userDataFormGroup.get('name')?.value}`;
+  }
   email = 'user.example@gmail.com';
-  userDataForm: FormGroup;
+  userDataFormGroup: FormGroup = new FormGroup({
+    "id": new FormControl(),
+    "name": new FormControl(),
+    "surname": new FormControl(),
+    "email": new FormControl(null, [Validators.required, Validators.email]),
+    "phone_number": new FormControl(null, [Validators.required, Validators.minLength(12), Validators.maxLength(12)]),
+  });
+
   cards = [];
+  editMode = false;
 
-  editMode = false; 
   ngOnInit(): void {
-
+    this.loadUserData();
   }
 
-  switchMode(){
+  switchMode() {
     this.editMode = !this.editMode;
   }
 
+  onSave() {
+    if (this.userDataFormGroup.valid) {
+      this.profileDataService.updateUserData(this.userDataFormGroup.value).subscribe(() => {
+        this.loadUserData();
+      });
+    }
+  }
+
+  private loadUserData() {
+    this.profileDataService.getUserData().subscribe((result) => {
+      if (result && result.length > 0) {
+        const user = result[0]
+        this.userDataFormGroup.setValue({
+          "id": user.id,
+          "name": user.name,
+          "surname": user.surname,
+          "email": user.email,
+          "phone_number": user.phone_number,
+        });
+      }
+    })
+  }
 }

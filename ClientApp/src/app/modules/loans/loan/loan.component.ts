@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import * as moment from 'moment';
 import { LoanModel } from 'src/app/models/loan-model';
+import { ProfileDataService } from '../../profile/services/profile-data.service';
 import { LoansService } from '../loans.service';
 
 @Component({
@@ -12,8 +14,14 @@ export class LoanComponent implements OnInit {
 
   loanId?: number;
   loan?: LoanModel;
-  constructor(private loansService: LoansService, private route: ActivatedRoute) { }
+  dateFormat: string = 'mm/dd/yyyy';
 
+  constructor(private profileDataService: ProfileDataService, private loansService: LoansService, private route: ActivatedRoute) { }
+
+  get getFormattedDate() {
+    return moment(this.loan?.created_at).format(this.dateFormat); 
+  }
+  
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.loanId = params['id'];
@@ -26,6 +34,12 @@ export class LoanComponent implements OnInit {
         })
       }
     })
-  }
 
+    this.profileDataService.getUserSettings().subscribe(result => {
+      if (result && result.length > 0) {
+        const settings = result[0];
+        this.dateFormat = settings.date_format;
+      }
+    })
+  }
 }

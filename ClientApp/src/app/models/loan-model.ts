@@ -1,9 +1,8 @@
 export interface LoanModel {
     id: number;
     status: number;
-    initialAmount: number;
-    remainingAmount: number;
-    creationDate: string;
+    amount: number;
+    remaining_amount: number;
+    created_at: string;
     percent: number;
-
 }

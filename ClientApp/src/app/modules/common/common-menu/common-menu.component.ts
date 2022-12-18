@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { ProfileDataService } from '../../profile/services/profile-data.service';
 
 @Component({
   selector: 'app-common-menu',

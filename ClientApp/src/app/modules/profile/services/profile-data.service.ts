@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment';
 })
 export class ProfileDataService {
 
-  private readonly USERS_URL = `${environment.baseUrl}users`;
+  private readonly USERS_URL = `${environment.baseUrl}users/`;
   private readonly PAYMENT_CARDS_URL = `${environment.baseUrl}payment-cards/`;
   private readonly TELEGRAM_ACCOUNTS_URL = `${environment.baseUrl}telegram-users/`;
   private readonly USER_SETTINGS_URL = `${environment.baseUrl}user-settings/`;
@@ -20,8 +20,8 @@ export class ProfileDataService {
 
   constructor(private http: HttpClient) { }
 
-  getUserData() {
-    return this.http.get(this.USERS_URL);
+  getUserData(): Observable<User[]> {
+    return this.http.get<User[]>(this.USERS_URL);
   }
 
   updateUserData(user: User) {
