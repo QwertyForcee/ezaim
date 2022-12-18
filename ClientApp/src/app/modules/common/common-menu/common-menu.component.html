@@ -1,19 +1,22 @@
-<ng-container *ngIf="!expanded; else expandedMenu">
-    <div class="closed-menu" (click)="expandMenu()">
-        <img src="assets/menu-icon.svg" alt="menu">
-    </div>
-</ng-container>
-<ng-template #expandedMenu>
-    <div class="expanded-menu">
-        <div class="expanded-menu-container">
-            <p class="close-container" (click)="closeMenu()">
-                <img src="assets/common-menu-close-icon.png">
-                <span>ЗАКРЫТЬ</span>
-                <img src="assets/common-menu-close-icon.png">
-            </p>
-            <ul class="expanded-menu-list">
-                <li *ngFor="let item of menuItems" [routerLink]="item.url">{{item.title}} <img *ngIf="item.star" src="assets/star.svg" alt=""></li>
-            </ul>
+<ng-container *ngIf="isAuthorized">
+    <ng-container *ngIf="!expanded; else expandedMenu">
+        <div class="closed-menu" (click)="expandMenu()">
+            <img src="assets/menu-icon.svg" alt="menu">
         </div>
-    </div>
-</ng-template>
+    </ng-container>
+    <ng-template #expandedMenu>
+        <div class="expanded-menu">
+            <div class="expanded-menu-container">
+                <p class="close-container" (click)="closeMenu()">
+                    <img src="assets/common-menu-close-icon.png">
+                    <span>ЗАКРЫТЬ</span>
+                    <img src="assets/common-menu-close-icon.png">
+                </p>
+                <ul class="expanded-menu-list">
+                    <li *ngFor="let item of menuItems" [routerLink]="item.url">{{item.title}} <img *ngIf="item.star"
+                            src="assets/star.svg" alt=""></li>
+                </ul>
+            </div>
+        </div>
+    </ng-template>
+</ng-container>

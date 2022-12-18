@@ -1,5 +1,5 @@
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile-menu',
@@ -8,15 +8,14 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ProfileMenuComponent implements OnInit {
 
-  constructor(private router: ActivatedRoute) { }
+  constructor(private router: Router) { }
 
   currentUrl = '';
   menuItems = [
     { title: 'данные об аккауте', url: '/profile' },
-    { title: 'telegram аккаунты', url: '/tg-accounts'},
+    { title: 'telegram аккаунты', url: 'tg-accounts' },
     { title: 'мои займы', url: 'loans' },
-    { title: 'настройки', url: '' },
-    { title: 'выйти', url: '' },
+    { title: 'настройки', url: 'settings' },
   ]
   ngOnInit(): void {
     this.currentUrl = window.location.href.split('/').pop() ?? '';
@@ -30,6 +29,11 @@ export class ProfileMenuComponent implements OnInit {
     setTimeout(() => {
       this.currentUrl = window.location.href.split('/').pop() ?? '';
     }, 0)
+  }
+
+  onExit() {
+    localStorage.clear();
+    this.router.navigate(['']);
   }
 
 }

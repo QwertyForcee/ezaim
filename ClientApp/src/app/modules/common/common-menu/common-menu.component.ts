@@ -1,4 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-common-menu',
@@ -17,10 +18,10 @@ export class CommonMenuComponent implements OnInit {
   constructor() { }
 
   @HostListener('window:scroll')
-  onScroll(){
-    this.expanded = false;    
+  onScroll() {
+    this.expanded = false;
   }
-  
+
   ngOnInit(): void {
   }
 
@@ -30,5 +31,10 @@ export class CommonMenuComponent implements OnInit {
 
   closeMenu(): void {
     this.expanded = false;
+  }
+
+  get isAuthorized() {
+    const token = localStorage.getItem(environment.access_token_key);
+    return token !== null && token !== undefined;
   }
 }

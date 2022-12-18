@@ -3,5 +3,6 @@
     <ul class="profile-menu-list">
         <li *ngFor="let item of menuItems" [routerLink]="item.url" [class.selected]="isSelectedUrl(item.url)" (click)="onMenuItemClicked()">
             {{item.title}}</li>
+        <li (click)="onExit()">выйти</li>
     </ul>
 </div>

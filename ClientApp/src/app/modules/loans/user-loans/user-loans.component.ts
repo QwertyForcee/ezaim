@@ -1,5 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoanModel } from 'src/app/models/loan-model';
+import { LoansService } from '../loans.service';
 
 @Component({
   selector: 'app-user-loans',
@@ -8,21 +10,22 @@ import { Router } from '@angular/router';
 })
 export class UserLoansComponent implements OnInit, OnDestroy {
 
+  loans?: LoanModel[];
+
   switchHeader: HTMLElement | null = null;
   greyMode = false;
-  constructor(private router: Router) { }
+  constructor(private router: Router, private loansService: LoansService) { }
 
   ngOnInit(): void {
     this.switchHeader = document.getElementById('complete-loans-separator');
-    const header = this.switchHeader?.getBoundingClientRect();
-    if (header) {
-      //console.log(header.top, header.right, header.bottom, header.left);
-    }
+    this.loansService.getUserLoans().subscribe(res => {
+      this.loans = res;
+    })
 
   }
 
   onLoanClicked(): void {
-    this.router.navigate(['/loan'], { queryParams: { id: 1} });
+    this.router.navigate(['/loan'], { queryParams: { id: 1 } });
   }
 
   @HostListener('window:scroll', ['$event'])
@@ -33,7 +36,7 @@ export class UserLoansComponent implements OnInit, OnDestroy {
 
       document.body.classList.add('body-grey');
       const completeHeader = document.body.getElementsByClassName('complete-loans-header')[0] as HTMLElement;
-      if (completeHeader){
+      if (completeHeader) {
         completeHeader?.classList.remove('complete-loans-header-hidden');
       }
 
@@ -45,9 +48,9 @@ export class UserLoansComponent implements OnInit, OnDestroy {
       // document.body.getElementsByClassName('complete-loans-header')[0]?.classList.add('complete-loans-header-hidden');
       document.body.classList.remove('body-grey');
       document.body.getElementsByClassName('profile-menu')[0]?.classList.remove('centered');
-      
+
       const completeHeader = document.body.getElementsByClassName('complete-loans-header')[0] as HTMLElement;
-      if (completeHeader){
+      if (completeHeader) {
         completeHeader?.classList.add('complete-loans-header-hidden');
       }
     }

@@ -11,6 +11,7 @@ import { LoansModule } from './modules/loans/loans.module';
 import { ProfileModule } from './modules/profile/profile.module';
 import { HomeComponent } from './shared/home/home.component';
 import 'hammerjs'; 
+import { MAT_DATE_LOCALE } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,9 @@ import 'hammerjs';
     LoansModule,
     BrowserAnimationsModule,
   ],
-  providers: [],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'en-US'}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -88,7 +88,7 @@ class UserSettings(BaseDbModel):
         on_delete=models.CASCADE,
         primary_key=True
     )
-    date_format = models.CharField(max_length=32, default="DD/MM/YYYY")
+    date_format = models.CharField(max_length=32, default="MM/DD/YYYY")
     preferred_currency = models.ForeignKey(
         Currency, 
         on_delete=models.RESTRICT,
