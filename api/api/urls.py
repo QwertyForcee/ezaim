@@ -10,6 +10,7 @@ from ezaim.views import (
     login, signup,
     UserViewSet,
     UserSettingsViewSet,
+    TelegramUsersViewSet,
     CurrencyViewSet,
     LoanViewSet,
     PaymentViewSet,
@@ -38,6 +39,7 @@ router.register(r'payments', PaymentViewSet, basename='payments')
 router.register(r'cards', PaymentCardViewSet, basename='cards')
 router.register(r'user-settings', UserSettingsViewSet, basename='user-settings')
 router.register(r'currencies', CurrencyViewSet, basename='currencies')
+router.register(r'telegram-users', TelegramUsersViewSet, basename='telegram-users')
 
 
 urlpatterns = [
