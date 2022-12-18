@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material';
+import { ApplicationCommonModule } from '../common/common.module';
 
 export function tokenGetter() {
   return localStorage.getItem(environment.access_token_key)
@@ -19,6 +20,7 @@ export function tokenGetter() {
   ],
   imports: [
     CommonModule,
+    ApplicationCommonModule,
     ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,

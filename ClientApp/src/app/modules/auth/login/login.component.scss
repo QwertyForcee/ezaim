@@ -30,6 +30,22 @@
                     font-size: 30px;
                     letter-spacing: 3px;
                 }
+
+                &-agreement {
+                    margin-top: -200px;
+                    &-container {
+                        margin-left: 5%;
+                        margin-right: 5%;
+                    }
+
+                    &-action {
+                        color: $project-medium-purple;
+                        margin-left: 5%;
+                        cursor: pointer;
+                        font-size: 120%;
+                        font-weight: 700;
+                    }
+                }
             }
 
             &-title-vertical {

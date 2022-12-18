@@ -3,13 +3,15 @@ import { CommonModule } from '@angular/common';
 import { CommonMenuComponent } from './common-menu/common-menu.component';
 import { CommonNavigationComponent } from './common-navigation/common-navigation.component';
 import { RouterModule } from '@angular/router';
+import { PersonalDataAgreementComponent } from './personal-data-agreement/personal-data-agreement.component';
 
 
 
 @NgModule({
   declarations: [
     CommonMenuComponent,
-    CommonNavigationComponent
+    CommonNavigationComponent,
+    PersonalDataAgreementComponent
   ],
   imports: [
     CommonModule,
@@ -18,6 +20,8 @@ import { RouterModule } from '@angular/router';
   exports: [
     CommonMenuComponent,
     CommonNavigationComponent,
+    PersonalDataAgreementComponent,
+    
   ]
 })
 export class ApplicationCommonModule { }

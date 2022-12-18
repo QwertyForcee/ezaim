@@ -13,6 +13,7 @@ import { SignUpModel } from '../models/sign-up-model';
 export class LoginComponent implements OnInit {
 
   isLoginMode = false;
+  showAgreement = false;
 
   get invalidLogInForm(): boolean {
     return this.loginFormGroup.invalid;
@@ -141,6 +142,10 @@ export class LoginComponent implements OnInit {
       residential_flat: this.signUpFormGroup.get('registration_flat')?.value,
       residential_mailIndex: this.signUpFormGroup.get('registration_mailIndex')?.value
     })
+  }
+  
+  switchShowAgreement(){
+    this.showAgreement = !this.showAgreement;
   }
 
   private passwordsValidation(group: AbstractControl): ValidationErrors | null {

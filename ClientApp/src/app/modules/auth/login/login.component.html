@@ -28,8 +28,17 @@
             <form class="auth-form" action="" [formGroup]="signUpFormGroup">
                 <section class="auth-form-checkbox-section">
                     <input type="checkbox" formControlName="personalDataTermsAgreement">
-                    <p>Я соглашаюсь с <span>политикой обработки персональных данных</span></p>
+                    <p>Я соглашаюсь с <span (click)="switchShowAgreement()">политикой обработки персональных данных</span>
+                    </p>
                 </section>
+                <ng-container *ngIf="showAgreement">
+                    <div class="auth-form-agreement">
+                        <p class="auth-form-agreement-action" (click)="switchShowAgreement()">свернуть</p>
+                        <div class="auth-form-agreement-container">
+                            <app-personal-data-agreement></app-personal-data-agreement>
+                        </div>
+                    </div>
+                </ng-container>
                 <div class="auth-form-block">
                     <img class="auth-image auth-image-sign-up-1">
                     <div class="auth-form-block-sections">

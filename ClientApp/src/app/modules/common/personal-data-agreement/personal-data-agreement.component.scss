@@ -1,0 +1,15 @@
+@import '/src/styles/constants';
+
+.agreement-block {
+    display: flex;
+    flex-direction: column;
+    h2 {
+        font-weight: bold;
+        color: $project-dark-grey;
+    }
+    p {
+        margin: 10px 0;
+
+        color: $project-medium-grey;
+    }
+}
