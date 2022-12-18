@@ -20,9 +20,13 @@ export class ProfileDataComponent implements OnInit {
   userDataForm: FormGroup;
   cards = [];
 
-
+  editMode = false; 
   ngOnInit(): void {
 
+  }
+
+  switchMode(){
+    this.editMode = !this.editMode;
   }
 
 }

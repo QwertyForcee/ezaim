@@ -1,8 +1,12 @@
 <div class="profile-data">
     <form [formGroup]="userDataForm">
         <h1 class="profile-data-title-first">{{userFullName}}</h1>
-        <input id="Email" formControlName="Email" type="email" class="profile-data-title-second">
+        <input id="Email" formControlName="Email" type="email" class="profile-data-title-second" [readonly]="!editMode">
         <div class="profile-data-separator"></div>
+        <button class="profile-data-switch-mode" (click)="switchMode()">
+            <div class="profile-data-switch-mode-img"></div>
+            {{ editMode ? 'disable edit mode' : 'enable edit mode'}}
+        </button>
 
         <div class="profile-data_form-block">
             <label for="Phone">КОНТАКТНЫЙ ТЕЛЕФОН</label>
