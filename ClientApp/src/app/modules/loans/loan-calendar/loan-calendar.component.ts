@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { DateHelper } from 'src/app/utilities/date-helper';
+import { LoansService } from '../loans.service';
 
 @Component({
   selector: 'app-loan-calendar',
@@ -9,7 +10,10 @@ import { DateHelper } from 'src/app/utilities/date-helper';
 })
 export class LoanCalendarComponent implements OnInit {
 
-  constructor() { }
+  @Input() loanId?: number;
+
+  constructor(private loansService: LoansService) { }
+
   realCurrentDate: Date = new Date();
   currentDate!: Date;
 
@@ -53,8 +57,12 @@ export class LoanCalendarComponent implements OnInit {
     return this.getMonthDaysCount(2);
   }
 
-  dayToolTip(day: number) {
-    return `оставшаяся сумма выплаты на ${day} число составит 100 BYN`
+  dayToolTip(day: number, month: number, year: number) {
+    // if (this.loanId) {
+      return this.loansService.getCalculatedSumForLoanDayAsync(this.loanId ?? 0, new Date(year, month, day))
+      // return ``
+    // }
+    // return '';
   }
 
   trackByDay(index: any, item: any) {
@@ -79,7 +87,9 @@ export class LoanCalendarComponent implements OnInit {
         id: `${year}_${month}_${day}`,
         value: day,
         isPrev: this.isPreviousDate(year, month, day),
-        isToday: this.isCurrentDate(year, month, day)
+        isToday: this.isCurrentDate(year, month, day),
+        year: year,
+        month: month,
       }
     });
   }

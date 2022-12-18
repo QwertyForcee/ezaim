@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 import { LoanModel } from 'src/app/models/loan-model';
 import { NewLoanModel } from 'src/app/models/new-loan-model';
 import { Payment } from 'src/app/models/payment';
@@ -35,7 +35,9 @@ export class LoansService {
     return this.http.post<string>(this.LOAN_URL, newLoanModel);
   }
 
-  getCalculatedSumForLoanDay(loanId: number, date: Date | string) {
+  getCalculatedSumForLoanDayAsync(loanId: number, date: Date | string) {
+    // const sum$ = await this.http.post<number>(`${environment.baseUrl}${this.LOAD_CALCULATED_SUM_FOR_LOAN}`, { loanId, date });
+    // return lastValueFrom(sum$).then(v => v ?? '');
     return this.http.post<number>(`${environment.baseUrl}${this.LOAD_CALCULATED_SUM_FOR_LOAN}`, { loanId, date });
   }
 
