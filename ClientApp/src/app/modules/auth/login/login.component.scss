@@ -334,6 +334,12 @@
                 z-index: 7;
             }
         }
+
+        &-select {
+            font-size: 30px;
+            padding-right: 150px;
+            min-width: 365px;
+        }
     }
 
     &-sign-up-sub-menu {

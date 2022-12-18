@@ -123,12 +123,20 @@
                     <div class="auth-form-block-sections">
                         <section class="auth-form-section">
                             <label class="auth-form-label" for="">ПОЛ</label>
-                            <input class="auth-form-input" formControlName="sex">
+                            <select class="auth-form-input auth-form-select" formControlName="sex">
+                                <option value="М">Мужской</option>
+                                <option value="Ж">Женский</option>
+                            </select>
+                            <!-- <input class="auth-form-input" formControlName="sex"> -->
                         </section>
 
                         <section class="auth-form-section">
                             <label class="auth-form-label" for="">РЕЗИДЕНТ</label>
-                            <input class="auth-form-input" formControlName="resident">
+                            <!-- <input class="auth-form-input" formControlName="resident"> -->
+                            <select class="auth-form-input auth-form-select" formControlName="resident">
+                                <option value="1">Да</option>
+                                <option value="0">Нет</option>
+                            </select>
                         </section>
 
                         <section class="auth-form-section">

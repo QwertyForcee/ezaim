@@ -124,8 +124,9 @@ export class LoginComponent implements OnInit {
         signUpModel.birthAddress = birthAddress;
         signUpModel.registrationAddress = registrationAddress;
         signUpModel.residentialAddress = residentialAddress;
+        signUpModel.resident = !!parseInt(signUpModel.resident as any);
         console.log(signUpModel);
-        
+
         this.authService.signUp(signUpModel);
       }
     }
@@ -143,8 +144,8 @@ export class LoginComponent implements OnInit {
       residential_mailIndex: this.signUpFormGroup.get('registration_mailIndex')?.value
     })
   }
-  
-  switchShowAgreement(){
+
+  switchShowAgreement() {
     this.showAgreement = !this.showAgreement;
   }
 
