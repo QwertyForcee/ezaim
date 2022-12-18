@@ -215,6 +215,13 @@ class UserSettingsViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return UserSettings.objects.filter(user_id=self.request.user)
 
+class TelegramUsersViewSet(viewsets.ModelViewSet):
+    serializer_class = TelegramUserSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return UserSettings.objects.filter(user_id=self.request.user)
 
 class LoanViewSet(
         viewsets.GenericViewSet, 
@@ -229,18 +236,29 @@ class LoanViewSet(
         return Loan.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
+        print('loan viewset: perform create')
+        data = json.loads(self.request.body.decode())
         serializer.save(
             user = self.request.user
+            # remaining_amount = data['remaining_amount']
         )
         return super().perform_create(serializer)
 
-class PaymentViewSet(viewsets.ModelViewSet):
+class PaymentViewSet(
+        viewsets.GenericViewSet,
+        mixins.ListModelMixin,
+        mixins.CreateModelMixin,
+        mixins.RetrieveModelMixin):
     serializer_class = PaymentSerializer
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         return Payment.objects.filter(loan_id__user=self.request.user)
+
+    def perform_create(self, serializer):
+        print('payment viewset: perform create')
+        return super().perform_create(serializer)
 
 class PaymentCardViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentCardSerializer
