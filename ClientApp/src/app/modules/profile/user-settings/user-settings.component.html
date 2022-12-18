@@ -1,1 +1,25 @@
-<p>user-settings works!</p>
+<div class="user-settings">
+    <form class="user-settings-blocks" [formGroup]="userSettingsGroup">
+        <div class="user-settings-blocks-block">
+            <label class="user-settings-blocks-block-label">Формат дат</label>
+            <input type="text" class="user-settings-blocks-block-input" formControlName="date_format">
+        </div>
+
+        <div class="user-settings-blocks-block">
+            <label class="user-settings-blocks-block-label">День начала недели</label>
+            <select class="user-settings-blocks-block-input user-settings-blocks-block-input-select" formControlName="week_start">
+                <option *ngFor="let day of daysOfWeek" value="{{day.id}}">{{day.name}}</option>
+            </select>
+        </div>
+
+        <div class="user-settings-blocks-block">
+            <label class="user-settings-blocks-block-label">Предпочитаемая валюта</label>
+            <select class="user-settings-blocks-block-input user-settings-blocks-block-input-select" formControlName="preferred_currency">
+                <option *ngFor="let cur of currencies" value="{{cur.id}}">{{cur.name}}</option>
+            </select>
+            <!-- <input type="text" class="user-settings-blocks-block-input" formControlName="preferred_currency"> -->
+        </div>
+    </form>
+    <button class="user-settings-save" (click)="onSave()">Сохранить</button>
+
+</div>
