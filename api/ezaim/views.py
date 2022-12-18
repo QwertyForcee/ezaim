@@ -3,14 +3,17 @@ from django.http import JsonResponse, HttpRequest
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
-from api.settings import JWT_KEY
 import jwt
 import json
+#
+import pprint
+from decimal import *
+
+from api.settings import JWT_KEY
 from ezaim.utils import JWTAuthentication
 from ezaim.utils import WebpayCurrency, pay_loan, get_loan
 from django.views.decorators.csrf import csrf_exempt
-import pprint
-from decimal import *
+
 
 
 from ezaim.models import (
@@ -213,13 +216,23 @@ class UserSettingsViewSet(viewsets.ModelViewSet):
         return UserSettings.objects.filter(user_id=self.request.user)
 
 
-class LoanViewSet(viewsets.ModelViewSet):
+class LoanViewSet(
+        viewsets.GenericViewSet, 
+        mixins.ListModelMixin, 
+        mixins.CreateModelMixin, 
+        mixins.RetrieveModelMixin):
     serializer_class = LoanSerializer
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         return Loan.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(
+            user = self.request.user
+        )
+        return super().perform_create(serializer)
 
 class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
