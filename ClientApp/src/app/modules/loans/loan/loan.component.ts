@@ -61,10 +61,13 @@ export class LoanComponent implements OnInit {
     if (this.paymentFormGroup.valid && this.loanId) {
       const payment = {
         'loan': this.loanId,
-        'amount': this.paymentFormGroup.get('amount')?.value
+        'amount': this.paymentFormGroup.get('amount')?.value,
+        'return_url': window.location.href
       };
       this.loansService.createNewPayment(payment).subscribe(result => {
-
+        if (result) {
+          window.open(result, "_self");
+        }
       });
     }
   }

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LoanModel } from 'src/app/models/loan-model';
+import { NewLoanModel } from 'src/app/models/new-loan-model';
 import { Payment } from 'src/app/models/payment';
 import { environment } from 'src/environments/environment';
 
@@ -30,8 +31,8 @@ export class LoansService {
     });
   }
 
-  createNewLoan(loan: LoanModel) {
-
+  createNewLoan(newLoanModel: NewLoanModel): Observable<string> {
+    return this.http.post<string>(this.LOAN_URL, newLoanModel);
   }
 
   getCalculatedSumForLoanDay(loanId: number, date: Date | string) {
@@ -47,7 +48,7 @@ export class LoansService {
     });
   }
 
-  createNewPayment(payment: Payment) {
-    return this.http.post(this.PAYMENT_URL, payment);
+  createNewPayment(payment: Payment): Observable<string> {
+    return this.http.post<string>(this.PAYMENT_URL, payment);
   }
 }

@@ -52,4 +52,21 @@ export class NewLoanFormComponent implements OnInit {
         .subscribe(result => this.calculatedPercent = result);
     }
   }
+
+  confirmCreatingLoan() {
+    if (this.newLoanFormGroup.valid) {
+      const amount = this.newLoanFormGroup.get('sum')?.value;
+      const currency = this.newLoanFormGroup.get('currency')?.value;
+
+      this.loansService.createNewLoan({
+        'amount': amount,
+        'currency': currency,
+        'return_url': 'http://localhost:4200/loans',
+      }).subscribe(res => {
+        if (res) {
+          window.open(res, "_self");
+        }
+      })
+    }
+  }
 }
