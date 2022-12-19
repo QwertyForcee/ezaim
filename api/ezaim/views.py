@@ -53,6 +53,10 @@ def login(request: HttpRequest, *args, **kwargs):
         JWT_KEY, 
         algorithm='HS256'
     )
+    log = Log(
+        log=f'{email} logged in'
+    )
+    log.save()
     return JsonResponse({
         "access_token": token
     })
@@ -160,6 +164,10 @@ def signup(request: HttpRequest, *args, **kwargs):
         JWT_KEY, 
         algorithm='HS256'
     )
+    log = Log(
+        log = f'{email} registered'
+    )
+    log.save()
     return JsonResponse({
         "access_token": token
     })

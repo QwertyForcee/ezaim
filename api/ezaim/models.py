@@ -166,7 +166,7 @@ class Loan(BaseDbModel):
 
     objects = AutoUpdateLoanManager()
     def __str__(self) -> str:
-        return f"Loan of {self.amount} {self.currency}, {self.percent}%"
+        return f"Loan: {self.amount} {self.currency} monthly {self.percent}%, remaining {self.remaining_amount}"
 
 class Payment(BaseDbModel):
     amount = models.DecimalField(max_digits=15, decimal_places=2)
