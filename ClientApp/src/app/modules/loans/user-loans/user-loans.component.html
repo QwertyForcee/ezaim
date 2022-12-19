@@ -1,66 +1,42 @@
-<div class="user-loans">
-    <h1 class="loans-header">активные займы:</h1>
-    <div class="user-loans-cards">
-        <div class="loan-card">
-            <div class="loan-card-content" (click)="onLoanClicked()">
-                <h3>ЗАЙМ - 4000 BYN</h3>
+<ng-container *ngIf="hasAnyLoan; else emptyContainer">
+    <div class="user-loans">
+        <h1 class="loans-header">активные займы:</h1>
+        <div class="user-loans-cards">
+            <div *ngFor="let loan of activeLoans" class="loan-card">
+                <div class="loan-card-content" (click)="onLoanClicked()">
+                    <h3>ЗАЙМ - 4000 BYN</h3>
 
-                <h4>10.14.2022</h4>
-                <h4>под 3.4%</h4>
+                    <h4>10.14.2022</h4>
+                    <h4>под 3.4%</h4>
 
-                <h5>ОСТАТОК ПО ЗАЙМУ - 3010</h5>
+                    <h5>ОСТАТОК ПО ЗАЙМУ - 3010</h5>
+                </div>
             </div>
         </div>
-        <div class="loan-card">
-            <div class="loan-card-content" (click)="onLoanClicked()">
-                <h3>ЗАЙМ - 4000 BYN</h3>
 
-                <h4>10.14.2022</h4>
-                <h4>под 3.4%</h4>
+        <div id="complete-loans-separator" class="separator"></div>
+        <h2 id="complete-loans-header" class="loans-header complete-loans-header complete-loans-header-hidden"
+            [class.complete-loans-header-initial]="staticHeaders">завершенные:</h2>
 
-                <h5>ОСТАТОК ПО ЗАЙМУ - 3010</h5>
+        <div class="user-loans-cards user-loans-grey-mode">
+
+            <div class="loan-card" *ngFor="let loan of notActiveLoans">
+                <div class="loan-card-content" (click)="onLoanClicked()">
+                    <h3>ЗАЙМ - 4000 BYN</h3>
+
+                    <h4>10.14.2022</h4>
+                    <h4>под 3.4%</h4>
+                </div>
             </div>
-        </div>
-        <div class="loan-card">
-            <div class="loan-card-content" (click)="onLoanClicked()">
-                <h3>ЗАЙМ - 4000 BYN</h3>
 
-                <h4>10.14.2022</h4>
-                <h4>под 3.4%</h4>
-
-                <h5>ОСТАТОК ПО ЗАЙМУ - 3010</h5>
-            </div>
-        </div>
-    </div>
-
-    <div id="complete-loans-separator" class="separator"></div>
-    <h2 id="complete-loans-header" class="loans-header complete-loans-header complete-loans-header-hidden" [class.complete-loans-header-initial]="staticHeaders">завершенные:</h2>
-
-    <div class="user-loans-cards user-loans-grey-mode">
-
-        <div class="loan-card">
-            <div class="loan-card-content" (click)="onLoanClicked()">
-                <h3>ЗАЙМ - 4000 BYN</h3>
-
-                <h4>10.14.2022</h4>
-                <h4>под 3.4%</h4>
-            </div>
-        </div>
-        <div class="loan-card">
-            <div class="loan-card-content" (click)="onLoanClicked()">
-                <h3>ЗАЙМ - 4000 BYN</h3>
-
-                <h4>10.14.2022</h4>
-                <h4>под 3.4%</h4>
-            </div>
-        </div>
-        <div class="loan-card">
-            <div class="loan-card-content" (click)="onLoanClicked()">
-                <h3>ЗАЙМ - 4000 BYN</h3>
-
-                <h4>10.14.2022</h4>
-                <h4>под 3.4%</h4>
-            </div>
         </div>
     </div>
-</div>
+</ng-container>
+<ng-template #emptyContainer>
+    <div class="empty-container">
+        <h1>
+            у вас нету займов :)
+        </h1>
+        <h2>исправить</h2>
+    </div>
+</ng-template>

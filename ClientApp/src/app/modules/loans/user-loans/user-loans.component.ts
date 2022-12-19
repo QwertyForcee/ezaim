@@ -1,6 +1,9 @@
 import { Component, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoanStatus } from 'src/app/enums/loan-status-enum';
+import { Currency } from 'src/app/models/currency';
 import { LoanModel } from 'src/app/models/loan-model';
+import { ProfileDataService } from '../../profile/services/profile-data.service';
 import { LoansService } from '../loans.service';
 
 @Component({
@@ -11,17 +14,34 @@ import { LoansService } from '../loans.service';
 export class UserLoansComponent implements OnInit, OnDestroy {
 
   loans?: LoanModel[];
+  currencies?: Currency[];
 
   switchHeader: HTMLElement | null = null;
-  greyMode = false;  
+  greyMode = false;
+
+  get activeLoans() {
+    return this.loans?.filter(l => l.status == LoanStatus.Active) ?? [];
+  }
+
+  get notActiveLoans() {
+    return this.loans?.filter(l => l.status == LoanStatus.Repaid) ?? [];
+  }
+
+  get hasAnyLoan() {
+    return this.loans && this.loans.length > 0;
+  }
 
   @Input() staticHeaders = false;
-  constructor(private router: Router, private loansService: LoansService) { }
+  constructor(private router: Router, private loansService: LoansService, private profileDataService: ProfileDataService) { }
 
   ngOnInit(): void {
     this.switchHeader = document.getElementById('complete-loans-separator');
     this.loansService.getUserLoans().subscribe(res => {
       this.loans = res;
+    })
+
+    this.profileDataService.getCurrencies().subscribe(res => {
+      this.currencies = res;
     })
 
   }
