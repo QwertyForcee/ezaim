@@ -34,26 +34,22 @@ class JWTAuthentication(BaseAuthentication):
 
         return (user, token)
 
-
-class WebpayCurrency(Enum):
-    BYN = 'BYN'
-    RUB = 'RUB'
-    EUR = 'EUR'
-    USD = 'USD'
-
 webpay_url = 'https://securesandbox.webpay.by/api/v1/payment'
 wsb_notify_url = 'http://127.0.0.1:8000/notify/'
+currencies = ('BYN', 'USD')
 
 def pay_loan(
     wsb_order_num: str,
     wsb_test: int,
-    wsb_currency: WebpayCurrency,
+    wsb_currency: str,
     wsb_total: str,
     wsb_customer_id: str,
     wsb_return_url: str
 ):
+    if wsb_currency not in currencies:
+        return None
     wsb_seed = str(int(time.time()))
-    signature = f'{wsb_seed}{WSB_STOREID}{wsb_customer_id}{wsb_order_num}{wsb_test}{wsb_currency.name}{wsb_total}{WEBPAY_SECRET_KEY}'
+    signature = f'{wsb_seed}{WSB_STOREID}{wsb_customer_id}{wsb_order_num}{wsb_test}{wsb_currency}{wsb_total}{WEBPAY_SECRET_KEY}'
     wsb_signature = sha1(signature.encode()).hexdigest()
 
     body = {
@@ -63,7 +59,7 @@ def pay_loan(
         # "wsb_card_halva": 0,
         "wsb_storeid": WSB_STOREID,
         "wsb_order_num": wsb_order_num,
-        "wsb_currency_id": wsb_currency.name,
+        "wsb_currency_id": wsb_currency,
         "wsb_version": 2,
         "wsb_seed": wsb_seed,
         "wsb_test": wsb_test,
@@ -84,20 +80,22 @@ def pay_loan(
         "wsb_notify_url": wsb_notify_url,
     }
     # return body
-    return requests.post(webpay_url, json=body)
+    return requests.post(webpay_url, json=body).json()
 
 def get_loan(
     wsb_order_num: str,
     wsb_test: int,
-    wsb_currency: WebpayCurrency,
+    wsb_currency: str,
     wsb_total: str,
     wsb_token_p2p: str,
     wsb_customer_id: str,
     wsb_return_url: str
 ):
+    if wsb_currency not in currencies:
+        return None
+    
     wsb_seed = str(int(time.time()))
-
-    signature = f'{wsb_seed}{WSB_STOREID}{wsb_customer_id}{wsb_order_num}{wsb_test}{wsb_currency.name}{wsb_total}{WEBPAY_SECRET_KEY}'
+    signature = f'{wsb_seed}{WSB_STOREID}{wsb_customer_id}{wsb_order_num}{wsb_test}{wsb_currency}{wsb_total}{WEBPAY_SECRET_KEY}'
     wsb_signature = sha1(signature.encode()).hexdigest()
 
     body = {
@@ -107,7 +105,7 @@ def get_loan(
         # "wsb_card_halva": 0,
         "wsb_storeid": WSB_STOREID,
         "wsb_order_num": wsb_order_num,
-        "wsb_currency_id": wsb_currency.name,
+        "wsb_currency_id": wsb_currency,
         "wsb_version": 2,
         "wsb_seed": wsb_seed,
         "wsb_test": wsb_test, # for testing needs to be 0 if money draw?
@@ -128,7 +126,7 @@ def get_loan(
         "wsb_return_url": wsb_return_url,       
     }
     # return body
-    return requests.post(webpay_url, json=body)
+    return requests.post(webpay_url, json=body).json()
 
 # def bind_card(
 #     wsb_customer_id: str,
@@ -138,7 +136,7 @@ def get_loan(
 #     wsb_total: str
 # ):
 #     wsb_seed = str(int(time.time()))
-#     signature = f'{wsb_seed}{WSB_STOREID}{wsb_customer_id}{wsb_order_num}{wsb_test}{wsb_currency.name}{wsb_total}{WEBPAY_SECRET_KEY}'
+#     signature = f'{wsb_seed}{WSB_STOREID}{wsb_customer_id}{wsb_order_num}{wsb_test}{wsb_currency}{wsb_total}{WEBPAY_SECRET_KEY}'
 #     wsb_signature = sha1(signature.encode()).hexdigest()
 
 #     body = {
@@ -148,7 +146,7 @@ def get_loan(
 #         "wsb_store": "EZAIM",
 #         "wsb_storeid": WSB_STOREID,
 #         "wsb_order_num": wsb_order_num,
-#         "wsb_currency_id": wsb_currency.name,
+#         "wsb_currency_id": wsb_currency,
 #         "wsb_version": 2,
 #         "wsb_seed": wsb_seed,
 #         "wsb_test": wsb_test,

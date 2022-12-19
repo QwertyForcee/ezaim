@@ -15,7 +15,7 @@ from decimal import *
 
 from api.settings import JWT_KEY
 from ezaim.utils import JWTAuthentication
-from ezaim.utils import WebpayCurrency, pay_loan, get_loan
+from ezaim.utils import pay_loan, get_loan
 from django.views.decorators.csrf import csrf_exempt
 
 
@@ -50,22 +50,6 @@ def app_error(request, *args, **kwargs):
 def not_authorized(request, *args, **kwargs):
     return JsonResponse(data={"message": "Unauthorized"}, status=401)
 
-@csrf_exempt
-def test_pay(request):
-    resp = pay_loan(
-        "order-test", 
-        1, 
-        WebpayCurrency.BYN,
-        "100",
-        "customer-test",
-        "http://127.0.0.1:8000/admin"
-    )
-    return JsonResponse(resp)
-
-@csrf_exempt
-def test_loan(request):
-    resp = None
-    JsonResponse(resp)
 
 @csrf_exempt
 def login(request: HttpRequest, *args, **kwargs):
@@ -252,7 +236,7 @@ class LoanViewSet(
     @action(detail=False, methods=["GET"], url_path="GetPercent", url_name="GetPercent")
     def getPercent(self, request: HttpRequest, *args, **kwargs):
         data = request.GET
-        sum = Decimal(data['sum'].replace(',', '.'))
+        amount = Decimal(data['sum'].replace(',', '.'))
         currency_id = int(data['currency'])
         try:
             percentOffers = PercentOffer.objects.filter(currency__pk=currency_id).order_by('-amount')
@@ -263,7 +247,7 @@ class LoanViewSet(
         percentOffer = None
         for offer in percentOffers:
             percentOffer = offer.percent
-            if sum < offer.amount:
+            if amount < offer.amount:
                 break
         return Response(percentOffer)
 
@@ -283,44 +267,67 @@ class LoanViewSet(
         return Response({"sum": sum})
 
 
-
     def create(self, request, *args, **kwargs):
-        print('loan viewset: perform create')
-        serializer = self.get_serializer_class()
+        # serializer = self.get_serializer_class()
+
         data = json.loads(self.request.body.decode())
         currency_id = int(data['currency'])
         amount = Decimal(data['amount'].replace(',', '.'))
         return_url = data['return_url']
+
         try:
-            percentOffers = PercentOffer.objects.filter(currency__pk=currency_id).order_by('amount')
+            currency = Currency.objects.get(pk=currency_id)
+            percentOffers = PercentOffer.objects.filter(currency=currency).order_by('amount')
             if len(percentOffers) == 0:
                 return not_found(self.request)
         except Exception:
             return not_found(self.request)
         percentOffer = None
-        currency_name = percentOffers[0].currency.name
         for offer in percentOffers:
             percentOffer = offer.percent
-            if sum < offer.amount:
+            if amount < offer.amount:
                 break
         
         remaining_amount = amount * (percentOffer + 1)
-        instance = serializer.save(
+        new_loan = Loan(
             user = self.request.user,
             percent = percentOffer,
-            remaining_amount = remaining_amount            
+            amount = amount,
+            remaining_amount = remaining_amount,
+            currency = currency
         )
+        new_loan.save()
+
+        # serializer = self.get_serializer_class()
+        # if serializer.is_valid():
+        #     print('1. valid')
+        # instance = serializer.save()
+        # data = {
+        #     "user": self.request.user,
+        #     "percent": percentOffer,
+        #     "remaining_amount": remaining_amount 
+        # }
+        # s = serializer(data=data)
+        # if not s.is_valid():
+        #     return not_found(self.request)
+        # s.is_valid()
+        # instance = s.save()
         # here should be get loans
-        response = pay_loan(
-            f'loan-{instance.pk}',
+        response_data = pay_loan(
+            f'loan-{new_loan.pk}',
             1,
-            currency_name,
+            currency.name,
             str(amount),
             # 'token', # here should be card token(transaction id from card bind)
             f'customer-{self.request.user.pk}',
             return_url
         )
-        return Response({"redirectUrl": response['data']['redirectUrl']})
+        if response_data is None:
+            return not_found(request)
+        print(response_data)
+        redirect_url = response_data['data']['redirectUrl']
+        print('redirect to ', redirect_url)
+        return Response(redirect_url)
 
 
 class PaymentViewSet(
