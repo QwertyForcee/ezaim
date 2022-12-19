@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment';
 })
 export class LoansService {
 
-  private readonly LOAD_CALCULATED_SUM_FOR_LOAN = `${environment.baseUrl}loans/GetCalculatedSumForLoan`;
+  private readonly LOAD_CALCULATED_SUM_FOR_LOAN = `${environment.baseUrl}loans/GetCalculatedSumForLoan/`;
   private readonly LOAD_PERCENT_FOR_SUM = `${environment.baseUrl}loans/GetPercent`;
 
   private readonly LOAN_URL = `${environment.baseUrl}loans/`;
@@ -38,7 +38,7 @@ export class LoansService {
   getCalculatedSumForLoanDay(loanId: number, date: Date | string) {
     // const sum$ = await this.http.post<number>(`${environment.baseUrl}${this.LOAD_CALCULATED_SUM_FOR_LOAN}`, { loanId, date });
     // return lastValueFrom(sum$).then(v => v ?? '');
-    return this.http.post<number>(`${environment.baseUrl}${this.LOAD_CALCULATED_SUM_FOR_LOAN}`, { loanId, date });
+    return this.http.post<number>(this.LOAD_CALCULATED_SUM_FOR_LOAN, { loanId, date });
   }
 
   getPercent(sum: number, currency: number): Observable<number> {

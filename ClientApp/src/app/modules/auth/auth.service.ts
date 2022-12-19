@@ -21,7 +21,7 @@ export class AuthService {
         next: (result: LoginResultModel) => {
           if (result) {
             localStorage.setItem('access_token', result.access_token);
-            this.router.navigate(['']);
+            this.router.navigate(['/profile']);
           }
         },
         error: (err) => {
@@ -36,7 +36,7 @@ export class AuthService {
         next: (result: LoginResultModel) => {
           if (result) {
             localStorage.setItem('access_token', result.access_token);
-            this.router.navigate(['']);
+            this.router.navigate(['/profile']);
           }
         }
       })
