@@ -108,8 +108,7 @@ class UserSettings(BaseDbModel):
     date_format = models.CharField(max_length=32, default="MM/DD/YYYY")
     preferred_currency = models.ForeignKey(
         Currency, 
-        on_delete=models.RESTRICT,
-        null=True
+        on_delete=models.RESTRICT
     )
     week_start = models.IntegerField(default=0)
 
