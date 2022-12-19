@@ -13,7 +13,7 @@ export class UserLoansComponent implements OnInit, OnDestroy {
   loans?: LoanModel[];
 
   switchHeader: HTMLElement | null = null;
-  greyMode = false;
+  greyMode = false;  
   constructor(private router: Router, private loansService: LoansService) { }
 
   ngOnInit(): void {

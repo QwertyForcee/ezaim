@@ -25,7 +25,11 @@ export class ProfileDataService {
   }
 
   updateUserData(user: User) {
-    return this.http.put(this.USERS_URL, user);
+    return this.http.put(this.USERS_URL, user, {
+      params: {
+        'id': 0
+      }
+    });
   }
 
   getTelegramAccounts(): Observable<TelegramAccount[]> {
@@ -37,7 +41,11 @@ export class ProfileDataService {
   }
 
   updateTelegramAccount(telegramAccount: TelegramAccount) {
-    return this.http.put(this.TELEGRAM_ACCOUNTS_URL, telegramAccount);
+    return this.http.put(this.TELEGRAM_ACCOUNTS_URL, telegramAccount, {
+      params: {
+        'id': 0,
+      }
+    });
   }
 
   getUserSettings(): Observable<UserSettings[]> {
@@ -45,7 +53,11 @@ export class ProfileDataService {
   }
 
   updateUserSettings(settings: UserSettings) {
-    return this.http.put(this.USER_SETTINGS_URL, settings);
+    return this.http.put(this.USER_SETTINGS_URL, settings, {
+      params: {
+        'id': 0
+      }
+    });
   }
 
   createUserSettings(settings: UserSettings) {

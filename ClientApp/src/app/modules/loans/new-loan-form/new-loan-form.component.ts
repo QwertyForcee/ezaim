@@ -27,6 +27,10 @@ export class NewLoanFormComponent implements OnInit {
     return this.newLoanFormGroup.get('sum')?.value ?? 0;
   }
 
+  get currentCurrency() {
+    return this.newLoanFormGroup.get('currency')?.value ?? '';
+  }
+
   ngOnInit(): void {
     this.profileDataService.getCurrencies().subscribe(res => {
       this.currencies = res;

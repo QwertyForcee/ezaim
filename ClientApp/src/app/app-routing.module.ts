@@ -14,10 +14,10 @@ import { HomeComponent } from './shared/home/home.component';
 
 
 const profile_routes: Routes = [
-  { path: '', component: ProfileDataComponent },
-  { path: 'loans', component: UserLoansComponent },
-  { path: 'tg-accounts', component: TelegramAccountsComponent },
-  { path: 'settings', component: UserSettingsComponent },
+  { path: '', component: ProfileDataComponent, canActivate: [AuthGuard]  },
+  { path: 'loans', component: UserLoansComponent, canActivate: [AuthGuard]  },
+  { path: 'tg-accounts', component: TelegramAccountsComponent, canActivate: [AuthGuard]  },
+  { path: 'settings', component: UserSettingsComponent, canActivate: [AuthGuard] },
 ];
 
 const routes: Routes = [
