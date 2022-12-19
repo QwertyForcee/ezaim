@@ -59,6 +59,11 @@ class LoanSerializer(serializers.ModelSerializer):
         read_only_fields = ['user', 'created_at']
         fields = read_only_fields + ['percent', 'amount', 'currency', 'remaining_amount']
 
+class NewLoanSerializer(serializers.ModelField):
+    class Meta:
+        model = Loan
+        fields = ['amount', 'currency']
+
 class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment

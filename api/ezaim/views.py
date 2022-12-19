@@ -8,6 +8,7 @@ from rest_framework.decorators import action
 import jwt
 import json
 import bcrypt
+import datetime
 #
 import pprint
 from decimal import *
@@ -34,6 +35,7 @@ from ezaim.serializers import (
     TelegramUserSerializer,
     PaymentCardSerializer,
     LoanSerializer,
+    NewLoanSerializer,
     PaymentSerializer,
     LogSerializer
 )
@@ -211,6 +213,8 @@ class UserViewSet(viewsets.ModelViewSet):
 class CurrencyViewSet(viewsets.ModelViewSet):
     queryset = Currency.objects.all()
     serializer_class = CurrencySerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
 class UserSettingsViewSet(viewsets.ModelViewSet):
     serializer_class = UserSettingsSerializer
@@ -233,42 +237,90 @@ class LoanViewSet(
         mixins.ListModelMixin, 
         mixins.CreateModelMixin, 
         mixins.RetrieveModelMixin):
-    serializer_class = LoanSerializer
+    # serializer_class = LoanSerializer
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         return Loan.objects.filter(user=self.request.user)
 
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return NewLoanSerializer
+        return LoanSerializer
+
     @action(detail=False, methods=["GET"], url_path="GetPercent", url_name="GetPercent")
-    def getLoanPercent(self, request: HttpRequest, *args, **kwargs):
+    def getPercent(self, request: HttpRequest, *args, **kwargs):
         data = request.GET
-        sum = float(data['sum'])
+        sum = Decimal(data['sum'].replace(',', '.'))
         currency_id = int(data['currency'])
         try:
-            print(sum, currency_id)
             percentOffers = PercentOffer.objects.filter(currency__pk=currency_id).order_by('amount')
             if len(percentOffers) == 0:
                 return not_found(request)
         except Exception:
             return not_found(request)
-        print(percentOffers)
         percentOffer = None
         for offer in percentOffers:
             percentOffer = offer.percent
             if sum < offer.amount:
                 break
-        print('offer', percentOffer)
         return Response({"percent": percentOffer})
 
-    def perform_create(self, serializer):
+    @action(detail=False, methods=["POST"], url_path="GetCalculatedSumForLoan", url_name="GetCalculatedSumForLoan")
+    def getCalculatedSum(self, request: HttpRequest, *args, **kwargs):
+        data = json.loads(request.body.decode())
+        loan_id = int(data['loan'])
+        loan_date = datetime()
+        try:
+            loan = Loan.objects.get(pk=loan_id)
+        except Exception:
+            return not_found(request)
+
+        # sum = 
+
+
+        return Response({"sum": sum})
+
+
+
+    def create(self, request, *args, **kwargs):
         print('loan viewset: perform create')
+        serializer = self.get_serializer_class()
         data = json.loads(self.request.body.decode())
-        serializer.save(
-            user = self.request.user
-            # remaining_amount = data['remaining_amount']
+        currency_id = int(data['currency'])
+        amount = Decimal(data['amount'].replace(',', '.'))
+        return_url = data['return_url']
+        try:
+            percentOffers = PercentOffer.objects.filter(currency__pk=currency_id).order_by('amount')
+            if len(percentOffers) == 0:
+                return not_found(self.request)
+        except Exception:
+            return not_found(self.request)
+        percentOffer = None
+        currency_name = percentOffers[0].currency.name
+        for offer in percentOffers:
+            percentOffer = offer.percent
+            if sum < offer.amount:
+                break
+        
+        remaining_amount = amount * (percentOffer + 1)
+        instance = serializer.save(
+            user = self.request.user,
+            percent = percentOffer,
+            remaining_amount = remaining_amount            
         )
-        return super().perform_create(serializer)
+        # here should be get loans
+        response = pay_loan(
+            f'loan-{instance.pk}',
+            1,
+            currency_name,
+            str(amount),
+            'token', # here should be card token(transaction id from card bind)
+            f'customer-{self.request.user.pk}',
+            return_url
+        )
+        return Response({"redirectUrl": response['data']['redirectUrl']})
 
 
 class PaymentViewSet(
@@ -288,9 +340,39 @@ class PaymentViewSet(
         return super().perform_create(serializer)
 
 class PaymentCardViewSet(viewsets.ModelViewSet):
-    serializer_class = PaymentCardSerializer
+    # serializer_class = PaymentCardSerializer
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         return PaymentCard.objects.filter(owner_id=self.request.user)
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return PaymentCardSerializer
+        return PaymentCardSerializer
+
+    def create(self, request, *args, **kwargs):
+        print('payment viewset: perform create')
+        serializer = self.get_serializer_class()
+        data = json.loads(self.request.body.decode())
+        loan_id = int(data['loan'])
+        amount = Decimal(data['amount'].replace(',', '.'))
+        return_url = data['return_url']
+
+        try:
+            loan = Loan.objects.get(pk=loan_id)
+        except Exception:
+            return not_found(self.request)
+        
+        
+        instance = serializer.save()
+        response = pay_loan(
+            f'payment-{instance.pk}',
+            1,
+            loan.currency.name,
+            str(amount),
+            f'customer-{self.request.user.pk}',
+            return_url
+        )
+        return Response({"redirectUrl": response['data']['redirectUrl']})

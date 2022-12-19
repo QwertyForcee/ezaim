@@ -83,7 +83,7 @@ def pay_loan(
         "wsb_cancel_return_url": wsb_return_url,
         "wsb_notify_url": wsb_notify_url,
     }
-    return body
+    # return body
     return requests.post(webpay_url, json=body)
 
 def get_loan(
@@ -92,11 +92,12 @@ def get_loan(
     wsb_currency: WebpayCurrency,
     wsb_total: str,
     wsb_token_p2p: str,
-    wsb_customer_id: str
+    wsb_customer_id: str,
+    wsb_return_url: str
 ):
     wsb_seed = str(int(time.time()))
 
-    signature = f'{wsb_seed}{WSB_STOREID}{wsb_order_num}{wsb_test}{wsb_currency.name}{wsb_total}{WEBPAY_SECRET_KEY}'
+    signature = f'{wsb_seed}{WSB_STOREID}{wsb_customer_id}{wsb_order_num}{wsb_test}{wsb_currency.name}{wsb_total}{WEBPAY_SECRET_KEY}'
     wsb_signature = sha1(signature.encode()).hexdigest()
 
     body = {
@@ -123,9 +124,10 @@ def get_loan(
         "wsb_total": wsb_total,
         "wsb_token_p2p": wsb_token_p2p,
         "wsb_output_via_corpocard_mtb": True,
-        "wsb_customer_id": wsb_customer_id,        
+        "wsb_customer_id": wsb_customer_id, 
+        "wsb_return_url": wsb_return_url,       
     }
-    return body
+    # return body
     return requests.post(webpay_url, json=body)
 
 # def bind_card(
