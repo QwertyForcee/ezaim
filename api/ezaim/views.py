@@ -85,7 +85,7 @@ def parse_address(address) -> Address:
 def signup(request: HttpRequest, *args, **kwargs):
     data = json.loads(request.body.decode())
 
-    pprint.pprint(data)
+    # pprint.pprint(data)
 
     email = data.get('email', None)
     password = data.get('password', None)
@@ -174,11 +174,24 @@ def signup(request: HttpRequest, *args, **kwargs):
 
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(viewsets.GenericViewSet,
+        mixins.ListModelMixin,
+        mixins.RetrieveModelMixin,
+        mixins.UpdateModelMixin):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
-class CurrencyViewSet(viewsets.ModelViewSet):
+    def get_object(self):
+        return User.objects.get(pk=self.request.user.pk)
+
+    def get_queryset(self):
+        return User.objects.filter(pk=self.request.user.pk)
+
+class CurrencyViewSet(viewsets.GenericViewSet,
+        mixins.ListModelMixin,
+        mixins.RetrieveModelMixin):
     queryset = Currency.objects.all()
     serializer_class = CurrencySerializer
     authentication_classes = (JWTAuthentication,)
@@ -189,16 +202,29 @@ class UserSettingsViewSet(viewsets.ModelViewSet):
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
 
+    def get_object(self):
+        return UserSettings.objects.get(pk=self.request.user.pk)
+
     def get_queryset(self):
-        return UserSettings.objects.filter(user_id=self.request.user)
+        return UserSettings.objects.filter(user=self.request.user)
 
 class TelegramUsersViewSet(viewsets.ModelViewSet):
     serializer_class = TelegramUserSerializer
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
 
+    def get_object(self):
+        data = json.loads(self.request.body.decode())
+        chat_id = int(data['chat_id'])
+        if self.action == 'update' or 'delete':
+            tg_user = TelegramUser.objects.get(user=self.request.user, chat_id=chat_id)
+            print('tg_user', tg_user)
+            return tg_user
+        return super().get_object()
+
+
     def get_queryset(self):
-        return TelegramUser.objects.filter(user_id=self.request.user)
+        return TelegramUser.objects.filter(user=self.request.user)
 
 @api_view(('GET',))
 def notify(request: HttpRequest, *args, **kwargs):
@@ -338,17 +364,17 @@ class PaymentViewSet(
         mixins.ListModelMixin,
         mixins.CreateModelMixin,
         mixins.RetrieveModelMixin):
-    # serializer_class = PaymentSerializer
+    serializer_class = PaymentSerializer
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         return Payment.objects.filter(loan_id__user=self.request.user)
 
-    def get_serializer_class(self):
-        if self.action == 'create':
-            return PaymentCardSerializer
-        return PaymentCardSerializer
+    # def get_serializer_class(self):
+    #     if self.action == 'create':
+    #         return PaymentSerializer
+    #     return PaymentCardSerializer
 
     def create(self, request, *args, **kwargs):
         data = json.loads(self.request.body.decode())
@@ -388,7 +414,3 @@ class PaymentCardViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return PaymentCard.objects.filter(owner_id=self.request.user)
-
-    
-
-    
