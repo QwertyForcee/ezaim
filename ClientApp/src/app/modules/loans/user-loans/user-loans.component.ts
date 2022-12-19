@@ -46,8 +46,8 @@ export class UserLoansComponent implements OnInit, OnDestroy {
 
   }
 
-  onLoanClicked(): void {
-    this.router.navigate(['/loan'], { queryParams: { id: 1 } });
+  onLoanClicked(id: number): void {
+    this.router.navigate(['/loan'], { queryParams: { id } });
   }
 
   @HostListener('window:scroll', ['$event'])

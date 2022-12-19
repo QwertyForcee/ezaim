@@ -33,7 +33,7 @@ export class ProfileDataService {
   }
 
   deleteTelegramAccount(chat_id: number) {
-    return this.http.delete(this.TELEGRAM_ACCOUNTS_URL, { params: { chat_id } })
+    return this.http.delete(this.TELEGRAM_ACCOUNTS_URL + '/0/', { params: { chat_id } })
   }
 
   updateTelegramAccount(telegramAccount: TelegramAccount) {
