@@ -74,7 +74,7 @@ def login(request: HttpRequest, *args, **kwargs):
 
     try:
         user = User.objects.get(email=email)
-        hashed = bcrypt.hashpw(password, user.salt)
+        hashed = bcrypt.hashpw(password.encode(), user.salt)
         if not bcrypt.checkpw(user.password, hashed):
             return not_authorized(request)
     except ObjectDoesNotExist:
@@ -265,7 +265,7 @@ class LoanViewSet(
             percentOffer = offer.percent
             if sum < offer.amount:
                 break
-        return Response({"percent": percentOffer})
+        return Response(percentOffer)
 
     @action(detail=False, methods=["POST"], url_path="GetCalculatedSumForLoan", url_name="GetCalculatedSumForLoan")
     def getCalculatedSum(self, request: HttpRequest, *args, **kwargs):
