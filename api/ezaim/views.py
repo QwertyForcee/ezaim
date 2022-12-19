@@ -1,10 +1,11 @@
 from django.shortcuts import render
-from django.http import JsonResponse, HttpRequest, HttpResponse
+from django.http import JsonResponse, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.decorators import action, api_view
+from rest_framework.decorators import action, api_view, renderer_classes
+from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 import jwt
 import json
 import bcrypt
@@ -228,12 +229,14 @@ class TelegramUsersViewSet(viewsets.ModelViewSet):
         return TelegramUser.objects.filter(user=self.request.user)
 
 @api_view(('GET',))
+@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 def notify(request: HttpRequest, *args, **kwargs):
     data = request.GET
+    pprint.pprint(data)
     order_num = data['wsb_order_num']
     loan_id = int(order_num)
     token = data.get('wsb_tid', None)
-    loans_link = 'http://localhost:4200/'
+    loans_link = 'http://localhost:4200/loans'
     if token is None:
         print('transaction was cancelled, need to delete loan')
         try:
@@ -252,7 +255,8 @@ def notify(request: HttpRequest, *args, **kwargs):
             token = token,
             user = loan.user,
         )
-    return Response(loans_link)
+        new_payment_card.save()
+    return HttpResponseRedirect(loans_link)
 
 
 class LoanViewSet(
@@ -277,7 +281,8 @@ class LoanViewSet(
         amount = Decimal(data['sum'].replace(',', '.'))
         currency_id = int(data['currency'])
         try:
-            percentOffers = PercentOffer.objects.filter(currency__pk=currency_id).order_by('-amount')
+            percentOffers = PercentOffer.objects.filter(currency__pk=currency_id).order_by('amount')
+            print(percentOffers)
             if len(percentOffers) == 0:
                 return not_found(request)
         except Exception:
@@ -287,6 +292,7 @@ class LoanViewSet(
             percentOffer = offer.percent
             if amount < offer.amount:
                 break
+        print(f'{percentOffer*100:.1f}% for {amount}')
         return Response(percentOffer)
 
     @action(detail=False, methods=["POST"], url_path="GetCalculatedSumForLoan", url_name="GetCalculatedSumForLoan")
@@ -306,6 +312,7 @@ class LoanViewSet(
 
 
     def create(self, request, *args, **kwargs):
+        print('loan create')
         data = json.loads(self.request.body.decode())
         currency_id = int(data['currency'])
         amount = Decimal(data['amount'].replace(',', '.'))
