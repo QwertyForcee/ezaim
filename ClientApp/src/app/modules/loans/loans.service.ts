@@ -11,8 +11,8 @@ import { environment } from 'src/environments/environment';
 })
 export class LoansService {
 
-  private readonly LOAD_CALCULATED_SUM_FOR_LOAN = 'Loans/GetCalculatedSumForLoan';
-  private readonly LOAD_PERCENT_FOR_SUM = 'Loans/GetPercent';
+  private readonly LOAD_CALCULATED_SUM_FOR_LOAN = `${environment.baseUrl}loans/GetCalculatedSumForLoan`;
+  private readonly LOAD_PERCENT_FOR_SUM = `${environment.baseUrl}loans/GetPercent`;
 
   private readonly LOAN_URL = `${environment.baseUrl}loans/`;
   private readonly PAYMENT_URL = `${environment.baseUrl}payments/`;
