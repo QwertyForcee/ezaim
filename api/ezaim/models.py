@@ -130,11 +130,12 @@ class TelegramUser(BaseDbModel):
         return f"{self.name}#{self.chat_id}"
 
 class PaymentCard(BaseDbModel):
-    number = EncryptedCharField(max_length=255)
-    csv = EncryptedCharField(max_length=255)
-    initials = EncryptedCharField(max_length=255)
-    valid_through = EncryptedDateTimeField() # test this
+    # number = EncryptedCharField(max_length=255)
+    # csv = EncryptedCharField(max_length=255)
+    # initials = EncryptedCharField(max_length=255)
+    # valid_through = EncryptedDateTimeField() # test this
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = EncryptedCharField(max_length=255)
 
     def __str__(self) -> str:
         return f"card owned by {self.user}"
@@ -174,6 +175,13 @@ class Payment(BaseDbModel):
 
     def __str__(self) -> str:
         return f"{self.amount} credited for {self.loan}"
+
+class OrderUser(BaseDbModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f'{self.user}, order #{self.pk}'
+
 
 class Log(BaseDbModel):
     log = models.TextField()

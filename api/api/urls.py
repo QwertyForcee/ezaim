@@ -7,7 +7,7 @@ from drf_yasg import openapi
 from api import settings
 from ezaim.views import (
     not_found, app_error,
-    login, signup,
+    login, signup, notify,
     UserViewSet,
     UserSettingsViewSet,
     TelegramUsersViewSet,
@@ -16,6 +16,7 @@ from ezaim.views import (
     PaymentViewSet,
     PaymentCardViewSet
 )
+# from ezaim.views import webpay
 
 
 schema_view = get_schema_view(
@@ -45,6 +46,8 @@ urlpatterns = [
     path('api/v1/', include(router.urls)),
     path('api/v1/auth/login', login),
     path('api/v1/auth/signup', signup),
+    path('notify/', notify),
+    # path('webpay', webpay)
 ]
 
 if settings.DEBUG:

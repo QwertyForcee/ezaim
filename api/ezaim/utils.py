@@ -54,7 +54,7 @@ def pay_loan(
 
     body = {
         "wsb_language_id": "russian",
-        "wsb_store": "EZAIM",
+        # "wsb_store": "EZAIM",
         # "wsb_tab": "cardPayment",
         # "wsb_card_halva": 0,
         "wsb_storeid": WSB_STOREID,
@@ -99,8 +99,8 @@ def get_loan(
     wsb_signature = sha1(signature.encode()).hexdigest()
 
     body = {
-        "wsb_language_id": "russian",
-        "wsb_store": "EZAIM",
+        # "wsb_language_id": "russian",
+        # "wsb_store": "EZAIM",
         # "wsb_tab": "cardPayment",
         # "wsb_card_halva": 0,
         "wsb_storeid": WSB_STOREID,
@@ -110,15 +110,15 @@ def get_loan(
         "wsb_seed": wsb_seed,
         "wsb_test": wsb_test, # for testing needs to be 0 if money draw?
         "wsb_signature": wsb_signature,
-        "wsb_invoice_item_name": [
-            'Ezaim. Получение займа'
-        ],
-        "wsb_invoice_item_quantity": [
-            1
-        ],
-        "wsb_invoice_item_price": [
-            wsb_total
-        ],
+        # "wsb_invoice_item_name": [
+        #     'Ezaim. Получение займа'
+        # ],
+        # "wsb_invoice_item_quantity": [
+        #     1
+        # ],
+        # "wsb_invoice_item_price": [
+        #     wsb_total
+        # ],
         "wsb_total": wsb_total,
         "wsb_token_p2p": wsb_token_p2p,
         "wsb_output_via_corpocard_mtb": True,
@@ -126,7 +126,7 @@ def get_loan(
         "wsb_return_url": wsb_return_url,       
     }
     # return body
-    return requests.post(webpay_url, json=body).json()
+    return requests.post('https://securesandbox.webpay.by/output/mtb', json=body).json()
 
 # def bind_card(
 #     wsb_customer_id: str,
