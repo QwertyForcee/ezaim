@@ -255,7 +255,7 @@ class LoanViewSet(
         sum = Decimal(data['sum'].replace(',', '.'))
         currency_id = int(data['currency'])
         try:
-            percentOffers = PercentOffer.objects.filter(currency__pk=currency_id).order_by('amount')
+            percentOffers = PercentOffer.objects.filter(currency__pk=currency_id).order_by('-amount')
             if len(percentOffers) == 0:
                 return not_found(request)
         except Exception:
