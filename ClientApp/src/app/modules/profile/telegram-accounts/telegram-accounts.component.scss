@@ -13,11 +13,17 @@
     }
 
     .confirm-action {
-        color: $project-light-green;
+        color: $project-gold;
+        cursor: pointer;
+        font-family: 'IBM Plex Sans', sans-serif;
+        
     }
 
     .delete-action {
-        color: red;
+        color: rgb(114, 3, 3);
+        cursor: pointer;
+        font-family: 'IBM Plex Sans', sans-serif;
+
     }
 
     &-confirmed {
@@ -26,5 +32,11 @@
 
     p {
         margin: 5px 10px;
+        font-size: 25px;
+    }
+
+    li {
+        display: flex;
+
     }
 }
