@@ -18,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         read_only_fields = ['id']
-        fields = read_only_fields + ['email', 'phone_number', 'salary', 'name', 'surname']
+        fields = read_only_fields + ['email', 'phone_number', 'name', 'surname']
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
@@ -59,7 +59,7 @@ class LoanSerializer(serializers.ModelSerializer):
         read_only_fields = ['user', 'created_at']
         fields = read_only_fields + ['percent', 'amount', 'currency', 'remaining_amount']
 
-class NewLoanSerializer(serializers.ModelField):
+class NewLoanSerializer(serializers.ModelSerializer):
     class Meta:
         model = Loan
         fields = ['amount', 'currency']

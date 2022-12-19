@@ -2,7 +2,7 @@ from django.contrib import admin
 from ezaim.models import (
     User, TelegramUser, UserSettings,
     Address, PassportData,
-    PaymentCard, Payment, Loan, 
+    PaymentCard, Payment, Loan, OrderUser, 
     Currency, PercentOffer, Log
 )
 
@@ -49,4 +49,8 @@ class PercentOfferAdmin(admin.ModelAdmin):
 
 @admin.register(Log)
 class LogAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(OrderUser)
+class OrderUserAdmin(admin.ModelAdmin):
     pass

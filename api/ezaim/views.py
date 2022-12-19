@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from django.http import JsonResponse, HttpRequest
+from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 import jwt
 import json
 import bcrypt
@@ -15,30 +15,11 @@ from decimal import *
 
 from api.settings import JWT_KEY
 from ezaim.utils import JWTAuthentication
-from ezaim.utils import WebpayCurrency, pay_loan, get_loan
+from ezaim.utils import pay_loan, get_loan
 from django.views.decorators.csrf import csrf_exempt
 
-
-
-from ezaim.models import (
-    User, TelegramUser, UserSettings,
-    PassportData, Address,
-    PaymentCard, Payment, Loan, 
-    Currency, PercentOffer, Log
-)
-from ezaim.serializers import (
-    CurrencySerializer,
-    UserSerializer,
-    AddressSerializer, 
-    PassportDataSerializer,
-    UserSettingsSerializer,
-    TelegramUserSerializer,
-    PaymentCardSerializer,
-    LoanSerializer,
-    NewLoanSerializer,
-    PaymentSerializer,
-    LogSerializer
-)
+from ezaim.models import *
+from ezaim.serializers import *
 
 
 def not_found(request, *args, **kwargs):
@@ -50,22 +31,6 @@ def app_error(request, *args, **kwargs):
 def not_authorized(request, *args, **kwargs):
     return JsonResponse(data={"message": "Unauthorized"}, status=401)
 
-@csrf_exempt
-def test_pay(request):
-    resp = pay_loan(
-        "order-test", 
-        1, 
-        WebpayCurrency.BYN,
-        "100",
-        "customer-test",
-        "http://127.0.0.1:8000/admin"
-    )
-    return JsonResponse(resp)
-
-@csrf_exempt
-def test_loan(request):
-    resp = None
-    JsonResponse(resp)
 
 @csrf_exempt
 def login(request: HttpRequest, *args, **kwargs):
@@ -88,6 +53,10 @@ def login(request: HttpRequest, *args, **kwargs):
         JWT_KEY, 
         algorithm='HS256'
     )
+    log = Log(
+        log=f'{email} logged in'
+    )
+    log.save()
     return JsonResponse({
         "access_token": token
     })
@@ -116,13 +85,12 @@ def parse_address(address) -> Address:
 def signup(request: HttpRequest, *args, **kwargs):
     data = json.loads(request.body.decode())
 
-    pprint.pprint(data)
+    # pprint.pprint(data)
 
     email = data.get('email', None)
     password = data.get('password', None)
     phone_number = data.get('phoneNumber', None)
     password = data.get('password', None)
-    salary = data.get('salary', None)
 
     name = data.get('name', None)
     surname = data.get('surname', None)
@@ -136,9 +104,6 @@ def signup(request: HttpRequest, *args, **kwargs):
     sex = data.get('sex', None)
     resident = data.get('resident', None)
     birth_date = data.get('birthDate', None)
-
-    if salary is None:
-        salary = Decimal()
 
     try:
         # birth_address = parse_address(data['birthAddress'])
@@ -159,7 +124,6 @@ def signup(request: HttpRequest, *args, **kwargs):
         password=hashed,
         salt=salt,
         phone_number=phone_number,
-        salary=salary,
         name=name,
         surname=surname
     )
@@ -200,17 +164,34 @@ def signup(request: HttpRequest, *args, **kwargs):
         JWT_KEY, 
         algorithm='HS256'
     )
+    log = Log(
+        log = f'{email} registered'
+    )
+    log.save()
     return JsonResponse({
         "access_token": token
     })
 
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(viewsets.GenericViewSet,
+        mixins.ListModelMixin,
+        mixins.RetrieveModelMixin,
+        mixins.UpdateModelMixin):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
-class CurrencyViewSet(viewsets.ModelViewSet):
+    def get_object(self):
+        return User.objects.get(pk=self.request.user.pk)
+
+    def get_queryset(self):
+        return User.objects.filter(pk=self.request.user.pk)
+
+class CurrencyViewSet(viewsets.GenericViewSet,
+        mixins.ListModelMixin,
+        mixins.RetrieveModelMixin):
     queryset = Currency.objects.all()
     serializer_class = CurrencySerializer
     authentication_classes = (JWTAuthentication,)
@@ -221,23 +202,63 @@ class UserSettingsViewSet(viewsets.ModelViewSet):
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
 
+    def get_object(self):
+        return UserSettings.objects.get(pk=self.request.user.pk)
+
     def get_queryset(self):
-        return UserSettings.objects.filter(user_id=self.request.user)
+        return UserSettings.objects.filter(user=self.request.user)
 
 class TelegramUsersViewSet(viewsets.ModelViewSet):
     serializer_class = TelegramUserSerializer
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
 
+    def get_object(self):
+        data = json.loads(self.request.body.decode())
+        chat_id = int(data['chat_id'])
+        if self.action == 'update' or 'delete':
+            tg_user = TelegramUser.objects.get(user=self.request.user, chat_id=chat_id)
+            print('tg_user', tg_user)
+            return tg_user
+        return super().get_object()
+
+
     def get_queryset(self):
-        return TelegramUser.objects.filter(user_id=self.request.user)
+        return TelegramUser.objects.filter(user=self.request.user)
+
+@api_view(('GET',))
+def notify(request: HttpRequest, *args, **kwargs):
+    data = request.GET
+    order_num = data['wsb_order_num']
+    loan_id = int(order_num)
+    token = data.get('wsb_tid', None)
+    loans_link = 'http://localhost:4200/'
+    if token is None:
+        print('transaction was cancelled, need to delete loan')
+        try:
+            loan = Loan.objects.get(pk=loan_id)
+            loan.delete()
+        except ObjectDoesNotExist:
+            print(f'loan#{loan_id} not found; token not found')
+    else:
+        print('got token, need to bind payment card' )
+        try:
+            loan: Loan = Loan.objects.get(pk=loan_id)
+        except ObjectDoesNotExist:
+            print(f'loan#{loan_id} not found; token not found')
+        print('user', loan.user)
+        new_payment_card = PaymentCard(
+            token = token,
+            user = loan.user,
+        )
+    return Response(loans_link)
+
 
 class LoanViewSet(
         viewsets.GenericViewSet, 
         mixins.ListModelMixin, 
         mixins.CreateModelMixin, 
         mixins.RetrieveModelMixin):
-    # serializer_class = LoanSerializer
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
 
@@ -252,10 +273,10 @@ class LoanViewSet(
     @action(detail=False, methods=["GET"], url_path="GetPercent", url_name="GetPercent")
     def getPercent(self, request: HttpRequest, *args, **kwargs):
         data = request.GET
-        sum = Decimal(data['sum'].replace(',', '.'))
+        amount = Decimal(data['sum'].replace(',', '.'))
         currency_id = int(data['currency'])
         try:
-            percentOffers = PercentOffer.objects.filter(currency__pk=currency_id).order_by('amount')
+            percentOffers = PercentOffer.objects.filter(currency__pk=currency_id).order_by('-amount')
             if len(percentOffers) == 0:
                 return not_found(request)
         except Exception:
@@ -263,7 +284,7 @@ class LoanViewSet(
         percentOffer = None
         for offer in percentOffers:
             percentOffer = offer.percent
-            if sum < offer.amount:
+            if amount < offer.amount:
                 break
         return Response(percentOffer)
 
@@ -283,44 +304,59 @@ class LoanViewSet(
         return Response({"sum": sum})
 
 
-
     def create(self, request, *args, **kwargs):
-        print('loan viewset: perform create')
-        serializer = self.get_serializer_class()
         data = json.loads(self.request.body.decode())
         currency_id = int(data['currency'])
         amount = Decimal(data['amount'].replace(',', '.'))
         return_url = data['return_url']
+
         try:
-            percentOffers = PercentOffer.objects.filter(currency__pk=currency_id).order_by('amount')
+            currency = Currency.objects.get(pk=currency_id)
+            percentOffers = PercentOffer.objects.filter(currency=currency).order_by('amount')
             if len(percentOffers) == 0:
                 return not_found(self.request)
         except Exception:
             return not_found(self.request)
         percentOffer = None
-        currency_name = percentOffers[0].currency.name
         for offer in percentOffers:
             percentOffer = offer.percent
-            if sum < offer.amount:
+            if amount < offer.amount:
                 break
         
         remaining_amount = amount * (percentOffer + 1)
-        instance = serializer.save(
+        new_loan = Loan(
             user = self.request.user,
             percent = percentOffer,
-            remaining_amount = remaining_amount            
+            amount = amount,
+            remaining_amount = remaining_amount,
+            currency = currency
         )
-        # here should be get loans
-        response = pay_loan(
-            f'loan-{instance.pk}',
-            1,
-            currency_name,
+        new_loan.save()
+
+        payment_cards = PaymentCard.objects.filter(user=self.request.user)
+        if len(payment_cards) == 0:
+            # needs binding
+            response = pay_loan(
+                f'{new_loan.pk}',
+                1,
+                currency.name,
+                1,
+                f'customer-{self.request.user.id}',
+                'http://127.0.0.1:8000/notify/'
+            )
+            print(response)
+            return Response(response['data']['redirectUrl'])
+        payment_card = payment_cards[0]
+        get_loan(
+            f'loan-{new_loan.pk}',
+            0,
+            currency.name,
             str(amount),
-            # 'token', # here should be card token(transaction id from card bind)
+            payment_card.token,
             f'customer-{self.request.user.pk}',
             return_url
         )
-        return Response({"redirectUrl": response['data']['redirectUrl']})
+        return Response(return_url)
 
 
 class PaymentViewSet(
@@ -335,26 +371,12 @@ class PaymentViewSet(
     def get_queryset(self):
         return Payment.objects.filter(loan_id__user=self.request.user)
 
-    def perform_create(self, serializer):
-        print('payment viewset: perform create')
-        return super().perform_create(serializer)
-
-class PaymentCardViewSet(viewsets.ModelViewSet):
-    # serializer_class = PaymentCardSerializer
-    authentication_classes = (JWTAuthentication,)
-    permission_classes = (IsAuthenticated,)
-
-    def get_queryset(self):
-        return PaymentCard.objects.filter(owner_id=self.request.user)
-
-    def get_serializer_class(self):
-        if self.action == 'create':
-            return PaymentCardSerializer
-        return PaymentCardSerializer
+    # def get_serializer_class(self):
+    #     if self.action == 'create':
+    #         return PaymentSerializer
+    #     return PaymentCardSerializer
 
     def create(self, request, *args, **kwargs):
-        print('payment viewset: perform create')
-        serializer = self.get_serializer_class()
         data = json.loads(self.request.body.decode())
         loan_id = int(data['loan'])
         amount = Decimal(data['amount'].replace(',', '.'))
@@ -365,16 +387,30 @@ class PaymentCardViewSet(viewsets.ModelViewSet):
         except Exception:
             return not_found(self.request)
         
+        new_payment = Payment(
+            amount=amount,
+            loan=loan
+        )
+        new_payment.save()
         
-        instance = serializer.save()
         response = pay_loan(
-            f'payment-{instance.pk}',
-            1,
+            f'payment-{new_payment.pk}',
+            0,
             loan.currency.name,
             str(amount),
             f'customer-{self.request.user.pk}',
             return_url
         )
+        if response is None:
+            return not_found()
         loan.remaining_amount = loan.remaining_amount - amount
         loan.save()
-        return Response({"redirectUrl": response['data']['redirectUrl']})
+        return Response(response['data']['redirectUrl'])
+
+class PaymentCardViewSet(viewsets.ModelViewSet):
+    # serializer_class = PaymentCardSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return PaymentCard.objects.filter(owner_id=self.request.user)

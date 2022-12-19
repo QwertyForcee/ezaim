@@ -30,14 +30,13 @@ class PercentOffer(models.Model):
     amount = models.DecimalField(max_digits=15, decimal_places=2)
 
     def __str__(self) -> str:
-        return f'{self.percent*100}% for < {self.amount}{self.currency.literal}'
+        return f'{self.percent*100:.1f}% for < {self.amount}{self.currency.literal}'
 
 class User(BaseDbModel):
     email = models.EmailField()
     password = models.BinaryField()
     salt = models.BinaryField()
     phone_number = models.CharField(max_length=255)
-    salary = models.DecimalField(max_digits=15, decimal_places=2)
     name = models.CharField(max_length=255)
     surname = models.CharField(max_length=255)
 
@@ -130,11 +129,12 @@ class TelegramUser(BaseDbModel):
         return f"{self.name}#{self.chat_id}"
 
 class PaymentCard(BaseDbModel):
-    number = EncryptedCharField(max_length=255)
-    csv = EncryptedCharField(max_length=255)
-    initials = EncryptedCharField(max_length=255)
-    valid_through = EncryptedDateTimeField() # test this
+    # number = EncryptedCharField(max_length=255)
+    # csv = EncryptedCharField(max_length=255)
+    # initials = EncryptedCharField(max_length=255)
+    # valid_through = EncryptedDateTimeField() # test this
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = EncryptedCharField(max_length=255)
 
     def __str__(self) -> str:
         return f"card owned by {self.user}"
@@ -166,7 +166,7 @@ class Loan(BaseDbModel):
 
     objects = AutoUpdateLoanManager()
     def __str__(self) -> str:
-        return f"Loan of {self.amount} {self.currency}, {self.percent}%"
+        return f"Lend out: {self.amount} {self.currency}; {self.percent*100:.1f}% monthly; Remaining to pay:{self.remaining_amount}"
 
 class Payment(BaseDbModel):
     amount = models.DecimalField(max_digits=15, decimal_places=2)
@@ -174,6 +174,13 @@ class Payment(BaseDbModel):
 
     def __str__(self) -> str:
         return f"{self.amount} credited for {self.loan}"
+
+class OrderUser(BaseDbModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f'{self.user}, order #{self.pk}'
+
 
 class Log(BaseDbModel):
     log = models.TextField()
