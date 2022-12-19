@@ -87,7 +87,6 @@ def signup(request: HttpRequest, *args, **kwargs):
     password = data.get('password', None)
     phone_number = data.get('phoneNumber', None)
     password = data.get('password', None)
-    salary = data.get('salary', None)
 
     name = data.get('name', None)
     surname = data.get('surname', None)
@@ -101,9 +100,6 @@ def signup(request: HttpRequest, *args, **kwargs):
     sex = data.get('sex', None)
     resident = data.get('resident', None)
     birth_date = data.get('birthDate', None)
-
-    if salary is None:
-        salary = Decimal()
 
     try:
         # birth_address = parse_address(data['birthAddress'])
@@ -124,7 +120,6 @@ def signup(request: HttpRequest, *args, **kwargs):
         password=hashed,
         salt=salt,
         phone_number=phone_number,
-        salary=salary,
         name=name,
         surname=surname
     )
