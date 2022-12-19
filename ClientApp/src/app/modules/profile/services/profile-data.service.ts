@@ -14,8 +14,8 @@ export class ProfileDataService {
 
   private readonly USERS_URL = `${environment.baseUrl}users/`;
   private readonly PAYMENT_CARDS_URL = `${environment.baseUrl}payment-cards/`;
-  private readonly TELEGRAM_ACCOUNTS_URL = `${environment.baseUrl}telegram-users/`;
-  private readonly USER_SETTINGS_URL = `${environment.baseUrl}user-settings/`;
+  private readonly TELEGRAM_ACCOUNTS_URL = `${environment.baseUrl}telegram-users`;
+  private readonly USER_SETTINGS_URL = `${environment.baseUrl}user-settings`;
   private readonly CURRENCY_URL = `${environment.baseUrl}currencies/`;
 
   constructor(private http: HttpClient) { }
@@ -25,11 +25,7 @@ export class ProfileDataService {
   }
 
   updateUserData(user: User) {
-    return this.http.put(this.USERS_URL, user, {
-      params: {
-        'id': 0
-      }
-    });
+    return this.http.put(this.USERS_URL + '0/', user);
   }
 
   getTelegramAccounts(): Observable<TelegramAccount[]> {
@@ -41,11 +37,7 @@ export class ProfileDataService {
   }
 
   updateTelegramAccount(telegramAccount: TelegramAccount) {
-    return this.http.put(this.TELEGRAM_ACCOUNTS_URL, telegramAccount, {
-      params: {
-        'id': 0,
-      }
-    });
+    return this.http.put(this.TELEGRAM_ACCOUNTS_URL  + '/0/', telegramAccount);
   }
 
   getUserSettings(): Observable<UserSettings[]> {
@@ -53,11 +45,7 @@ export class ProfileDataService {
   }
 
   updateUserSettings(settings: UserSettings) {
-    return this.http.put(this.USER_SETTINGS_URL, settings, {
-      params: {
-        'id': 0
-      }
-    });
+    return this.http.put(this.USER_SETTINGS_URL + '/0/', settings);
   }
 
   createUserSettings(settings: UserSettings) {

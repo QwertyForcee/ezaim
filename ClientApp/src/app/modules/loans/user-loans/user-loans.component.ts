@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoanModel } from 'src/app/models/loan-model';
 import { LoansService } from '../loans.service';
@@ -14,6 +14,8 @@ export class UserLoansComponent implements OnInit, OnDestroy {
 
   switchHeader: HTMLElement | null = null;
   greyMode = false;  
+
+  @Input() staticHeaders = false;
   constructor(private router: Router, private loansService: LoansService) { }
 
   ngOnInit(): void {

@@ -16,6 +16,7 @@ export class UserSettingsComponent implements OnInit {
   userSettings?: UserSettings;
   userSettingsGroup: FormGroup = new FormGroup(
     {
+      user: new FormControl(0),
       date_format: new FormControl(null, [Validators.required]),
       week_start: new FormControl(null, [Validators.required]),
       preferred_currency: new FormControl(null, [Validators.required]),
