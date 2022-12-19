@@ -1,5 +1,5 @@
 from django.db import models
-from encrypted_model_fields.fields import EncryptedCharField
+from encrypted_model_fields.fields import EncryptedCharField, EncryptedBooleanField, EncryptedDateTimeField
 
 class BaseDbModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -18,6 +18,14 @@ class Currency(BaseDbModel):
 
     class Meta:
         verbose_name_plural = "Currencies"
+
+class PercentOffer(models.Model):
+    currency = models.ForeignKey(Currency, on_delete=models.CASCADE)
+    percent = models.DecimalField(max_digits=7, decimal_places=3)
+    amount = models.DecimalField(max_digits=15, decimal_places=2)
+
+    def __str__(self) -> str:
+        return f'{self.percent*100}% for < {self.amount}{self.currency.literal}'
 
 class User(BaseDbModel):
     email = models.EmailField()
@@ -59,8 +67,8 @@ class PassportData(BaseDbModel):
     name = EncryptedCharField(max_length=255)
     surname = EncryptedCharField(max_length=255)
     sex = EncryptedCharField(max_length=255)
-    resident = EncryptedCharField(max_length=255)
-    birth_date = EncryptedCharField(max_length=255)
+    resident = EncryptedBooleanField()
+    birth_date = EncryptedDateTimeField(max_length=255)
     birth_country = EncryptedCharField(max_length=255)
     birth_state = EncryptedCharField(max_length=255)
     birth_city = EncryptedCharField(max_length=255)
@@ -77,8 +85,8 @@ class PassportData(BaseDbModel):
     nationality = EncryptedCharField(max_length=255)
     passport_number = EncryptedCharField(max_length=255)
     identification_number = EncryptedCharField(max_length=255)
-    issue_date = EncryptedCharField(max_length=255)
-    expiry_date = EncryptedCharField(max_length=255)
+    issue_date = EncryptedDateTimeField()
+    expiry_date = EncryptedDateTimeField()
     authority = EncryptedCharField(max_length=255)
 
     def __str__(self) -> str:
@@ -117,10 +125,10 @@ class TelegramUser(BaseDbModel):
         return f"{self.name}#{self.chat_id}"
 
 class PaymentCard(BaseDbModel):
-    number = models.CharField(max_length=255)
-    csv = models.CharField(max_length=255)
-    initials = models.CharField(max_length=255)
-    valid_through = models.DateField()    
+    number = EncryptedCharField(max_length=255)
+    csv = EncryptedCharField(max_length=255)
+    initials = EncryptedCharField(max_length=255)
+    valid_through = EncryptedDateTimeField() # test this
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self) -> str:

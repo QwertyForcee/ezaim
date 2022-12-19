@@ -3,7 +3,7 @@ from ezaim.models import (
     User, TelegramUser, UserSettings,
     Address, PassportData,
     PaymentCard, Payment, Loan, 
-    Currency, Log
+    Currency, PercentOffer, Log
 )
 
 @admin.register(User)
@@ -41,6 +41,10 @@ class LoanAdmin(admin.ModelAdmin):
 
 @admin.register(Currency)
 class CurrencyAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(PercentOffer)
+class PercentOfferAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(Log)

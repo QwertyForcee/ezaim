@@ -15,7 +15,7 @@ class JWTAuthentication(BaseAuthentication):
     def authenticate(self, request):
         auth_header = get_authorization_header(request).split()
 
-        if len(auth_header) == 1:
+        if len(auth_header) < 2:
             msg = 'Invalid token header. No credentials provided.'
             raise exceptions.AuthenticationFailed(msg)
         elif len(auth_header) > 2:

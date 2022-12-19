@@ -41,7 +41,6 @@ router.register(r'user-settings', UserSettingsViewSet, basename='user-settings')
 router.register(r'currencies', CurrencyViewSet, basename='currencies')
 router.register(r'telegram-users', TelegramUsersViewSet, basename='telegram-users')
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),

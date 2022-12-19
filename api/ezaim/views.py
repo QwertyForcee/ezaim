@@ -3,6 +3,8 @@ from django.http import JsonResponse, HttpRequest
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.decorators import action
 import jwt
 import json
 import bcrypt
@@ -21,7 +23,7 @@ from ezaim.models import (
     User, TelegramUser, UserSettings,
     PassportData, Address,
     PaymentCard, Payment, Loan, 
-    Currency, Log
+    Currency, PercentOffer, Log
 )
 from ezaim.serializers import (
     CurrencySerializer,
@@ -112,6 +114,8 @@ def parse_address(address) -> Address:
 def signup(request: HttpRequest, *args, **kwargs):
     data = json.loads(request.body.decode())
 
+    pprint.pprint(data)
+
     email = data.get('email', None)
     password = data.get('password', None)
     phone_number = data.get('phoneNumber', None)
@@ -199,6 +203,7 @@ def signup(request: HttpRequest, *args, **kwargs):
     })
 
 
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -221,7 +226,7 @@ class TelegramUsersViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return UserSettings.objects.filter(user_id=self.request.user)
+        return TelegramUser.objects.filter(user_id=self.request.user)
 
 class LoanViewSet(
         viewsets.GenericViewSet, 
@@ -235,6 +240,27 @@ class LoanViewSet(
     def get_queryset(self):
         return Loan.objects.filter(user=self.request.user)
 
+    @action(detail=False, methods=["GET"], url_path="GetPercent", url_name="GetPercent")
+    def getLoanPercent(self, request: HttpRequest, *args, **kwargs):
+        data = request.GET
+        sum = float(data['sum'])
+        currency_id = int(data['currency'])
+        try:
+            print(sum, currency_id)
+            percentOffers = PercentOffer.objects.filter(currency__pk=currency_id).order_by('amount')
+            if len(percentOffers) == 0:
+                return not_found(request)
+        except Exception:
+            return not_found(request)
+        print(percentOffers)
+        percentOffer = None
+        for offer in percentOffers:
+            percentOffer = offer.percent
+            if sum < offer.amount:
+                break
+        print('offer', percentOffer)
+        return Response({"percent": percentOffer})
+
     def perform_create(self, serializer):
         print('loan viewset: perform create')
         data = json.loads(self.request.body.decode())
@@ -243,6 +269,7 @@ class LoanViewSet(
             # remaining_amount = data['remaining_amount']
         )
         return super().perform_create(serializer)
+
 
 class PaymentViewSet(
         viewsets.GenericViewSet,
