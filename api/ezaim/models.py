@@ -1,5 +1,10 @@
 from django.db import models
 from encrypted_model_fields.fields import EncryptedCharField, EncryptedBooleanField, EncryptedDateTimeField
+from datetime import datetime
+from dateutil import relativedelta
+import pytz
+
+utc = pytz.UTC
 
 class BaseDbModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -14,7 +19,7 @@ class Currency(BaseDbModel):
     literal = models.CharField(max_length=16)
 
     def __str__(self) -> str:
-        return self.full_name
+        return self.name
 
     class Meta:
         verbose_name_plural = "Currencies"
@@ -134,16 +139,34 @@ class PaymentCard(BaseDbModel):
     def __str__(self) -> str:
         return f"card owned by {self.user}"
 
+class AuthUpdateLoanQuerySet(models.query.QuerySet):
+    def get(self, **kwargs):
+        loan: Loan = super().get(**kwargs)
+        today = utc.localize(datetime.fromisocalendar(2023, 10, 1))
+        delta = relativedelta.relativedelta(today, loan.created_at)
+        months_passed = delta.years * 12 + delta.months
+        if months_passed > loan.months_passed:
+            if loan.remaining_amount > 0:
+                months_diff = months_passed - loan.months_passed
+                loan.remaining_amount += loan.amount * loan.percent * months_diff
+            loan.months_passed = months_passed
+            loan.save()
+        return super().get(**kwargs)
+
+class AutoUpdateLoanManager(models.Manager.from_queryset(AuthUpdateLoanQuerySet)):
+    pass
+
 class Loan(BaseDbModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     percent = models.DecimalField(max_digits=7, decimal_places=3)
     amount = models.DecimalField(max_digits=15, decimal_places=2)
     remaining_amount = models.DecimalField(max_digits=15, decimal_places=2)
-    
+    months_passed = models.IntegerField(default=0)
     currency = models.ForeignKey(Currency, on_delete=models.RESTRICT)
 
+    objects = AutoUpdateLoanManager()
     def __str__(self) -> str:
-        return f"Loan of {self.amount}, {self.percent}%"
+        return f"Loan of {self.amount} {self.currency}, {self.percent}%"
 
 class Payment(BaseDbModel):
     amount = models.DecimalField(max_digits=15, decimal_places=2)

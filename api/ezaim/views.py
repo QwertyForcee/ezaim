@@ -316,7 +316,7 @@ class LoanViewSet(
             1,
             currency_name,
             str(amount),
-            'token', # here should be card token(transaction id from card bind)
+            # 'token', # here should be card token(transaction id from card bind)
             f'customer-{self.request.user.pk}',
             return_url
         )
@@ -375,4 +375,6 @@ class PaymentCardViewSet(viewsets.ModelViewSet):
             f'customer-{self.request.user.pk}',
             return_url
         )
+        loan.remaining_amount = loan.remaining_amount - amount
+        loan.save()
         return Response({"redirectUrl": response['data']['redirectUrl']})
