@@ -9,7 +9,8 @@ from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 import jwt
 import json
 import bcrypt
-import datetime
+from datetime import datetime
+from dateutil import relativedelta
 #
 import pprint
 from decimal import *
@@ -263,7 +264,7 @@ class LoanViewSet(
         viewsets.GenericViewSet, 
         mixins.ListModelMixin, 
         mixins.CreateModelMixin, 
-        mixins.RetrieveModelMixin):
+        mixins.RetrieveModelMixin):  
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
 
@@ -271,14 +272,14 @@ class LoanViewSet(
         return Loan.objects.filter(user=self.request.user)
 
     def get_serializer_class(self):
-        if self.action == 'create':
-            return NewLoanSerializer
+        # if self.action == 'create':
+        #     return NewLoanSerializer
         return LoanSerializer
 
-    @action(detail=False, methods=["GET"], url_path="GetPercent", url_name="GetPercent")
+    @action(detail=False, methods=["POST"], url_path="GetPercent", url_name="GetPercent")
     def getPercent(self, request: HttpRequest, *args, **kwargs):
         data = request.GET
-        amount = Decimal(data['sum'].replace(',', '.'))
+        amount = Decimal(data['sum'])
         currency_id = int(data['currency'])
         try:
             percentOffers = PercentOffer.objects.filter(currency__pk=currency_id).order_by('amount')
@@ -298,24 +299,23 @@ class LoanViewSet(
     @action(detail=False, methods=["POST"], url_path="GetCalculatedSumForLoan", url_name="GetCalculatedSumForLoan")
     def getCalculatedSum(self, request: HttpRequest, *args, **kwargs):
         data = json.loads(request.body.decode())
-        loan_id = int(data['loan'])
-        loan_date = datetime()
+        loan_id = int(data['loanId']) # check name
+        estimate_date = datetime(data['date']) # check name, maybe needs localize
         try:
-            loan = Loan.objects.get(pk=loan_id)
-        except Exception:
+            loan: Loan = Loan.objects.get(pk=loan_id)
+        except ObjectDoesNotExist:
             return not_found(request)
-
-        # sum = 
-
-
-        return Response({"sum": sum})
+        delta = relativedelta.relativedelta(estimate_date, loan.created_at)
+        estimated_months = delta.years * 12 + delta.months
+        total_amount = estimated_months * loan.percent * loan.amount - loan.remaining_amount
+        return Response(total_amount)
 
 
     def create(self, request, *args, **kwargs):
         print('loan create')
         data = json.loads(self.request.body.decode())
         currency_id = int(data['currency'])
-        amount = Decimal(data['amount'].replace(',', '.'))
+        amount = Decimal(data['amount'])
         return_url = data['return_url']
 
         try:
@@ -387,7 +387,7 @@ class PaymentViewSet(
     def create(self, request, *args, **kwargs):
         data = json.loads(self.request.body.decode())
         loan_id = int(data['loan'])
-        amount = Decimal(data['amount'].replace(',', '.'))
+        amount = Decimal(data['amount'])
         return_url = data['return_url']
 
         try:
@@ -415,7 +415,9 @@ class PaymentViewSet(
         loan.save()
         return Response(response['data']['redirectUrl'])
 
-class PaymentCardViewSet(viewsets.ModelViewSet):
+class PaymentCardViewSet(viewsets.GenericViewSet,
+        mixins.ListModelMixin,
+        mixins.RetrieveModelMixin):
     # serializer_class = PaymentCardSerializer
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)

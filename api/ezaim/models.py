@@ -141,7 +141,7 @@ class PaymentCard(BaseDbModel):
 class AuthUpdateLoanQuerySet(models.query.QuerySet):
     def get(self, **kwargs):
         loan: Loan = super().get(**kwargs)
-        today = utc.localize(datetime.fromisocalendar(2023, 10, 1))
+        today = utc.localize(datetime.today())
         delta = relativedelta.relativedelta(today, loan.created_at)
         months_passed = delta.years * 12 + delta.months
         if months_passed > loan.months_passed:
@@ -157,6 +157,7 @@ class AutoUpdateLoanManager(models.Manager.from_queryset(AuthUpdateLoanQuerySet)
 
 class Loan(BaseDbModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True)
     percent = models.DecimalField(max_digits=7, decimal_places=3)
     amount = models.DecimalField(max_digits=15, decimal_places=2)
     remaining_amount = models.DecimalField(max_digits=15, decimal_places=2)
