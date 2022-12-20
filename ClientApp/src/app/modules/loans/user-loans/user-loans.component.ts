@@ -31,6 +31,10 @@ export class UserLoansComponent implements OnInit, OnDestroy {
     return this.loans && this.loans.length > 0;
   }
 
+  // getFormattedDate(loan) {
+  //   return loan.created_at
+  // }
+
   @Input() staticHeaders = false;
   constructor(private router: Router, private loansService: LoansService, private profileDataService: ProfileDataService) { }
 
