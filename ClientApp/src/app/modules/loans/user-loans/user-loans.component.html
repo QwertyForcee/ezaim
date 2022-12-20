@@ -3,7 +3,7 @@
         <h1 class="loans-header">активные займы:</h1>
         <div class="user-loans-cards">
             <div *ngFor="let loan of activeLoans" class="loan-card">
-                <div class="loan-card-content" (click)="onLoanClicked()">
+                <div class="loan-card-content" (click)="onLoanClicked(loan.id)">
                     <h3>ЗАЙМ - 4000 BYN</h3>
 
                     <h4>10.14.2022</h4>
@@ -21,7 +21,7 @@
         <div class="user-loans-cards user-loans-grey-mode">
 
             <div class="loan-card" *ngFor="let loan of notActiveLoans">
-                <div class="loan-card-content" (click)="onLoanClicked()">
+                <div class="loan-card-content" (click)="onLoanClicked(loan.id)">
                     <h3>ЗАЙМ - 4000 BYN</h3>
 
                     <h4>10.14.2022</h4>
@@ -37,6 +37,6 @@
         <h1>
             у вас нету займов :)
         </h1>
-        <h2>исправить</h2>
+        <h2 routerLink="/new-loan">исправить</h2>
     </div>
 </ng-template>
