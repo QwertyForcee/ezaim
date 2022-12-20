@@ -217,11 +217,16 @@ class TelegramUsersViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_object(self):
-        data = json.loads(self.request.body.decode())
-        chat_id = int(data['chat_id'])
-        if self.action == 'update' or 'delete':
+        if self.action == 'update':
+            data = json.loads(self.request.body.decode())
+            chat_id = int(data['chat_id'])
             tg_user = TelegramUser.objects.get(user=self.request.user, chat_id=chat_id)
             print('tg_user', tg_user)
+            return tg_user
+        if self.action == 'destroy':
+            data = self.request.GET
+            chat_id = int(data['chat_id'])
+            tg_user = TelegramUser.objects.get(user=self.request.user, chat_id=chat_id)
             return tg_user
         return super().get_object()
 
