@@ -180,8 +180,9 @@ def signup(request: HttpRequest, *args, **kwargs):
 class UserViewSet(viewsets.GenericViewSet,
         mixins.ListModelMixin,
         mixins.RetrieveModelMixin,
-        mixins.UpdateModelMixin):
-    queryset = User.objects.all()
+        mixins.UpdateModelMixin,
+        mixins.DestroyModelMixin):
+    # queryset = User.objects.all()
     serializer_class = UserSerializer
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
@@ -190,6 +191,7 @@ class UserViewSet(viewsets.GenericViewSet,
         return User.objects.get(pk=self.request.user.pk)
 
     def get_queryset(self):
+        print('getting objects')
         return User.objects.filter(pk=self.request.user.pk)
 
 class CurrencyViewSet(viewsets.GenericViewSet,
@@ -281,7 +283,7 @@ class LoanViewSet(
         #     return NewLoanSerializer
         return LoanSerializer
 
-    @action(detail=False, methods=["POST"], url_path="GetPercent", url_name="GetPercent")
+    @action(detail=False, methods=["GET"], url_path="GetPercent", url_name="GetPercent")
     def getPercent(self, request: HttpRequest, *args, **kwargs):
         data = request.GET
         amount = Decimal(data['sum'])
