@@ -305,14 +305,19 @@ class LoanViewSet(
     def getCalculatedSum(self, request: HttpRequest, *args, **kwargs):
         data = json.loads(request.body.decode())
         loan_id = int(data['loanId']) # check name
-        estimate_date = datetime(data['date']) # check name, maybe needs localize
+        estimate_date = datetime.fromisoformat(data['date']) # check name, maybe needs localize
         try:
             loan: Loan = Loan.objects.get(pk=loan_id)
         except ObjectDoesNotExist:
             return not_found(request)
+        utc = pytz.UTC
+        if estimate_date < utc.localize(datetime.today()):
+            return Response(0)
         delta = relativedelta.relativedelta(estimate_date, loan.created_at)
         estimated_months = delta.years * 12 + delta.months
-        total_amount = estimated_months * loan.percent * loan.amount - loan.remaining_amount
+        print('estimated_months', estimated_months)
+        print('remaining', loan.remaining_amount)
+        total_amount = (estimated_months + 1) * loan.percent * loan.amount - ((loan.months_passed + 1) * loan.percent * loan.amount - loan.remaining_amount)
         return Response(total_amount)
 
 
