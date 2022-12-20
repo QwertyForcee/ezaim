@@ -133,7 +133,7 @@ def signup(request: HttpRequest, *args, **kwargs):
     print('user saved')
     user_settings = UserSettings(
         user=user,
-        currency=Currency.objects.get(name='BYN')
+        preferred_currency=Currency.objects.get(name='BYN')
     )
     user_settings.save()
     print('user settings saved')
