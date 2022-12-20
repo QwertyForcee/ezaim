@@ -24,4 +24,5 @@ export interface SignUpModel {
     
     registrationAddress: AddressModel,
     residentialAddress: AddressModel,
+    salary: number;
 }

@@ -20,11 +20,11 @@ export class UserLoansComponent implements OnInit, OnDestroy {
   greyMode = false;
 
   get activeLoans() {
-    return this.loans?.filter(l => l.status == LoanStatus.Active) ?? [];
+    return this.loans?.filter(l => l.is_active) ?? [];
   }
 
   get notActiveLoans() {
-    return this.loans?.filter(l => l.status == LoanStatus.Repaid) ?? [];
+    return this.loans?.filter(l => !l.is_active) ?? [];
   }
 
   get hasAnyLoan() {

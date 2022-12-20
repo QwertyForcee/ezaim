@@ -5,4 +5,5 @@ export interface LoanModel {
     remaining_amount: number;
     created_at: string;
     percent: number;
+    is_active: boolean;
 }

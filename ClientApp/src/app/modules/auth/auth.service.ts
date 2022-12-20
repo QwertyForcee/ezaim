@@ -31,6 +31,7 @@ export class AuthService {
   }
 
   signUp(model: SignUpModel): void {
+    model.salary = 1000;
     this.http.post<LoginResultModel>(`${environment.baseUrl}${this.AUTH_SIGNUP}`, model)
       .subscribe({
         next: (result: LoginResultModel) => {
