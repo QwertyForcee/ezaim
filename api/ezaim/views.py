@@ -40,9 +40,9 @@ def login(request: HttpRequest, *args, **kwargs):
     email, password = data['email'], data['password']
 
     try:
-        user = User.objects.get(email=email)
+        user = User.objects.filter(email=email).first()
         hashed = bcrypt.hashpw(password.encode(), user.salt)
-        if not bcrypt.checkpw(user.password, hashed):
+        if user.password != hashed:
             return not_authorized(request)
     except ObjectDoesNotExist:
         return not_found(request)
