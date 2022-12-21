@@ -1,8 +1,10 @@
 import { Component, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
 import { LoanStatus } from 'src/app/enums/loan-status-enum';
 import { Currency } from 'src/app/models/currency';
 import { LoanModel } from 'src/app/models/loan-model';
+import { UserSettings } from 'src/app/models/user-settings';
 import { ProfileDataService } from '../../profile/services/profile-data.service';
 import { LoansService } from '../loans.service';
 
@@ -15,6 +17,7 @@ export class UserLoansComponent implements OnInit, OnDestroy {
 
   loans?: LoanModel[];
   currencies?: Currency[];
+  userSettings?: UserSettings;
 
   switchHeader: HTMLElement | null = null;
   greyMode = false;
@@ -29,6 +32,10 @@ export class UserLoansComponent implements OnInit, OnDestroy {
 
   get hasAnyLoan() {
     return this.loans && this.loans.length > 0;
+  }
+
+  getformattedDate(date: string) {
+    return moment(date).format(this.userSettings?.date_format);
   }
 
   // getFormattedDate(loan) {
@@ -48,6 +55,9 @@ export class UserLoansComponent implements OnInit, OnDestroy {
       this.currencies = res;
     })
 
+    this.profileDataService.getUserSettings().subscribe(res => {
+      this.userSettings = res[0];
+    })
   }
 
   onLoanClicked(id: number): void {

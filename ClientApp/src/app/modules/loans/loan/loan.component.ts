@@ -19,7 +19,7 @@ export class LoanComponent implements OnInit {
   isPaymentFormOpened = false;
 
   paymentFormGroup: FormGroup = new FormGroup({
-    'amount': new FormControl(0, [Validators.required, Validators.min(100), Validators.max(3_165_000)])
+    'amount': new FormControl(0, [Validators.required, Validators.max(3_165_000)])
   });
 
   constructor(private profileDataService: ProfileDataService, private loansService: LoansService, private route: ActivatedRoute) { }
@@ -61,7 +61,7 @@ export class LoanComponent implements OnInit {
     if (this.paymentFormGroup.valid && this.loanId) {
       const payment = {
         'loan': this.loanId,
-        'amount': this.paymentFormGroup.get('amount')?.value,
+        'amount': this.paymentFormGroup.get('amount')?.value?.toString(),
         'return_url': window.location.href
       };
       this.loansService.createNewPayment(payment).subscribe(result => {

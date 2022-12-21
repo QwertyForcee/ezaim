@@ -68,7 +68,7 @@ export class LoanCalendarComponent implements OnInit {
   }
 
   setData(day: number, month: number, year: number) {
-    this.loansService.getCalculatedSumForLoanDay(this.loanId ?? 0, new Date(year, month, day)).subscribe(res => {
+    this.loansService.getCalculatedSumForLoanDay(this.loanId ?? 0, (new Date(year, month, day)).toISOString()).subscribe(res => {
       this.toolTip = `оставшаяся сумма выплаты на ${day} число составит ${res}`;
     })
   }
