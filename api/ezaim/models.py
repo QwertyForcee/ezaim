@@ -182,7 +182,7 @@ class Payment(BaseDbModel):
     loan = models.ForeignKey(Loan, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return f"{self.amount} credited for {self.loan}"
+        return f"{self.amount} {self.loan.currency} payed for loan#{self.loan.pk}"
 
 class OrderUser(BaseDbModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

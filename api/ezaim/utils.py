@@ -6,6 +6,7 @@ import time
 from hashlib import sha1
 import requests
 import json
+from pprint import pprint
 
 
 from api.settings import JWT_KEY, WSB_STOREID, WEBPAY_SECRET_KEY
@@ -79,6 +80,8 @@ def pay_loan(
         "wsb_cancel_return_url": wsb_return_url,
         "wsb_notify_url": wsb_notify_url,
     }
+    # pprint(body)
+    
     # return body
     return requests.post(webpay_url, json=body).json()
 

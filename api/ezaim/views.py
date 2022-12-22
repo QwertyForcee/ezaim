@@ -307,12 +307,16 @@ class LoanViewSet(
     def getCalculatedSum(self, request: HttpRequest, *args, **kwargs):
         data = json.loads(request.body.decode())
         loan_id = int(data['loanId']) # check name
-        estimate_date = datetime.fromisoformat(data['date']) # check name, maybe needs localize
+        print(f"request data: {data['date']}\n")
+        estimate_date = datetime.fromisoformat(data['date'][:-1]+'+00:00') # check name, maybe needs localize
+
+
         try:
             loan: Loan = Loan.objects.get(pk=loan_id)
         except ObjectDoesNotExist:
             return not_found(request)
         utc = pytz.UTC
+        # print(estimate_date, utc.localize(datetime.today()))
         if estimate_date < utc.localize(datetime.today()):
             return Response(0)
         delta = relativedelta.relativedelta(estimate_date, loan.created_at)
@@ -324,7 +328,6 @@ class LoanViewSet(
 
 
     def create(self, request, *args, **kwargs):
-        print('loan create')
         data = json.loads(self.request.body.decode())
         currency_id = int(data['currency'])
         amount = Decimal(data['amount'])
@@ -364,7 +367,7 @@ class LoanViewSet(
                 f'customer-{self.request.user.id}',
                 'http://127.0.0.1:8000/notify/'
             )
-            print(response)
+            # print(response)
             return Response(response['data']['redirectUrl'])
         payment_card = payment_cards[0]
         get_loan(
@@ -401,6 +404,7 @@ class PaymentViewSet(
         loan_id = int(data['loan'])
         amount = Decimal(data['amount'])
         return_url = data['return_url']
+        # pprint.pprint(data)
 
         try:
             loan = Loan.objects.get(pk=loan_id)
@@ -425,6 +429,7 @@ class PaymentViewSet(
             return not_found()
         loan.remaining_amount = loan.remaining_amount - amount
         loan.save()
+        # pprint.pprint(response)
         return Response(response['data']['redirectUrl'])
 
 class PaymentCardViewSet(viewsets.GenericViewSet,
