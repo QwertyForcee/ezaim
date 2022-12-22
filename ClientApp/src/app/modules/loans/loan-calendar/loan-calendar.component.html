@@ -16,8 +16,8 @@
 
     <div class="days-list">
         <div class="days-list-item" *ngFor="let day of nextMonthDays; trackBy trackByDay"
-            [class.days-list-item-past]="day.isPrev" [matTooltipShowDelay]="1500"
-            (mouseover)="setData(day.value, day.month, day.year)" [class.days-list-item-today]=" day.isToday"
+            [class.days-list-item-past]="day.isPrev" 
+            (mouseover)="setData(day.value, day.month, day.year)" [class.days-list-item-today]="day.isToday"
             mat-raised-button [matTooltip]="toolTip">
             {{day.value}}</div>
     </div>
@@ -27,7 +27,7 @@
 
     <div class="days-list">
         <div class="days-list-item" *ngFor="let day of nextNextMonthDays; trackBy trackByDay"
-            [class.days-list-item-past]="day.isPrev" [matTooltipShowDelay]="1500"
+            [class.days-list-item-past]="day.isPrev"
             [class.days-list-item-today]="day.isToday" (mouseover)="setData(day.value, day.month, day.year)"
             mat-raised-button [matTooltip]="toolTip">
             {{day.value}}</div>

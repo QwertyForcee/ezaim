@@ -34,6 +34,14 @@ export class UserLoansComponent implements OnInit, OnDestroy {
     return this.loans && this.loans.length > 0;
   }
 
+  getCurrencyName(currencyId: number | string) {
+    return this.currencies?.find(c => c.id.toString() == currencyId.toString())?.name;
+  }
+
+  getPercentValue(percent:number) {
+    return (percent * 100).toLocaleString('en-EN')
+  }
+
   getformattedDate(date: string) {
     return moment(date).format(this.userSettings?.date_format);
   }

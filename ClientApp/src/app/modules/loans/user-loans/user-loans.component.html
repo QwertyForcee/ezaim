@@ -7,7 +7,7 @@
                     <h3>ЗАЙМ - {{loan.amount}}</h3>
 
                     <h4>{{getformattedDate(loan.created_at)}}</h4>
-                    <h4>под {{loan.percent}}%</h4>
+                    <h4>под {{getPercentValue(loan.percent)}}%</h4>
 
                     <h5>ОСТАТОК ПО ЗАЙМУ - {{loan.remaining_amount}}</h5>
                 </div>
@@ -25,7 +25,7 @@
                     <h3>ЗАЙМ - {{loan.amount}}</h3>
 
                     <h4>{{getformattedDate(loan.created_at)}}</h4>
-                    <h4>под {{loan.percent}}</h4>
+                    <h4>под {{getPercentValue(loan.percent)}}%</h4>
                 </div>
             </div>
 
