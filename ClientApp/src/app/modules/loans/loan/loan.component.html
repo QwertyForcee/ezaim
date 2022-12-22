@@ -32,13 +32,13 @@
         <div class="loan-payment-form" [formGroup]="paymentFormGroup">
             <div class="loan-payment-form-block">
                 <label class="loan-payment-form-block-label">Сумма</label>
-                <input type="number" class="loan-payment-form-block-input">
+                <input type="number" class="loan-payment-form-block-input" formControlName="amount">
             </div>
             <div class="loan-payment-form-buttons">
                 <button class="loan-payment-form-buttons-action" (click)="closePaymentForm()">
                     Свернуть
                 </button>
-                <button class="loan-payment-form-buttons-action" (click)="confirmPayment()" formControlName="amount">
+                <button class="loan-payment-form-buttons-action" (click)="confirmPayment()">
                     Перейти к данным по карте
                 </button>
             </div>
