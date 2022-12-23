@@ -17,7 +17,7 @@
             </p>
         </div>
         <div class="loan-data-status">
-            <p>СТАТУС ЗАЙМА: <span class="loan-data-status-white">НЕ ПОГАШЕН</span></p>
+            <p>СТАТУС ЗАЙМА: <span class="loan-data-status-white">{{ loan?.is_active ? 'НЕ ПОГАШЕН' : 'ПОГАШЕН' }}</span></p>
             <p>ОСТАВШАЯСЯ СУММА ВОЗВРАТА: <span class="loan-data-status-black">{{loan?.remaining_amount}}</span></p>
         </div>
         <div class="loan-data-empty">

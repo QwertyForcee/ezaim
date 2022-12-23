@@ -1,0 +1,23 @@
+@import '/src/styles/constants';
+
+
+.payments-history {
+    ul {
+        display: flex;  
+        flex-direction: column;
+        row-gap: 20px;
+
+        li {
+            display: flex;
+            span {
+                margin-right: 15px;
+                font-size: 150%;
+                &.link {
+                    text-decoration: underline;
+                    color: $project-medium-purple;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}

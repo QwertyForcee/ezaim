@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Currency } from 'src/app/models/currency';
+import { Payment } from 'src/app/models/payment';
+import { CompletePayment } from 'src/app/models/payment-history-model';
 import { TelegramAccount } from 'src/app/models/telegram-account';
 import { User } from 'src/app/models/user';
 import { UserSettings } from 'src/app/models/user-settings';
@@ -17,6 +19,7 @@ export class ProfileDataService {
   private readonly TELEGRAM_ACCOUNTS_URL = `${environment.baseUrl}telegram-users`;
   private readonly USER_SETTINGS_URL = `${environment.baseUrl}user-settings`;
   private readonly CURRENCY_URL = `${environment.baseUrl}currencies/`;
+  private readonly PAYMENTS_URL = `${environment.baseUrl}payments/`;
 
   constructor(private http: HttpClient) { }
 
@@ -54,5 +57,9 @@ export class ProfileDataService {
 
   getCurrencies(): Observable<Currency[]> {
     return this.http.get<Currency[]>(this.CURRENCY_URL);
+  }
+
+  getPayments(): Observable<CompletePayment[]> {
+    return this.http.get<CompletePayment[]>(this.PAYMENTS_URL);
   }
 }

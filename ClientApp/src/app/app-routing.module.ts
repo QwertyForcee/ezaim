@@ -6,6 +6,7 @@ import { LoanComponent } from './modules/loans/loan/loan.component';
 import { LoansPageComponent } from './modules/loans/loans-page/loans-page.component';
 import { NewLoanFormComponent } from './modules/loans/new-loan-form/new-loan-form.component';
 import { UserLoansComponent } from './modules/loans/user-loans/user-loans.component';
+import { PaymentsHistoryComponent } from './modules/profile/payments-history/payments-history.component';
 import { ProfileDataComponent } from './modules/profile/profile-data/profile-data.component';
 import { ProfileComponent } from './modules/profile/profile/profile.component';
 import { TelegramAccountsComponent } from './modules/profile/telegram-accounts/telegram-accounts.component';
@@ -14,10 +15,11 @@ import { HomeComponent } from './shared/home/home.component';
 
 
 const profile_routes: Routes = [
-  { path: '', component: ProfileDataComponent, canActivate: [AuthGuard]  },
-  { path: 'loans', component: UserLoansComponent, canActivate: [AuthGuard]  },
-  { path: 'tg-accounts', component: TelegramAccountsComponent, canActivate: [AuthGuard]  },
+  { path: '', component: ProfileDataComponent, canActivate: [AuthGuard] },
+  { path: 'loans', component: UserLoansComponent, canActivate: [AuthGuard] },
+  { path: 'tg-accounts', component: TelegramAccountsComponent, canActivate: [AuthGuard] },
   { path: 'settings', component: UserSettingsComponent, canActivate: [AuthGuard] },
+  { path: 'history', component: PaymentsHistoryComponent, canActivate: [AuthGuard] },
 ];
 
 const routes: Routes = [

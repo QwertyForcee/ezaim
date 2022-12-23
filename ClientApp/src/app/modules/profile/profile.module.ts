@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TelegramAccountsComponent } from './telegram-accounts/telegram-accounts.component';
 import { UserSettingsComponent } from './user-settings/user-settings.component';
+import { PaymentsHistoryComponent } from './payments-history/payments-history.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { UserSettingsComponent } from './user-settings/user-settings.component';
     ProfileComponent,
     ProfileMenuComponent,
     TelegramAccountsComponent,
-    UserSettingsComponent
+    UserSettingsComponent,
+    PaymentsHistoryComponent
   ],
   imports: [
     ApplicationCommonModule,

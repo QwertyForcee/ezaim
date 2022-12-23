@@ -16,6 +16,7 @@ export class ProfileMenuComponent implements OnInit {
     { title: 'telegram аккаунты', url: 'tg-accounts' },
     { title: 'мои займы', url: 'loans' },
     { title: 'настройки', url: 'settings' },
+    { title: 'история', url: 'history'}
   ]
   ngOnInit(): void {
     this.currentUrl = window.location.href.split('/').pop() ?? '';

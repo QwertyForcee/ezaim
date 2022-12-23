@@ -1,0 +1,11 @@
+<div class="payments-history">
+    <ul>
+        <li *ngFor="let payment of payments">
+            <span>{{payment.amount}}</span>
+            <span>по</span>
+            <span class="link" routerLink="/loans" [queryParams]="{id: payment.loan}">займу</span>
+            <span>{{formattedDate(payment.created_at)}}</span>
+
+        </li>
+    </ul>
+</div>
