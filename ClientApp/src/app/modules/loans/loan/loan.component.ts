@@ -28,6 +28,10 @@ export class LoanComponent implements OnInit {
     return moment(this.loan?.created_at).format(this.dateFormat);
   }
 
+  get isActiveLoan() {
+    return this.loan?.is_active;
+  }
+
   getPercentValue(percent?: number) {
     if (percent){
       return (percent * 100).toLocaleString('en-EN')

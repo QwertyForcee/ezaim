@@ -31,6 +31,14 @@ export class NewLoanFormComponent implements OnInit {
     return this.newLoanFormGroup.get('currency')?.value ?? '';
   }
 
+  get displayPercent() {
+    return this.calculatedPercent * 100;
+  }
+
+  getCurrencyName(currencyId: number | string) {
+    return this.currencies?.find(c => c.id.toString() == currencyId.toString())?.name;
+  }
+
   ngOnInit(): void {
     this.profileDataService.getCurrencies().subscribe(res => {
       this.currencies = res;

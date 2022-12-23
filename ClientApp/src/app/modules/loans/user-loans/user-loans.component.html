@@ -4,7 +4,7 @@
         <div class="user-loans-cards">
             <div *ngFor="let loan of activeLoans" class="loan-card">
                 <div class="loan-card-content" (click)="onLoanClicked(loan.id)">
-                    <h3>ЗАЙМ - {{loan.amount}}</h3>
+                    <h3>ЗАЙМ - {{loan.amount}} {{getCurrencyName(loan.currency)}}</h3>
 
                     <h4>{{getformattedDate(loan.created_at)}}</h4>
                     <h4>под {{getPercentValue(loan.percent)}}%</h4>
@@ -22,7 +22,7 @@
 
             <div class="loan-card" *ngFor="let loan of notActiveLoans">
                 <div class="loan-card-content" (click)="onLoanClicked(loan.id)">
-                    <h3>ЗАЙМ - {{loan.amount}}</h3>
+                    <h3>ЗАЙМ - {{loan.amount}} {{getCurrencyName(loan.currency)}}</h3>
 
                     <h4>{{getformattedDate(loan.created_at)}}</h4>
                     <h4>под {{getPercentValue(loan.percent)}}%</h4>

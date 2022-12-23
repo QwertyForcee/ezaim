@@ -14,8 +14,8 @@
                 <div class="new-loan-form-blocks-block-label">
                     ВАЛЮТА
                 </div>
-                <select class="new-loan-form-blocks-block-input new-loan-form-blocks-block-input-select" formControlName="currency" (input)="onInputChange()">
-                    <option *ngFor="let cur of currencies" value="{{cur.id}}">{{cur.name}}</option>
+                <select class="new-loan-form-blocks-block-input new-loan-form-blocks-block-input-select" formControlName="currency" (change)="onInputChange()">
+                    <option *ngFor="let cur of currencies" [ngValue]="cur.id">{{cur.name}}</option>
                 </select>
             </div>
             <!-- <div class="new-loan-form-blocks-block">
@@ -30,7 +30,7 @@
 
         <div class="new-loan-form-block-sum">
             <h3>
-                ЗАЙМ НА СУММУ {{inputSum}} BYN С {{calculatedPercent}}% ЕЖЕМЕСЯЧНЫХ
+                ЗАЙМ НА СУММУ {{inputSum}} {{getCurrencyName(currentCurrency)}} С {{displayPercent}}% ЕЖЕМЕСЯЧНЫХ
             </h3>
         </div>
 
