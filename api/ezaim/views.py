@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.http import JsonResponse, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from rest_framework import viewsets, mixins
@@ -11,8 +10,7 @@ import json
 import bcrypt
 from datetime import datetime
 from dateutil import relativedelta
-#
-import pprint
+from pprint import pprint
 from decimal import *
 
 from api.settings import JWT_KEY
@@ -38,6 +36,7 @@ def not_authorized(request, *args, **kwargs):
 def login(request: HttpRequest, *args, **kwargs):
     data = json.loads(request.body.decode())
     email, password = data['email'], data['password']
+    # pprint(data)
 
     try:
         user = User.objects.filter(email=email).first()
@@ -86,8 +85,7 @@ def parse_address(address) -> Address:
 @csrf_exempt
 def signup(request: HttpRequest, *args, **kwargs):
     data = json.loads(request.body.decode())
-
-    # pprint.pprint(data)
+    # pprint(data)
 
     email = data.get('email', None)
     password = data.get('password', None)
@@ -111,10 +109,10 @@ def signup(request: HttpRequest, *args, **kwargs):
         # birth_address = parse_address(data['birthAddress'])
         registration_address = parse_address(data['registrationAddress'])
         registration_address.save()
-        print('reg add saved')
+        # print('reg add saved')
         residential_address = parse_address(data['residentialAddress'])
-        residential_address.save()
-        print('res add saved')
+        # residential_address.save()
+        # print('res add saved')
     except Exception:
         print('something went wrong')
 
@@ -130,13 +128,13 @@ def signup(request: HttpRequest, *args, **kwargs):
         surname=surname
     )
     user.save()
-    print('user saved')
+    # print('user saved')
     user_settings = UserSettings(
         user=user,
         preferred_currency=Currency.objects.get(name='BYN')
     )
     user_settings.save()
-    print('user settings saved')
+    # print('user settings saved')
 
     passport = PassportData(
         user=user,
@@ -158,7 +156,7 @@ def signup(request: HttpRequest, *args, **kwargs):
         residential_address=residential_address
     )
     passport.save()
-    print('passport saved')
+    # print('passport saved')
 
     token = jwt.encode(
         {
@@ -191,7 +189,7 @@ class UserViewSet(viewsets.GenericViewSet,
         return User.objects.get(pk=self.request.user.pk)
 
     def get_queryset(self):
-        print('getting objects')
+        # print('getting objects')
         return User.objects.filter(pk=self.request.user.pk)
 
 class CurrencyViewSet(viewsets.GenericViewSet,
@@ -223,7 +221,7 @@ class TelegramUsersViewSet(viewsets.ModelViewSet):
             data = json.loads(self.request.body.decode())
             chat_id = int(data['chat_id'])
             tg_user = TelegramUser.objects.get(user=self.request.user, chat_id=chat_id)
-            print('tg_user', tg_user)
+            # print('tg_user', tg_user)
             return tg_user
         if self.action == 'destroy':
             data = self.request.GET
@@ -240,7 +238,7 @@ class TelegramUsersViewSet(viewsets.ModelViewSet):
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 def notify(request: HttpRequest, *args, **kwargs):
     data = request.GET
-    pprint.pprint(data)
+    pprint(data)
     order_num = data['wsb_order_num']
     loan_id = int(order_num)
     token = data.get('wsb_tid', None)
@@ -290,7 +288,7 @@ class LoanViewSet(
         currency_id = int(data['currency'])
         try:
             percentOffers = PercentOffer.objects.filter(currency__pk=currency_id).order_by('amount')
-            print(percentOffers)
+            # print(percentOffers)
             if len(percentOffers) == 0:
                 return not_found(request)
         except Exception:
@@ -307,7 +305,7 @@ class LoanViewSet(
     def getCalculatedSum(self, request: HttpRequest, *args, **kwargs):
         data = json.loads(request.body.decode())
         loan_id = int(data['loanId']) # check name
-        print(f"request data: {data['date']}\n")
+        # print(f"request data: {data['date']}\n")
         estimate_date = datetime.fromisoformat(data['date'][:-1]+'+00:00') # check name, maybe needs localize
 
 
@@ -315,14 +313,16 @@ class LoanViewSet(
             loan: Loan = Loan.objects.get(pk=loan_id)
         except ObjectDoesNotExist:
             return not_found(request)
+        if not loan.is_active:
+            return Response(0)
         utc = pytz.UTC
         # print(estimate_date, utc.localize(datetime.today()))
         if estimate_date < utc.localize(datetime.today()):
             return Response(0)
         delta = relativedelta.relativedelta(estimate_date, loan.created_at)
         estimated_months = delta.years * 12 + delta.months
-        print('estimated_months', estimated_months)
-        print('remaining', loan.remaining_amount)
+        # print('estimated_months', estimated_months)
+        # print('remaining', loan.remaining_amount)
         total_amount = (estimated_months + 1) * loan.percent * loan.amount - ((loan.months_passed + 1) * loan.percent * loan.amount - loan.remaining_amount)
         return Response(total_amount)
 
@@ -370,7 +370,7 @@ class LoanViewSet(
             # print(response)
             return Response(response['data']['redirectUrl'])
         payment_card = payment_cards[0]
-        get_loan(
+        response = get_loan(
             f'loan-{new_loan.pk}',
             0,
             currency.name,
@@ -379,6 +379,8 @@ class LoanViewSet(
             f'customer-{self.request.user.pk}',
             return_url
         )
+        print('get loan response')
+        pprint(response)
         return Response(return_url)
 
 
@@ -394,17 +396,12 @@ class PaymentViewSet(
     def get_queryset(self):
         return Payment.objects.filter(loan_id__user=self.request.user)
 
-    # def get_serializer_class(self):
-    #     if self.action == 'create':
-    #         return PaymentSerializer
-    #     return PaymentCardSerializer
-
     def create(self, request, *args, **kwargs):
         data = json.loads(self.request.body.decode())
         loan_id = int(data['loan'])
         amount = Decimal(data['amount'])
         return_url = data['return_url']
-        # pprint.pprint(data)
+        # pprint(data)
 
         try:
             loan = Loan.objects.get(pk=loan_id)
@@ -429,7 +426,7 @@ class PaymentViewSet(
             return not_found()
         loan.remaining_amount = loan.remaining_amount - amount
         loan.save()
-        # pprint.pprint(response)
+        # pprint(response)
         return Response(response['data']['redirectUrl'])
 
 class PaymentCardViewSet(viewsets.GenericViewSet,
