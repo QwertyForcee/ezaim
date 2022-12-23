@@ -28,14 +28,22 @@ export class LoanComponent implements OnInit {
     return moment(this.loan?.created_at).format(this.dateFormat);
   }
 
+  getPercentValue(percent?: number) {
+    if (percent){
+      return (percent * 100).toLocaleString('en-EN')
+    }
+    else {
+      return '';
+    }
+  }
+
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.loanId = params['id'];
       if (this.loanId) {
         this.loansService.getUserLoanById(this.loanId).subscribe({
-          next: (loan) => {
-            this.loan = loan;
-            console.log(loan);
+          next: (loans) => {
+            this.loan = loans.find(loan => loan.id.toString() === this.loanId?.toString());
           }
         })
       }

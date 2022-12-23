@@ -23,8 +23,8 @@ export class LoansService {
     return this.http.get<LoanModel[]>(this.LOAN_URL);
   }
 
-  getUserLoanById(id: number): Observable<LoanModel> {
-    return this.http.get<LoanModel>(this.LOAN_URL, {
+  getUserLoanById(id: number): Observable<LoanModel[]> {
+    return this.http.get<LoanModel[]>(this.LOAN_URL, {
       params: {
         id: id,
       }

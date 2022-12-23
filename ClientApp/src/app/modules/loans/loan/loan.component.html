@@ -25,7 +25,7 @@
         </div>
         <div class="loan-data-info">
             <p>ДАТА ОФОРМЛЕНИЯ ЗАЙМА: <span class="loan-data-info-gold">{{getFormattedDate}}</span></p>
-            <p>ЗАЙМ ПОД <span class="loan-data-info-gold">{{loan?.percent}}</span> ЕЖЕМЕСЯЧНЫХ</p>
+            <p>ЗАЙМ ПОД <span class="loan-data-info-gold">{{getPercentValue(loan?.percent)}}%</span> ЕЖЕМЕСЯЧНЫХ</p>
         </div>
     </div>
     <ng-container *ngIf="isPaymentFormOpened">
