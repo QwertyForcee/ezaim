@@ -111,7 +111,7 @@ def signup(request: HttpRequest, *args, **kwargs):
         registration_address.save()
         # print('reg add saved')
         residential_address = parse_address(data['residentialAddress'])
-        # residential_address.save()
+        residential_address.save()
         # print('res add saved')
     except Exception:
         print('something went wrong')
