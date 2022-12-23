@@ -8,7 +8,7 @@ from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 import jwt
 import json
 import bcrypt
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil import relativedelta
 from pprint import pprint
 from decimal import *
@@ -307,7 +307,8 @@ class LoanViewSet(
         loan_id = int(data['loanId']) # check name
         # print(f"request data: {data['date']}\n")
         estimate_date = datetime.fromisoformat(data['date'][:-1]+'+00:00') # check name, maybe needs localize
-
+        estimate_date += timedelta(days=1, hours=2, minutes=59, seconds=59, microseconds=999999)
+        # print(estimate_date)
 
         try:
             loan: Loan = Loan.objects.get(pk=loan_id)
