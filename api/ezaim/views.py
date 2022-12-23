@@ -426,6 +426,8 @@ class PaymentViewSet(
         if response is None:
             return not_found()
         loan.remaining_amount = loan.remaining_amount - amount
+        if loan.remaining_amount <= 0:
+            loan.is_active = False
         loan.save()
         # pprint(response)
         return Response(response['data']['redirectUrl'])
