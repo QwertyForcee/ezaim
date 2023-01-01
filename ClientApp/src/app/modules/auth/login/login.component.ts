@@ -23,6 +23,12 @@ export class LoginComponent implements OnInit {
     return this.signUpFormGroup.invalid;
   }
 
+  get maxBirthDate(): Date {
+    const date = new Date();
+    date.setFullYear(date.getFullYear() - 21);
+    return date;
+  }
+
   loginFormGroup: FormGroup = new FormGroup(
     {
       email: new FormControl(null, [Validators.required, Validators.email]),

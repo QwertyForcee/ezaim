@@ -143,7 +143,7 @@
                             <label class="auth-form-label" for="">ДАТА РОЖДЕНИЯ</label>
                             <div class="auth-form-date">
                                 <input class="auth-form-input auth-form-input-date" matInput
-                                    [matDatepicker]="birthDatePicker" formControlName="birthDate">
+                                    [matDatepicker]="birthDatePicker" formControlName="birthDate" [max]="maxBirthDate">
                                 <img class="auth-form-date-img" (click)="birthDatePicker.open()">
                                 <mat-datepicker #birthDatePicker></mat-datepicker>
                             </div>

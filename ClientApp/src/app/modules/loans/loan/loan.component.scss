@@ -131,7 +131,7 @@
                 width: fit-content;
                 transition: .5s;
                 -webkit-transition: 0.5s;
-                
+
                 &:hover {
                     color: $project-gold;
                     box-shadow: 0px 3px 0px $project-white;
@@ -145,6 +145,11 @@
                 border: none;
                 border-bottom: 1px solid $project-dark-grey;
                 padding: 10px 15px;
+
+                &.ng-touched.ng-invalid {
+                    background: $control-error-background !important;
+                    box-shadow: -6px 5px 0px $control-error !important;
+                }
             }
         }
 

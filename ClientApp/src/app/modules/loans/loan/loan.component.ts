@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, MinValidator, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { Currency } from 'src/app/models/currency';
@@ -59,6 +59,8 @@ export class LoanComponent implements OnInit {
         this.loansService.getUserLoanById(this.loanId).subscribe({
           next: (loans) => {
             this.loan = loans.find(loan => loan.id.toString() === this.loanId?.toString());
+
+            this.paymentFormGroup.get('amount')?.setValidators([Validators.min(1), Validators.max(this.loan?.remaining_amount ?? 3_165_000)])
           }
         })
       }
