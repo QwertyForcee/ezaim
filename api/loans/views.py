@@ -23,6 +23,7 @@ from loans.models import (
     PercentOffer
 )
 from loans.serializers import *
+from api.settings import MAX_ACTIVE_LOANS
 
 def not_found(request, *args, **kwargs):
     return JsonResponse(data={"message": "Not Found"}, status=404)
@@ -182,6 +183,14 @@ class LoanViewSet(
                 break
 
         loans = Loan.objects.filter(user=self.request.user)
+
+        active_loans_count = 0
+        for loan in loans:
+            if loan.is_active:
+                active_loans_count += 1
+        if active_loans_count >= MAX_ACTIVE_LOANS:
+            return bad_request(request, 'Too many loans')
+
         monthly_pay = 0
         for loan in loans:
             if loan.currency.name != 'BYN':
