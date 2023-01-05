@@ -5,18 +5,20 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
 from api import settings
-from ezaim.views import (
-    not_found, app_error,
-    login, signup, notify,
+from users.views import (
+    login,
+    signup,
     UserViewSet,
     UserSettingsViewSet,
-    TelegramUsersViewSet,
+    TelegramUsersViewSet
+)
+from loans.views import (
     CurrencyViewSet,
+    notify,
     LoanViewSet,
     PaymentViewSet,
     PaymentCardViewSet
 )
-# from ezaim.views import webpay
 
 
 schema_view = get_schema_view(
@@ -27,8 +29,8 @@ schema_view = get_schema_view(
     public=True,
     permission_classes=[permissions.AllowAny],
 )
-handler404 = not_found
-handler500 = app_error
+# handler404 = not_found
+# handler500 = app_error
 
 router = routers.SimpleRouter()
 # router.include_root_view = False
@@ -47,7 +49,6 @@ urlpatterns = [
     path('api/v1/auth/login', login),
     path('api/v1/auth/signup', signup),
     path('notify/', notify),
-    # path('webpay', webpay)
 ]
 
 if settings.DEBUG:

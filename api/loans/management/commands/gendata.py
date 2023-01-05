@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from ezaim.models import PercentOffer, Currency
+from loans.models import PercentOffer, Currency
 from decimal import Decimal
 
 class Command(BaseCommand):
