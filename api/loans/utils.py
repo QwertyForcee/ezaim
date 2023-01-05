@@ -70,7 +70,7 @@ def pay_loan(
         "wsb_total": wsb_total,
         "wsb_return_url": wsb_return_url,
         "wsb_cancel_return_url": wsb_return_url,
-        "wsb_notify_url": wsb_notify_url,
+        # "wsb_notify_url": wsb_notify_url,
     }
     print('pay loan body:')
     pprint(body)
