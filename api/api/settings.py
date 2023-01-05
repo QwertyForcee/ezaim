@@ -14,7 +14,7 @@ else:
     print('.env file not found')
     sys.exit(1)
 
-MAX_LOANS = 3
+MAX_ACTIVE_LOANS = 3
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 if TELEGRAM_TOKEN is None:
