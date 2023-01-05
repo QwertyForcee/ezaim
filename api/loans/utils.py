@@ -3,6 +3,7 @@ from hashlib import sha1
 import requests
 import json
 from pprint import pprint
+from decimal import Decimal
 
 from api.settings import WSB_STOREID, WEBPAY_SECRET_KEY, EXCHANGE_RATE_API_KEY
 
@@ -10,21 +11,22 @@ from api.settings import WSB_STOREID, WEBPAY_SECRET_KEY, EXCHANGE_RATE_API_KEY
 def convert_currency(amount, currency_from, currency_to):
     print(f'converting {amount}{currency_from} to {currency_to}')
     # temp
-    if currency_from == 'USD':
-        return amount * 2.5
-    # response = requests.get(
-    #     "https://api.apilayer.com/exchangerates_data/convert", 
-    #     params = {
-    #         'amount': amount,
-    #         'from': currency_from,
-    #         'to': currency_to
-    #     },
-    #     headers = {
-    #         'apikey': EXCHANGE_RATE_API_KEY
-    #     }
-    # )
-    # pprint(response.json())
-    # return response.json()['result']
+    if currency_from == 'USD' and currency_to == 'BYN':
+        return amount * Decimal('2.5')
+    
+    response = requests.get(
+        "https://api.apilayer.com/exchangerates_data/convert", 
+        params = {
+            'amount': amount,
+            'from': currency_from,
+            'to': currency_to
+        },
+        headers = {
+            'apikey': EXCHANGE_RATE_API_KEY
+        }
+    )
+    pprint(response.json())
+    return Decimal(f"{response.json()['result']:.4f}")
 
 
 webpay_url = 'https://securesandbox.webpay.by/api/v1/payment'

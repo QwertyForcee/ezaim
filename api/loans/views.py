@@ -33,6 +33,9 @@ def app_error(request, *args, **kwargs):
 def not_authorized(request, *args, **kwargs):
     return JsonResponse(data={"message": "Unauthorized"}, status=401)
 
+def bad_request(request, message):
+    return JsonResponse(data={"message": f'Bad Request: {message}'}, status=400)
+
 class CurrencyViewSet(viewsets.GenericViewSet,
         mixins.ListModelMixin,
         mixins.RetrieveModelMixin):
@@ -80,14 +83,15 @@ class LoanViewSet(
         mixins.RetrieveModelMixin):  
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
+    serializer_class = LoanSerializer
 
     def get_queryset(self):
         return Loan.objects.filter(user=self.request.user)
 
-    def get_serializer_class(self):
-        # if self.action == 'create':
-        #     return NewLoanSerializer
-        return LoanSerializer
+    # def get_serializer_class(self):
+    #     # if self.action == 'create':
+    #     #     return NewLoanSerializer
+    #     return LoanSerializer
 
     @action(detail=False, methods=["GET"], url_path="GetPercent", url_name="GetPercent")
     def getPercent(self, request: HttpRequest, *args, **kwargs):
@@ -95,6 +99,7 @@ class LoanViewSet(
         amount = Decimal(data['sum'])
         currency_id = int(data['currency'])
         try:
+            currency = Currency.objects.get(pk=currency_id)
             percentOffers = PercentOffer.objects.filter(currency__pk=currency_id).order_by('amount')
             # print(percentOffers)
             if len(percentOffers) == 0:
@@ -107,20 +112,23 @@ class LoanViewSet(
             if amount < offer.amount:
                 break
 
-        # loans = Loan.objects.filter(user=self.request.user)
-        # monthly_pay = 0
-        # for loan in loans:
-        #     if loan.currency.name != 'BYN':
-        #         loan_amount = convert_currency(loan.amount, loan.currency.name, 'BYN')
-        #     else:
-        #         loan_amount = loan.amount
-        #     monthly_pay += loan_amount * loan.percent
-        # salary = 1
-        # # salary = self.request.user.salary
-        # pdn = monthly_pay / salary
-        # print(f'pdn: {pdn}')
-        # if pdn > 0.5:
-        #     percentOffer *= 2
+        loans = Loan.objects.filter(user=self.request.user)
+        monthly_pay = 0
+        if currency.name == 'BYN':
+            monthly_pay = amount * percentOffer
+        else:
+            monthly_pay = convert_currency(amount, currency.name, 'BYN') * percentOffer
+        for loan in loans:
+            if loan.currency.name != 'BYN':
+                loan_amount = convert_currency(loan.amount, loan.currency.name, 'BYN')
+            else:
+                loan_amount = loan.amount
+            monthly_pay += loan_amount * loan.percent
+        salary = self.request.user.salary
+        pdn = monthly_pay / salary
+        print(f'monthly loans: {monthly_pay}, salary: {salary}, pdn: {pdn}')
+        if pdn > 0.5:
+            percentOffer *= 2
 
         print(f'{percentOffer*100:.1f}% for {amount}')
         return Response(percentOffer)
@@ -173,20 +181,19 @@ class LoanViewSet(
             if amount < offer.amount:
                 break
 
-        # loans = Loan.objects.filter(user=self.request.user)
-        
-        # monthly_pay = 0
-        # for loan in loans:
-        #     if loan.currency.name != 'BYN':
-        #         loan_amount = convert_currency(loan.amount, loan.currency.name, 'BYN')
-        #     else:
-        #         loan_amount = loan.amount
-        #     monthly_pay += loan_amount * loan.percent
-
-        # salary = 100
-        # # salary = self.request.user.salary
-        # pdn = monthly_pay / salary
-        # print(f'pdn: {pdn}')
+        loans = Loan.objects.filter(user=self.request.user)
+        monthly_pay = 0
+        for loan in loans:
+            if loan.currency.name != 'BYN':
+                loan_amount = convert_currency(loan.amount, loan.currency.name, 'BYN')
+            else:
+                loan_amount = loan.amount
+            monthly_pay += loan_amount * loan.percent
+        salary = self.request.user.salary
+        pdn = monthly_pay / salary
+        print(f'monthly loans: {monthly_pay}, salary: {salary}, pdn: {pdn}')
+        if pdn > 0.5:
+            percentOffer *= 2
 
         remaining_amount = amount * (percentOffer + 1)
         new_loan = Loan(
