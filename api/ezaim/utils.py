@@ -9,7 +9,7 @@ import json
 from pprint import pprint
 
 
-from api.settings import JWT_KEY, WSB_STOREID, WEBPAY_SECRET_KEY
+from api.settings import JWT_KEY, WSB_STOREID, WEBPAY_SECRET_KEY, EXCHANGE_RATE_API_KEY
 from ezaim.models import User
 
 class JWTAuthentication(BaseAuthentication):
@@ -34,6 +34,24 @@ class JWTAuthentication(BaseAuthentication):
             raise exceptions.AuthenticationFailed('No such user')
 
         return (user, token)
+
+
+def convert_currency(amount, currency_from, currency_to):
+    print(f'converting {amount}{currency_from} to {currency_to}')
+    # response = requests.get(
+    #     "https://api.apilayer.com/exchangerates_data/convert", 
+    #     params = {
+    #         'amount': amount,
+    #         'from': currency_from,
+    #         'to': currency_to
+    #     },
+    #     headers = {
+    #         'apikey': EXCHANGE_RATE_API_KEY
+    #     }
+    # )
+    # pprint(response.json())
+    # return response.json()['result']
+
 
 webpay_url = 'https://securesandbox.webpay.by/api/v1/payment'
 wsb_notify_url = 'http://127.0.0.1:8000/notify/'

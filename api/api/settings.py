@@ -59,6 +59,11 @@ if MYSQL_PASSWORD is None:
     print('MYSQL_PASSWORD not found in env')
     sys.exit(1)
 
+EXCHANGE_RATE_API_KEY = os.getenv("EXCHANGE_RATE_API_KEY")
+if EXCHANGE_RATE_API_KEY is None:
+    print('EXCHANGE_RATE_API_KEY not found in env')
+    sys.exit(1)
+
 if os.environ.get('DJANGO_DEBUG') in ('True', 'true', '1', True):
     DEBUG = True
 else:

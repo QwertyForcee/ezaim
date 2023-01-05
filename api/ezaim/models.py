@@ -1,5 +1,9 @@
 from django.db import models
-from encrypted_model_fields.fields import EncryptedCharField, EncryptedBooleanField, EncryptedDateTimeField
+from encrypted_model_fields.fields import (
+    EncryptedCharField, 
+    EncryptedBooleanField, 
+    EncryptedDateTimeField
+)
 from datetime import datetime
 from dateutil import relativedelta
 import pytz
@@ -37,6 +41,7 @@ class User(BaseDbModel):
     password = models.BinaryField()
     salt = models.BinaryField()
     phone_number = models.CharField(max_length=255)
+    salary = models.DecimalField(max_digits=15, decimal_places=2)
     name = models.CharField(max_length=255)
     surname = models.CharField(max_length=255)
 

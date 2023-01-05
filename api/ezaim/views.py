@@ -16,6 +16,7 @@ from decimal import *
 from api.settings import JWT_KEY
 from ezaim.utils import JWTAuthentication
 from ezaim.utils import pay_loan, get_loan
+from ezaim.utils import convert_currency
 from django.views.decorators.csrf import csrf_exempt
 
 from ezaim.models import *
@@ -91,6 +92,7 @@ def signup(request: HttpRequest, *args, **kwargs):
     password = data.get('password', None)
     phone_number = data.get('phoneNumber', None)
     password = data.get('password', None)
+    salary = data.get('salary', None)
 
     name = data.get('name', None)
     surname = data.get('surname', None)
@@ -125,7 +127,8 @@ def signup(request: HttpRequest, *args, **kwargs):
         salt=salt,
         phone_number=phone_number,
         name=name,
-        surname=surname
+        surname=surname,
+        salary=salary
     )
     user.save()
     # print('user saved')
@@ -298,6 +301,22 @@ class LoanViewSet(
             percentOffer = offer.percent
             if amount < offer.amount:
                 break
+
+        # loans = Loan.objects.filter(user=self.request.user)
+        # monthly_pay = 0
+        # for loan in loans:
+        #     if loan.currency.name != 'BYN':
+        #         loan_amount = convert_currency(loan.amount, loan.currency.name, 'BYN')
+        #     else:
+        #         loan_amount = loan.amount
+        #     monthly_pay += loan_amount * loan.percent
+        # salary = 1
+        # # salary = self.request.user.salary
+        # pdn = monthly_pay / salary
+        # print(f'pdn: {pdn}')
+        # if pdn > 0.5:
+        #     percentOffer *= 2
+
         print(f'{percentOffer*100:.1f}% for {amount}')
         return Response(percentOffer)
 
@@ -346,7 +365,22 @@ class LoanViewSet(
             percentOffer = offer.percent
             if amount < offer.amount:
                 break
+
+        # loans = Loan.objects.filter(user=self.request.user)
         
+        # monthly_pay = 0
+        # for loan in loans:
+        #     if loan.currency.name != 'BYN':
+        #         loan_amount = convert_currency(loan.amount, loan.currency.name, 'BYN')
+        #     else:
+        #         loan_amount = loan.amount
+        #     monthly_pay += loan_amount * loan.percent
+
+        # salary = 100
+        # # salary = self.request.user.salary
+        # pdn = monthly_pay / salary
+        # print(f'pdn: {pdn}')
+
         remaining_amount = amount * (percentOffer + 1)
         new_loan = Loan(
             user = self.request.user,
