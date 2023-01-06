@@ -25,16 +25,16 @@ from loans.models import (
 from loans.serializers import *
 from api.settings import MAX_ACTIVE_LOANS
 
-def not_found(request, *args, **kwargs):
+def not_found():
     return JsonResponse(data={"message": "Not Found"}, status=404)
 
-def app_error(request, *args, **kwargs):
+def app_error():
     return JsonResponse(data={"message": "Server Error"}, status=500)
 
-def not_authorized(request, *args, **kwargs):
+def not_authorized():
     return JsonResponse(data={"message": "Unauthorized"}, status=401)
 
-def bad_request(request, message):
+def bad_request(message):
     return JsonResponse(data={"message": f'Bad Request: {message}'}, status=400)
 
 class CurrencyViewSet(viewsets.GenericViewSet,
@@ -89,24 +89,20 @@ class LoanViewSet(
     def get_queryset(self):
         return Loan.objects.filter(user=self.request.user)
 
-    # def get_serializer_class(self):
-    #     # if self.action == 'create':
-    #     #     return NewLoanSerializer
-    #     return LoanSerializer
-
     @action(detail=False, methods=["GET"], url_path="GetPercent", url_name="GetPercent")
     def getPercent(self, request: HttpRequest, *args, **kwargs):
         data = request.GET
         amount = Decimal(data['sum'])
         currency_id = int(data['currency'])
+
         try:
             currency = Currency.objects.get(pk=currency_id)
             percentOffers = PercentOffer.objects.filter(currency__pk=currency_id).order_by('amount')
-            # print(percentOffers)
             if len(percentOffers) == 0:
-                return not_found(request)
+                return not_found()
         except Exception:
-            return not_found(request)
+            return not_found()
+
         percentOffer = None
         for offer in percentOffers:
             percentOffer = offer.percent
@@ -137,7 +133,7 @@ class LoanViewSet(
     @action(detail=False, methods=["POST"], url_path="GetCalculatedSumForLoan", url_name="GetCalculatedSumForLoan")
     def getCalculatedSum(self, request: HttpRequest, *args, **kwargs):
         data = json.loads(request.body.decode())
-        loan_id = int(data['loanId']) # check name
+        loan_id = int(data['loanId'])
         # print(f"request data: {data['date']}\n")
         estimate_date = datetime.fromisoformat(data['date'][:-1]+'+00:00') # check name, maybe needs localize
         estimate_date += timedelta(days=1, hours=2, minutes=59, seconds=59, microseconds=999999)
@@ -146,13 +142,16 @@ class LoanViewSet(
         try:
             loan: Loan = Loan.objects.get(pk=loan_id)
         except ObjectDoesNotExist:
-            return not_found(request)
+            return not_found()
+
         if not loan.is_active:
             return Response(0)
+
         utc = pytz.UTC
         # print(estimate_date, utc.localize(datetime.today()))
         if estimate_date < utc.localize(datetime.today()):
             return Response(0)
+
         delta = relativedelta.relativedelta(estimate_date, loan.created_at)
         estimated_months = delta.years * 12 + delta.months
         # print('estimated_months', estimated_months)
@@ -163,8 +162,8 @@ class LoanViewSet(
 
     def create(self, request, *args, **kwargs):
         data = json.loads(self.request.body.decode())
-        print('loan create:')
-        pprint(data)
+        # print('loan create:')
+        # pprint(data)
         currency_id = int(data['currency'])
         amount = Decimal(data['amount'])
         return_url = data['return_url']
@@ -173,9 +172,9 @@ class LoanViewSet(
             currency = Currency.objects.get(pk=currency_id)
             percentOffers = PercentOffer.objects.filter(currency=currency).order_by('amount')
             if len(percentOffers) == 0:
-                return not_found(self.request)
+                return not_found()
         except Exception:
-            return not_found(self.request)
+            return not_found()
         percentOffer = None
         for offer in percentOffers:
             percentOffer = offer.percent
@@ -189,7 +188,7 @@ class LoanViewSet(
             if loan.is_active:
                 active_loans_count += 1
         if active_loans_count >= MAX_ACTIVE_LOANS:
-            return bad_request(request, 'Too many loans')
+            return bad_request('Too many loans')
 
         monthly_pay = 0
         for loan in loans:
@@ -225,8 +224,8 @@ class LoanViewSet(
                 f'customer-{self.request.user.id}',
                 'http://127.0.0.1:8000/notify/'
             )
-            print('bind card response')
-            print(response)
+            # print('bind card response')
+            # print(response)
             return Response(response['data']['redirectUrl'])
         payment_card = payment_cards[0]
         response = get_loan(
@@ -264,8 +263,11 @@ class PaymentViewSet(
         try:
             loan = Loan.objects.get(pk=loan_id)
         except Exception:
-            return not_found(self.request)
+            return not_found()
         
+        if amount > loan.remaining_amount:
+            return bad_request("Payment amount exceeds loan's remaining amount")
+
         new_payment = Payment(
             amount=amount,
             loan=loan
@@ -292,7 +294,7 @@ class PaymentViewSet(
 class PaymentCardViewSet(viewsets.GenericViewSet,
         mixins.ListModelMixin,
         mixins.RetrieveModelMixin):
-    # serializer_class = PaymentCardSerializer
+    serializer_class = PaymentCardSerializer
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
 
