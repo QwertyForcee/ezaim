@@ -64,6 +64,7 @@
             width: 100%;
             grid-row: 2;
             grid-column: 2;
+            min-width: 380px;
 
             display: flex;
             flex-direction: column;
@@ -75,7 +76,6 @@
                 cursor: pointer;
                 margin: 0 0 5px 0;
                 white-space: break-spaces;
-                word-break: break-word;
                 max-width: 80%;
 
                 width: fit-content;
