@@ -4,12 +4,11 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.decorators import action, api_view, renderer_classes
-from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 
 import jwt
 import json
 import bcrypt
+from pprint import pprint
 
 from users.utils import JWTAuthentication
 from users.models import (
@@ -26,16 +25,16 @@ from loans.models import (
 from users.serializers import *
 from api.settings import JWT_KEY
 
-def not_found(request, *args, **kwargs):
+def not_found():
     return JsonResponse(data={"message": "Not Found"}, status=404)
 
-def app_error(request, *args, **kwargs):
+def app_error():
     return JsonResponse(data={"message": "Server Error"}, status=500)
 
-def not_authorized(request, *args, **kwargs):
+def not_authorized():
     return JsonResponse(data={"message": "Unauthorized"}, status=401)
 
-def bad_request(request, message):
+def bad_request(message):
     return JsonResponse(data={"message": f'Bad Request: {message}'}, status=400)
 
 @csrf_exempt
@@ -48,11 +47,11 @@ def login(request: HttpRequest, *args, **kwargs):
         user = User.objects.filter(email=email).first()
         hashed = bcrypt.hashpw(password.encode(), user.salt)
         if user.password != hashed:
-            return not_authorized(request)
+            return not_authorized()
     except ObjectDoesNotExist:
-        return not_found(request)
+        return not_found()
     except MultipleObjectsReturned:
-        return app_error(request)
+        return app_error()
     token = jwt.encode(
         {
             "id": user.pk
@@ -70,74 +69,82 @@ def login(request: HttpRequest, *args, **kwargs):
 
 
 def parse_address(address) -> Address:
-    country = address.get('country', None)
-    state = address.get('state', None)
-    city = address.get('city', None) 
-    code_soato = address.get('codeSoato', None)
-    street = address.get('street', None)
-    house = address.get('house', None)
-    flat = address.get('flat', None)
-    mail_index = address.get('mailIndex', None)
+    address_data_fields = (
+        'country', 'state', 'city',
+        'codeSoato', 'street', 'house',
+        'flat', 'mailIndex'
+    )
+    address_data = {}
+    for data_field in address_data_fields:
+        address_data[data_field] = address[data_field]
+
     return Address(
-        country=country,
-        state=state,
-        city=city,
-        code_soato=code_soato,
-        street=street,
-        house=house,
-        flat=flat,
-        mail_index=mail_index
+        country=address_data['country'],
+        state=address_data['state'],
+        city=address_data['city'],
+        code_soato=address_data['codeSoato'],
+        street=address_data['street'],
+        house=address_data['house'],
+        flat=address_data['flat'],
+        mail_index=address_data['mailIndex']
     )
 
 @csrf_exempt
 def signup(request: HttpRequest, *args, **kwargs):
     data = json.loads(request.body.decode())
     # pprint(data)
+    user_data_fields = (
+        'email', 'password', 'phoneNumber', 'salary',
+        'name', 'surname', 'passportNumber', 'identificationNumber',
+        'issueDate', 'expiryDate', 'authority', 'nationality',
+        'sex', 'resident', 'birthDate',
+        'registrationAddress', 'residentialAddress', 'birthAddress'
+    )
+    birth_address_fields = ('country', 'state', 'city')
 
-    email = data.get('email', None)
-    password = data.get('password', None)
-    phone_number = data.get('phoneNumber', None)
-    password = data.get('password', None)
-    salary = data.get('salary', None)
+    user_data = {}
+    for data_field in user_data_fields:
+        try:
+            user_data[data_field] = data[data_field]
+        except KeyError as err:
+            return bad_request(f'{err} required')
 
-    name = data.get('name', None)
-    surname = data.get('surname', None)
-    passport_number = data.get('passportNumber', None)
-    identification_number = data.get('identificationNumber', None)
-    issue_date = data.get('issueDate', None)
-    expiry_date = data.get('expiryDate', None)
-    authority = data.get('authority', None)
-    nationality = data.get('nationality', None)
-
-    sex = data.get('sex', None)
-    resident = data.get('resident', None)
-    birth_date = data.get('birthDate', None)
+    for field in birth_address_fields:
+        if field not in user_data['birthAddress']:
+            return bad_request(f'{field} in birth address is required')
 
     try:
-        # birth_address = parse_address(data['birthAddress'])
-        registration_address = parse_address(data['registrationAddress'])
-        registration_address.save()
-        # print('reg add saved')
-        residential_address = parse_address(data['residentialAddress'])
-        residential_address.save()
-        # print('res add saved')
-    except Exception:
-        print('something went wrong')
+        registration_address = parse_address(user_data['registrationAddress'])
+        residential_address = parse_address(user_data['residentialAddress'])
+    except KeyError as err:
+        return bad_request(f'{err} in address is required')
 
+    if User.objects.filter(email=user_data['email']).count() > 0:
+        print(User.objects.filter(email=user_data['email']).count())
+        return JsonResponse(
+            data={
+                "message": f"User with email '{user_data['email']}' already exists"
+            },
+            status=409
+        )
+    
+    if len(user_data['password']) < 6:
+        return bad_request('Password should be atleast 6 characters')
 
     salt = bcrypt.gensalt()
-    hashed = bcrypt.hashpw(password.encode(), salt)
+    hashed = bcrypt.hashpw(user_data['password'].encode(), salt)
     user = User(
-        email=email,
+        email=user_data['email'],
         password=hashed,
         salt=salt,
-        phone_number=phone_number,
-        name=name,
-        surname=surname,
-        salary=salary
+        phone_number=user_data['phoneNumber'],
+        name=user_data['name'],
+        surname=user_data['surname'],
+        salary=user_data['salary']
     )
     user.save()
     # print('user saved')
+
     user_settings = UserSettings(
         user=user,
         preferred_currency=Currency.objects.get(name='BYN')
@@ -145,22 +152,24 @@ def signup(request: HttpRequest, *args, **kwargs):
     user_settings.save()
     # print('user settings saved')
 
+    registration_address.save()
+    residential_address.save()
     passport = PassportData(
         user=user,
-        name=name,
-        surname=surname,
-        passport_number=passport_number,
-        identification_number=identification_number,
-        issue_date=issue_date,
-        expiry_date=expiry_date,
-        authority=authority,
-        nationality=nationality,
-        sex=sex,
-        resident=resident,
-        birth_date=birth_date,
-        birth_country=data['birthAddress']['country'],
-        birth_state=data['birthAddress']['state'],
-        birth_city=data['birthAddress']['city'],
+        name=user_data['name'],
+        surname=user_data['surname'],
+        passport_number=user_data['passportNumber'],
+        identification_number=user_data['identificationNumber'],
+        issue_date=user_data['issueDate'],
+        expiry_date=user_data['expiryDate'],
+        authority=user_data['authority'],
+        nationality=user_data['nationality'],
+        sex=user_data['sex'],
+        resident=user_data['resident'],
+        birth_date=user_data['birthDate'],
+        birth_country=user_data['birthAddress']['country'],
+        birth_state=user_data['birthAddress']['state'],
+        birth_city=user_data['birthAddress']['city'],
         registration_address=registration_address,
         residential_address=residential_address
     )
@@ -175,7 +184,7 @@ def signup(request: HttpRequest, *args, **kwargs):
         algorithm='HS256'
     )
     log = Log(
-        log = f'{email} registered'
+        log = f'{user_data["email"]} registered'
     )
     log.save()
     return JsonResponse({
@@ -187,7 +196,6 @@ class UserViewSet(viewsets.GenericViewSet,
         mixins.RetrieveModelMixin,
         mixins.UpdateModelMixin,
         mixins.DestroyModelMixin):
-    # queryset = User.objects.all()
     serializer_class = UserSerializer
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
@@ -196,7 +204,6 @@ class UserViewSet(viewsets.GenericViewSet,
         return User.objects.get(pk=self.request.user.pk)
 
     def get_queryset(self):
-        # print('getting objects')
         return User.objects.filter(pk=self.request.user.pk)
 
 class UserSettingsViewSet(viewsets.ModelViewSet):
