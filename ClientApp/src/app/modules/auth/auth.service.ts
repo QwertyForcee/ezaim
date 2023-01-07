@@ -32,7 +32,6 @@ export class AuthService {
   }
 
   signUp(model: SignUpModel): Observable<LoginResultModel> {
-    model.salary = 1000;
     return this.http.post<LoginResultModel>(`${environment.baseUrl}${this.AUTH_SIGNUP}`, model);
   }
 }

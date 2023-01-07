@@ -21,6 +21,7 @@ export class ProfileDataComponent implements OnInit {
     "surname": new FormControl(),
     "email": new FormControl(null, [Validators.required, Validators.email]),
     "phone_number": new FormControl(null, [Validators.required, Validators.minLength(12), Validators.maxLength(12)]),
+    "salary": new FormControl(0, [Validators.required, Validators.min(0)]),
   });
 
   cards = [];
@@ -52,6 +53,7 @@ export class ProfileDataComponent implements OnInit {
           "surname": user.surname,
           "email": user.email,
           "phone_number": user.phone_number,
+          "salary": user.salary,
         });
       }
     })

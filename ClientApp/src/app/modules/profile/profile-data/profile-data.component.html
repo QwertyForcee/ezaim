@@ -19,6 +19,12 @@
             <input id="Phone" formControlName="phone_number" type="text" [readonly]="!editMode">
         </div>
 
+        <div class="profile-data_form-block">
+            <label >ЗАРАБОТНАЯ ПЛАТА</label>
+            <input formControlName="salary" type="number" [readonly]="!editMode">
+        </div>
+
+
         <div *ngFor="let card of cards; let i=index">
             <div class="profile-data_form-block">
                 <label>КАРТА #{{i}} <span class="card-delete-button">удалить</span></label>

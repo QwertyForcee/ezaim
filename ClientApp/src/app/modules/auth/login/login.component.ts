@@ -23,12 +23,12 @@ export class LoginComponent implements OnInit {
   }
 
   get invalidSignUpForm(): boolean {
-    return this.signUpFormGroup.invalid;
+    return this.signUpFormGroup.invalid || this.signUpFormGroup.get('personalDataTermsAgreement')?.value !== true;
   }
 
   get maxBirthDate(): Date {
     const date = new Date();
-    date.setFullYear(date.getFullYear() - 21);
+    date.setFullYear(date.getFullYear() - 18);
     return date;
   }
 
@@ -58,7 +58,8 @@ export class LoginComponent implements OnInit {
 
       sex: new FormControl(null, [Validators.required]),
       resident: new FormControl(null, [Validators.required]),
-      birthDate: new FormControl(new Date()),
+      birthDate: new FormControl(this.maxBirthDate),
+      salary: new FormControl(0, [Validators.required, Validators.min(0)]),
 
       birth_country: new FormControl(null, [Validators.required]),
       birth_state: new FormControl(null, [Validators.required]),
@@ -100,9 +101,9 @@ export class LoginComponent implements OnInit {
         this.authService.login(this.loginFormGroup.value);
       }
     } else {
-      if (this.signUpFormGroup.valid) {
+      if (this.signUpFormGroup.valid && this.signUpFormGroup.get('personalDataTermsAgreement')?.value === true) {
         this.showExistingEmailError = false;
-        
+
         const birthAddress = {
           country: this.signUpFormGroup.get('birth_country')?.value,
           state: this.signUpFormGroup.get('birth_state')?.value,
