@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
 
   isLoginMode = false;
   showAgreement = false;
+  showExistingEmailError = false;
 
   get invalidLogInForm(): boolean {
     return this.loginFormGroup.invalid;
@@ -100,6 +101,8 @@ export class LoginComponent implements OnInit {
       }
     } else {
       if (this.signUpFormGroup.valid) {
+        this.showExistingEmailError = false;
+        
         const birthAddress = {
           country: this.signUpFormGroup.get('birth_country')?.value,
           state: this.signUpFormGroup.get('birth_state')?.value,
@@ -143,7 +146,9 @@ export class LoginComponent implements OnInit {
             }
           },
           error: (err) => {
-            console.error(err);
+            if (err.status === 409) {
+              this.showExistingEmailError = true;
+            }
           }
         });
       }

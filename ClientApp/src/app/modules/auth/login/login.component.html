@@ -265,6 +265,7 @@
                     <button class="auth-form-submit" (click)="onSubmit()" [disabled]="invalidSignUpForm"
                         [class.disabled]="invalidSignUpForm">ВОЙТИ</button>
                     <p *ngIf="invalidSignUpForm">Некоторые данные заполнены некорректно</p>
+                    <p *ngIf="showExistingEmailError">Пользователь с данной электронной почтой уже существует</p>
                 </div>
             </form>
         </div>
