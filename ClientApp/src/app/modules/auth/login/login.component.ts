@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { AddressModel } from '../models/address-model';
+import { LoginResultModel } from '../models/login-result-model';
 import { SignUpModel } from '../models/sign-up-model';
 
 @Component({
@@ -82,7 +84,7 @@ export class LoginComponent implements OnInit {
     }, { validators: this.passwordsValidation }
   )
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -133,7 +135,17 @@ export class LoginComponent implements OnInit {
         signUpModel.resident = !!parseInt(signUpModel.resident as any);
         console.log(signUpModel);
 
-        this.authService.signUp(signUpModel);
+        this.authService.signUp(signUpModel).subscribe({
+          next: (result: LoginResultModel) => {
+            if (result) {
+              localStorage.setItem('access_token', result.access_token);
+              this.router.navigate(['/profile']);
+            }
+          },
+          error: (err) => {
+            console.error(err);
+          }
+        });
       }
     }
   }

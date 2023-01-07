@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoginModel } from './models/login-model';
 import { LoginResultModel } from './models/login-result-model';
@@ -30,16 +31,8 @@ export class AuthService {
       })
   }
 
-  signUp(model: SignUpModel): void {
+  signUp(model: SignUpModel): Observable<LoginResultModel> {
     model.salary = 1000;
-    this.http.post<LoginResultModel>(`${environment.baseUrl}${this.AUTH_SIGNUP}`, model)
-      .subscribe({
-        next: (result: LoginResultModel) => {
-          if (result) {
-            localStorage.setItem('access_token', result.access_token);
-            this.router.navigate(['/profile']);
-          }
-        }
-      })
+    return this.http.post<LoginResultModel>(`${environment.baseUrl}${this.AUTH_SIGNUP}`, model);
   }
 }
