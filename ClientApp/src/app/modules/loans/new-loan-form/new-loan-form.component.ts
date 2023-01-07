@@ -17,6 +17,7 @@ export class NewLoanFormComponent implements OnInit {
   calculatedPercent = 0;
   currencies?: Currency[];
   userSettings?: UserSettings;
+  canTakeNewLoan = false;
 
   newLoanFormGroup: FormGroup = new FormGroup({
     'sum': new FormControl(0, [Validators.required, Validators.min(100), Validators.max(3_165_000)]),
@@ -49,6 +50,12 @@ export class NewLoanFormComponent implements OnInit {
       this.newLoanFormGroup.patchValue({
         'currency': this.userSettings?.preferred_currency
       })
+    })
+
+    this.loansService.canTakeNewLoan().subscribe({
+      next: (value) => {
+        this.canTakeNewLoan = value;
+      }
     })
   }
 

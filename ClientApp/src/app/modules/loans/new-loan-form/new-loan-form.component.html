@@ -2,23 +2,25 @@
 </app-common-navigation>
 <div class="new-loan-form-container">
     <div class="new-loan-form-container-header"></div>
-    <div class="new-loan-form" [formGroup]="newLoanFormGroup">
-        <div class="new-loan-form-blocks">
-            <div class="new-loan-form-blocks-block new-loan-form-blocks-block-main">
-                <div class="new-loan-form-blocks-block-label">
-                    ЗАЙМ НА СУММУ
+    <ng-container *ngIf="canTakeNewLoan; else cantTakeLoanMessage">
+        <div class="new-loan-form" [formGroup]="newLoanFormGroup">
+            <div class="new-loan-form-blocks">
+                <div class="new-loan-form-blocks-block new-loan-form-blocks-block-main">
+                    <div class="new-loan-form-blocks-block-label">
+                        ЗАЙМ НА СУММУ
+                    </div>
+                    <input class="new-loan-form-blocks-block-input" formControlName="sum" (input)="onInputChange()">
                 </div>
-                <input class="new-loan-form-blocks-block-input" formControlName="sum" (input)="onInputChange()">
-            </div>
-            <div class="new-loan-form-blocks-block">
-                <div class="new-loan-form-blocks-block-label">
-                    ВАЛЮТА
+                <div class="new-loan-form-blocks-block">
+                    <div class="new-loan-form-blocks-block-label">
+                        ВАЛЮТА
+                    </div>
+                    <select class="new-loan-form-blocks-block-input new-loan-form-blocks-block-input-select"
+                        formControlName="currency" (change)="onInputChange()">
+                        <option *ngFor="let cur of currencies" [ngValue]="cur.id">{{cur.name}}</option>
+                    </select>
                 </div>
-                <select class="new-loan-form-blocks-block-input new-loan-form-blocks-block-input-select" formControlName="currency" (change)="onInputChange()">
-                    <option *ngFor="let cur of currencies" [ngValue]="cur.id">{{cur.name}}</option>
-                </select>
-            </div>
-            <!-- <div class="new-loan-form-blocks-block">
+                <!-- <div class="new-loan-form-blocks-block">
                 <div class="new-loan-form-blocks-block-label">
                     НОМЕР ТЕЛЕФОНА
                 </div>
@@ -26,36 +28,26 @@
                     +375 29 333 44 55
                 </div>
             </div> -->
-        </div>
+            </div>
 
-        <div class="new-loan-form-block-sum">
-            <h3>
-                ЗАЙМ НА СУММУ {{inputSum}} {{getCurrencyName(currentCurrency)}} С {{displayPercent}}% ЕЖЕМЕСЯЧНЫХ
-            </h3>
-        </div>
+            <div class="new-loan-form-block-sum">
+                <h3>
+                    ЗАЙМ НА СУММУ {{inputSum}} {{getCurrencyName(currentCurrency)}} С {{displayPercent}}% ЕЖЕМЕСЯЧНЫХ
+                </h3>
+            </div>
 
-        <div class="new-loan-form-block-card" (click)="confirmCreatingLoan()">
-            <h4>перейти к данным по карте</h4>
-            <div class="new-loan-form-block-card-img"></div>
-        </div>
-
-    </div>
-    <!-- <div class="payment-card-form">
-        <div class="payment-card-form-block">
-            <div class="payment-card-form-block-label">НОМЕР КАРТЫ</div>
-            <div class="payment-card-form-block-input"></div>
-        </div>
-        <div class="payment-card-form-block payment-card-form-block-horizontal">
+            <div class="new-loan-form-block-card" (click)="confirmCreatingLoan()">
+                <h4>перейти к данным по карте</h4>
+                <div class="new-loan-form-block-card-img"></div>
+            </div>
 
         </div>
-        <div class="payment-card-form-block">
-            <div class="payment-card-form-block-label">ИМЯ ФАМИЛИЯ</div>
-            <div class="payment-card-form-block-input"></div>
+    </ng-container>
+
+    <ng-template #cantTakeLoanMessage>
+        <div class="new-loan-form-container-message">
+            <h1>Вы достигли лимита по займам</h1>
+            <p>Погасите текущие займы</p>
         </div>
-        <div class="payment-card-form-buttons">
-
-        </div>
-    </div> -->
-
-
+    </ng-template>
 </div>

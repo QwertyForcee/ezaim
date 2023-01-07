@@ -13,6 +13,7 @@ export class LoansService {
 
   private readonly LOAD_CALCULATED_SUM_FOR_LOAN = `${environment.baseUrl}loans/GetCalculatedSumForLoan/`;
   private readonly LOAD_PERCENT_FOR_SUM = `${environment.baseUrl}loans/GetPercent`;
+  private readonly CAN_TAKE_LOAN = `${environment.baseUrl}loans/CanTakeNewLoan`;
 
   private readonly LOAN_URL = `${environment.baseUrl}loans/`;
   private readonly PAYMENT_URL = `${environment.baseUrl}payments/`;
@@ -52,5 +53,9 @@ export class LoansService {
 
   createNewPayment(payment: Payment): Observable<string> {
     return this.http.post<string>(this.PAYMENT_URL, payment);
+  }
+
+  canTakeNewLoan(): Observable<boolean> {
+    return this.http.get<boolean>(this.CAN_TAKE_LOAN);
   }
 }
