@@ -45,7 +45,6 @@ class CurrencyViewSet(viewsets.GenericViewSet,
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
 
-
 @api_view(('GET',))
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 def notify(request: HttpRequest, *args, **kwargs):
@@ -88,6 +87,11 @@ class LoanViewSet(
 
     def get_queryset(self):
         return Loan.objects.filter(user=self.request.user)
+
+    @action(detail=False, methods=['GET'], url_path='CanTakeNewLoan', url_name='CanTakeNewLoan')
+    def canTakeNewLoan(self, request: HttpRequest, *args, **kwargs):
+        print(self.request.user)
+        return Response(Loan.objects.filter(user=request.user).count() < MAX_ACTIVE_LOANS)
 
     @action(detail=False, methods=["GET"], url_path="GetPercent", url_name="GetPercent")
     def getPercent(self, request: HttpRequest, *args, **kwargs):
