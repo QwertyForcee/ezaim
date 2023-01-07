@@ -32,6 +32,18 @@ export class LoginComponent implements OnInit {
     return date;
   }
 
+  get fromDate(): Date {
+    return this.signUpFormGroup.get('issueDate')?.value ?? null;
+  }
+
+  get toDate(): Date {
+    return this.signUpFormGroup.get('expiryDate')?.value ?? null;
+  }
+
+  get today(): Date {
+    return new Date();
+  }
+
   loginFormGroup: FormGroup = new FormGroup(
     {
       email: new FormControl(null, [Validators.required, Validators.email]),
