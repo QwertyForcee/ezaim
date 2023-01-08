@@ -3,7 +3,8 @@ from telegram import ChatAction, Update
 from telegram.ext import CallbackContext
 
 from bot.main import bot
-from ezaim.models import User, TelegramUser, Loan
+from loans.models import Loan
+from users.models import User, TelegramUser
 
 
 HELP_TEXT = """
