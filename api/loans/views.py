@@ -91,7 +91,7 @@ class LoanViewSet(
     @action(detail=False, methods=['GET'], url_path='CanTakeNewLoan', url_name='CanTakeNewLoan')
     def canTakeNewLoan(self, request: HttpRequest, *args, **kwargs):
         print(self.request.user)
-        return Response(Loan.objects.filter(user=request.user).count() < MAX_ACTIVE_LOANS)
+        return Response(Loan.objects.filter(user=request.user, is_active=True).count() < MAX_ACTIVE_LOANS)
 
     @action(detail=False, methods=["GET"], url_path="GetPercent", url_name="GetPercent")
     def getPercent(self, request: HttpRequest, *args, **kwargs):
